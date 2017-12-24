@@ -5,7 +5,7 @@
   "scripts": {
     "start": "cross-env NODE_PATH=. node ./bin/www",
     "debug": "cross-env NODE_PATH=. node --debug-brk --inspect ./bin/www",
-    "test": "cross-env NODE_PATH=. node ./bin/test"
+    "test": "cross-env NODE_PATH=. tape ./test/**/*-test.js"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
@@ -17,6 +17,8 @@
     "express": "~4.15.5",
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "supertest": "^3.0.0",
+    "tape": "^4.8.0"
   }
 }

@@ -5,7 +5,6 @@ var router = express.Router();
 router
   .route('/:coinName')
   .get((req, res, next) => {
-    console.log(req.params.coinName);
     res.json([{
       id: 1,
       username: "cardano"

@@ -6,9 +6,21 @@ class App extends Component {
   state = {users: []};
 
   componentDidMount() {
-    fetch('/api/coins/cardano')
-      .then(res => res.json())
-      .then(users => this.setState({users}));
+    // console.log('fetch coins')
+    // return  fetch('/api/coins/cardano', {
+    //           headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //           }
+    //         })
+    //         .then(res => {
+    //           console.log(res)
+    //           return res.json();
+    //         })
+    //         .then(users => {
+    //           console.log(users)
+    //           this.setState({users})
+    //         });
   }
 
   render() {
