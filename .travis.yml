@@ -1,0 +1,15 @@
+language: node_js
+install:
+  - yarn install
+  - cd client && yarn install
+script:
+  - yarn test
+  - cd client && yarn build
+  - cd client && yarn test
+git:
+  depth: 10
+  submodules: false
+branches:
+  only: 
+    - master
+
