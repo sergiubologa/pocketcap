@@ -7,20 +7,20 @@ class App extends Component {
 
   componentDidMount() {
     console.log('fetch coins')
-    return  fetch('/api/coins/cardano', {
-              headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(res => {
-              console.log(res)
-              return res.json();
-            })
-            .then(users => {
-              console.log(users)
-              this.setState({users})
-            });
+    // fetch('/api/coins/cardano', {
+    //   headers: {
+    //     'Accept': 'application/json',
+    //     'Content-Type': 'application/json'
+    //   }
+    // })
+    // .then(res => {
+    //   console.log(res)
+    //   return res.json();
+    // })
+    // .then(users => {
+    //   console.log(users)
+    //   this.setState({users})
+    // });
   }
 
   render() {
