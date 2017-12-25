@@ -3,15 +3,18 @@ node_js:
   - "node"
   - "9"
 
-before_install: cd project
 install:
   - yarn install
-  - cd client && yarn install
+  - cd client
+  - yarn install
+  - cd ..
 
-before_script: cd project
 script:
   - yarn test
-  - cd client && yarn build && yarn test
+  - cd client
+  - yarn build
+  - yarn test
+  - cd ..
 
 git:
   depth: 10
