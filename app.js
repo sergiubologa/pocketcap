@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 require('dotenv').config();
 require('checkenv').check();
 
-var index = require('routes/index');
+//var index = require('routes/index');
 var coins = require('routes/coins');
 var allOthers = require('routes/all-others');
 
