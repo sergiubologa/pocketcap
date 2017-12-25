@@ -5,7 +5,8 @@
   "scripts": {
     "start": "cross-env NODE_PATH=. node ./bin/www",
     "debug": "cross-env NODE_PATH=. node --debug-brk --inspect ./bin/www",
-    "test": "cross-env NODE_PATH=. tape ./test/**/*-test.js"
+    "test": "cross-env NODE_PATH=. tape ./test/**/*-test.js",
+    "heroku-postbuild": "cd client && yarn --production=false && yarn run build"
   },
   "dependencies": {
     "body-parser": "~1.18.2",
