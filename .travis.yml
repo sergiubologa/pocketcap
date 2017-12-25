@@ -16,9 +16,6 @@ script:
   - yarn test
   - cd ..
 
-env:
-  - NODE_DEBUG=checkenv # used to disabignorele checkenv 
-
 git:
   depth: 10
   submodules: false
