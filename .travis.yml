@@ -7,8 +7,7 @@ install:
   - cd client && yarn install
 script:
   - yarn test
-  - cd client && yarn build
-  - cd client && yarn test
+  - cd client && yarn build && yarn test
 git:
   depth: 10
   submodules: false
