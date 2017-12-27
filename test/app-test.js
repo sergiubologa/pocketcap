@@ -1,10 +1,11 @@
 const test = require('tape');
 const request = require('supertest');
-const testHelpers = require('test/test-helpers');
-
 const app = require('app');
+const testHelpers = require('test/test-helpers');
+const mongooseConnector = require('db/mongoose-connector');
 
 test('get /api', assert => {
+    assert.plan(2);
     request(app)
         .get('/api')
         .expect(200)
@@ -14,18 +15,20 @@ test('get /api', assert => {
         .end(testHelpers.testEnd('should return 200 OK', assert));
 });
 
-test('get coin data', assert => {
+test('get coins data', assert => {
+    assert.plan(3);
     request(app)
-        .get('/api/coins/cardano')
+        .get('/api/coins')
         .expect(200)
         .expect(response => {
             assert.ok(response.body, 'Response should be truthy');
-            assert.equal(response.body[0].username, 'cardano');
+            assert.equal(response.body[0].id, 'bitcoin');
         })
         .end(testHelpers.testEnd('should return 200 OK', assert));
 });
 
 test('get not existing endpoint', assert => {
+    assert.plan(1);
     request(app)
         .get('/some/url/that/will/never/exist')
         .expect(200)
@@ -35,3 +38,6 @@ test('get not existing endpoint', assert => {
         })
         .end(testHelpers.testEnd('should return 200 OK', assert));
 });
+
+// Close the open DB connection otherwise Tape would not exit the tests
+test.onFinish(() => mongooseConnector.disconnectIfNeeded());
