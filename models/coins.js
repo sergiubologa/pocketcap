@@ -21,6 +21,7 @@ const coinsSchema = new Schema({
         "last_updated": Number
     }]
 });
+coinsSchema.index({created_at: 1, type: -1});
 
 const coinsModel = mongoose.model('Coins', coinsSchema);
 
