@@ -3,13 +3,25 @@ node_js:
   - "node"
   - "9"
 
+services:
+  - mongodb
+
 install:
   - yarn install
   - cd client
   - yarn install
   - cd ..
 
+before_script:
+  # artificial wait before making the first connection
+  - sleep 15
+  # insert bitcoin document
+  #- mongo ThePocketCap --eval 'db.coins.insert({"date":ISODate("2017-12-26T12:43:01.004Z"),"coins":[{"id":"bitcoin","name":"Bitcoin","symbol":"BTC","rank":"1","price_usd":"14798.3","price_btc":"1.0","24h_volume_usd":"12411400000.0","market_cap_usd":"248171368155","available_supply":"16770262.0","total_supply":"16770262.0","max_supply":"21000000.0","percent_change_1h":"0.16","percent_change_24h":"4.08","percent_change_7d":"8.87","last_updated":"1514576960"}]});'
+  # create index
+  #- mongo ThePocketCap --eval 'db.coins.ensureIndex({"date":-1});'
+
 script:
+  # run first the client, as the api depends on the built client
   - cd client
   - yarn build
   - yarn test
