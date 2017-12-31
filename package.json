@@ -8,6 +8,9 @@
     "test": "cross-env NODE_PATH=. NODE_ENV=testing tape ./test/**/*-test.js",
     "heroku-postbuild": "cd client && yarn --production=false && yarn run build"
   },
+  "engines": {
+    "node": "9.3.0"
+  },
   "dependencies": {
     "axios": "^0.17.1",
     "body-parser": "~1.18.2",
