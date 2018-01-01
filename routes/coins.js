@@ -1,17 +1,18 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const coinsService = require('db/coins-service');
 
 /* GET coin value. */
 router
-  .route('/:coinName')
+  .route('/')
   .get((req, res, next) => {
-    res.json([{
-      id: 1,
-      username: "cardano"
-    }, {
-      id: 2,
-      username: "bitcoin"
-    }]);
+    coinsService.getMostRecentCoinsData()
+      .then((coinsModel) => res.json(coinsModel))
+      .catch((error) => {
+        // TODO - log the error
+        console.log(error);
+        res.status(500).send();
+      });
 });
 
 module.exports = router;
