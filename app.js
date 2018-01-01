@@ -38,6 +38,8 @@ app.use('*', allOthers);
 if (process.env.NODE_ENV != 'testing'){
     coinsCronJob.start();
     cleanDBCronJob.start();
+    // TODO - use logger
+    console.log('Cron jobs started');
     //setInterval(() => console.log(coinsCronJob.nextDates(), process.env.NODE_ENV), 1000);
 }
 
