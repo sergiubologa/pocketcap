@@ -16,13 +16,15 @@ test('get /api', assert => {
 });
 
 test('get coins data', assert => {
-    assert.plan(3);
+    assert.plan(5);
     request(app)
         .get('/api/coins')
         .expect(200)
         .expect(response => {
             assert.ok(response.body, 'Response should be truthy');
-            assert.equal(response.body[0].id, 'bitcoin');
+            assert.ok(response.body.added_at, 'Last update date should be there');
+            assert.ok(response.body.data, 'Coins should be there');
+            assert.equal(response.body.data[0].id, 'bitcoin');
         })
         .end(testHelpers.testEnd('should return 200 OK', assert));
 });
