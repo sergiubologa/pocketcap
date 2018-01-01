@@ -31,7 +31,19 @@ function getMostRecentCoinsData(){
     return CoinsModel.findOne(filters, fields, sortObj);
 }
 
+function cleanupDatabase(){
+    // remove coins data older than 5 days
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - process.env.DAYS_TO_KEEP_COINS_DATA);
+    return CoinsModel.remove({ added_at: { $lt: cutoff }})
+                     .then((res) => {
+                         // TODO - use logger
+                         console.log('Coins deleted:', res.result.n);
+                     });
+}
+
 module.exports = {
     retrieveAndSaveCoinsDataFrom3rdParty,
-    getMostRecentCoinsData
+    getMostRecentCoinsData,
+    cleanupDatabase
 };

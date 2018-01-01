@@ -7,6 +7,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const { coinsCronJob } = require('cron-jobs/coins-cron');
+const { cleanDBCronJob } = require('cron-jobs/clean-db-cron');
 
 var index = require('routes/index');
 var coins = require('routes/coins');
@@ -36,6 +37,7 @@ app.use('*', allOthers);
 // Start cron jobs
 if (process.env.NODE_ENV != 'testing'){
     coinsCronJob.start();
+    cleanDBCronJob.start();
     //setInterval(() => console.log(coinsCronJob.nextDates(), process.env.NODE_ENV), 1000);
 }
 
