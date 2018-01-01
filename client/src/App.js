@@ -8,20 +8,20 @@ class App extends Component {
 
   componentDidMount() {
     console.log('fetch coins')
-    // fetch('/api/coins', {
-    //   headers: {
-    //     'Accept': 'application/json',
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    // .then(res => {
-    //   console.log(res)
-    //   return res.json();
-    // })
-    // .then(coins => {
-    //   console.log(coins)
-    //   this.setState({coins})
-    // });
+    fetch('/api/coins', {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(res => {
+      console.log(res)
+      return res.json();
+    })
+    .then(coins => {
+      console.log(coins)
+      this.setState({coins})
+    });
   }
 
   getAddedAtDate() {
