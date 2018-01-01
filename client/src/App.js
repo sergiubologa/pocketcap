@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
-  state = {users: []};
+  state = {coins: {added_at: new Date().toString(), data: []}};
 
   componentDidMount() {
     console.log('fetch coins')
-    // fetch('/api/coins/cardano', {
+    // fetch('/api/coins', {
     //   headers: {
     //     'Accept': 'application/json',
     //     'Content-Type': 'application/json'
@@ -17,10 +18,14 @@ class App extends Component {
     //   console.log(res)
     //   return res.json();
     // })
-    // .then(users => {
-    //   console.log(users)
-    //   this.setState({users})
+    // .then(coins => {
+    //   console.log(coins)
+    //   this.setState({coins})
     // });
+  }
+
+  getAddedAtDate() {
+    return moment(this.state.coins.added_at).format("h:mm a");
   }
 
   render() {
@@ -28,14 +33,12 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Welcome to ThePocketCap</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <h1>Users</h1>
-        {this.state.users.map(user =>
-          <div key={user.id}>{user.username}</div>
+        <p className="App-intro">Last updated at: {this.getAddedAtDate()}</p>
+        <h1>Coins</h1>
+        {this.state.coins.data.map(coin =>
+          <div key={coin.id}>{coin.id}: {coin.price_usd}</div>
         )}
       </div>
     );

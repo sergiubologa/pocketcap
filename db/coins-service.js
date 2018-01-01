@@ -3,12 +3,11 @@ const CoinsModel = require('models/coins');
 const axios = require('axios');
 
 function retrieveAndSaveCoinsDataFrom3rdParty() {
-    return axios.get('https://api.coinmarketcap.com/v1/ticker/')
+    return axios.get(process.env.COINMARKETCAP_ALL_COINS_URI)
                 .then((coins) => {
                     if (coins && coins.data && coins.data.length > 0) {
-                        const newCoinsData = new CoinsModel({
-                            coins: coins.data
-                        });
+                        const newCoinsData = new CoinsModel;
+                        newCoinsData.data = coins.data;
                         return newCoinsData.save();
                     }
                 })
@@ -19,7 +18,17 @@ function retrieveAndSaveCoinsDataFrom3rdParty() {
 }
 
 function getMostRecentCoinsData(){
-    return CoinsModel.findOne({}, { 'coins.last_updated': 0, 'coins._id': 0}, { sort: { 'created_at': -1 } });
+    const filters = {};
+    const fields = {
+        '_id': 0,
+        '__v': 0,
+        'data.last_updated': 0,
+        'data._id': 0
+    };
+    const sortObj = {
+        sort: { 'added_at': -1 }
+    };
+    return CoinsModel.findOne(filters, fields, sortObj);
 }
 
 module.exports = {
