@@ -8,17 +8,17 @@ const coinsSchema = new Schema({
         name: String,
         symbol: String,
         rank: Number,
-        price_usd: Number,
-        price_btc: Number,
-        "24h_volume_usd": Number,
-        market_cap_usd: Number,
-        available_supply: Number,
-        total_supply: Number,
-        max_supply: Number,
-        percent_change_1h: Number,
-        percent_change_24h: Number,
-        percent_change_7d: Number,
-        last_updated: Number
+        price_usd: { type: Number, default: null },
+        price_btc: { type: Number, default: null },
+        "24h_volume_usd": { type: Number, default: null },
+        market_cap_usd: { type: Number, default: null },
+        available_supply: { type: Number, default: null },
+        total_supply: { type: Number, default: null },
+        max_supply: { type: Number, default: null },
+        percent_change_1h: { type: Number, default: null },
+        percent_change_24h: { type: Number, default: null },
+        percent_change_7d: { type: Number, default: null },
+        last_updated: { type: Number, default: null }
     }]
 });
 coinsSchema.index({added_at: 1, type: -1});
