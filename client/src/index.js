@@ -3,10 +3,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {
   BrowserRouter,
-  Route
+  Route,
+  Switch
 } from 'react-router-dom'
 import './index.css'
 import Header from './components/header/header'
+import NotFound from './components/not-found.js/not-found'
+import Contact from './components/contact/contact'
 import App from './components/App'
 import registerServiceWorker from './registerServiceWorker'
 
@@ -20,7 +23,11 @@ ReactDOM.render(
   <BrowserRouter>
     <div className="App">
       <Header />
-      <Route path='/' component={App} />
+      <Switch>
+        <Route exact path='/' component={App} />
+        <Route path='/contact' component={Contact} />
+        <Route component={NotFound} />
+      </Switch>
     </div>
   </BrowserRouter>,
   rootElement)
