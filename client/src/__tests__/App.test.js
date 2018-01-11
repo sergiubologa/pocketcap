@@ -1,7 +1,7 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { shallow, mount, render } from 'enzyme';
-import App from '../App';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { shallow, mount, render } from 'enzyme'
+import App from '../components/App'
 
 it('calls componentDidMount', () => {
   // const spy = jest.spyOn(App.prototype, 'componentDidMount');
