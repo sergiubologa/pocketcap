@@ -52,4 +52,4 @@ class App extends Component<Props, State> {
   }
 }
 
-export default App;
+export default App
