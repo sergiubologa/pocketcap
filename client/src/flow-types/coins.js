@@ -16,3 +16,10 @@ export type Coin = {
   percent_change_7d: ?number,
   last_updated: ?number
 }
+
+export type CoinsData = {
+  coins: {
+    added_at: ?Date,
+    data: Array<Coin>
+  }
+}
