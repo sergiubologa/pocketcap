@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { shallow, mount, render } from 'enzyme'
-import Portfolio from '../portfolio/portfolio'
+import Portfolio from './portfolio'
 
 it('calls componentDidMount', () => {
   // const spy = jest.spyOn(App.prototype, 'componentDidMount');

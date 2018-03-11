@@ -38,8 +38,9 @@ class Portfolio extends Component<Props, State> {
   render() {
     return (
       <div>
-        <p className="App-intro">Last updated at: {this.getAddedAtDate()}</p>
-        <button onClick={this.refreshCoinsData.bind(this)}>Refresh</button>
+        <p className="App-intro">
+          <i className="fa fa-calendar"></i>Last updated at: {this.getAddedAtDate()}</p>
+        <button className="button is-primary" onClick={this.refreshCoinsData.bind(this)}>Refresh</button>
         <h1>Coins</h1>
         {this.state.coins.data.map(coin =>
           <div key={coin.id}>{coin.id}: {coin.price_usd}</div>
