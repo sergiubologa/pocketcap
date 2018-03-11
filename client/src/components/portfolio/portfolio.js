@@ -43,7 +43,7 @@ class Portfolio extends Component<Props, State> {
         <button className="button is-primary" onClick={this.refreshCoinsData.bind(this)}>Refresh</button>
         <h1>Coins</h1>
         {this.state.coins.data.map(coin =>
-          <div key={coin.id}>{coin.id}: {coin.price_usd}</div>
+          <div key={coin.id}><i className={`cc ${coin.symbol.toUpperCase()}`}></i> {coin.id}: {coin.price_usd}</div>
         )}
       </div>
     );

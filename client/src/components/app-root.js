@@ -8,6 +8,8 @@ import Contact from './contact/contact'
 import NotFound from './not-found/not-found'
 import 'bulma/css/bulma.css'
 import 'font-awesome/css/font-awesome.min.css'
+import 'cryptocoins-icons/webfont/cryptocoins.css'
+import 'cryptocoins-icons/webfont/cryptocoins-colors.css'
 import './app-root.css'
 
 class AppRoot extends Component<Props, State> {
