@@ -16,7 +16,7 @@ class AppRoot extends Component<Props, State> {
   render(){
     return (
       <BrowserRouter>
-        <div className="App">
+        <div>
           <Header />
           <Switch>
             <Route exact path='/' component={Portfolio} />

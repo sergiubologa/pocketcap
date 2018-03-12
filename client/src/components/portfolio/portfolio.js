@@ -38,12 +38,11 @@ class Portfolio extends Component<Props, State> {
   render() {
     return (
       <div>
-        <p className="App-intro">
-          <i className="fa fa-calendar"></i>Last updated at: {this.getAddedAtDate()}</p>
+        <p><i className="fa fa-calendar"></i>Last updated at: {this.getAddedAtDate()}</p>
         <button className="button is-primary" onClick={this.refreshCoinsData.bind(this)}>Refresh</button>
         <h1>Coins</h1>
         {this.state.coins.data.map(coin =>
-          <div key={coin.id}><i className={`cc ${coin.symbol.toUpperCase()}`}></i> {coin.id}: {coin.price_usd}</div>
+          <div key={coin.id}><i className={`cc defaultCoinIcon ${coin.symbol.toUpperCase()}`}></i> {coin.id}: {coin.price_usd}</div>
         )}
       </div>
     );
