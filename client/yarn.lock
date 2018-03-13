@@ -1187,7 +1187,7 @@ builtin-status-codes@^3.0.0:
 
 bulma@^0.6.2:
   version "0.6.2"
-  resolved "http://artifactory-prd.prd.betfair/artifactory/api/npm/npm/bulma/-/bulma-0.6.2.tgz#f4b1d11d5acc51a79644eb0a2b0b10649d3d71f5"
+  resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.6.2.tgz#f4b1d11d5acc51a79644eb0a2b0b10649d3d71f5"
 
 bytes@3.0.0:
   version "3.0.0"
@@ -1635,7 +1635,7 @@ crypto-browserify@^3.11.0:
 
 cryptocoins-icons@^2.7.0:
   version "2.7.0"
-  resolved "http://artifactory-prd.prd.betfair/artifactory/api/npm/npm/cryptocoins-icons/-/cryptocoins-icons-2.7.0.tgz#53e455f367bd3add9e91a611366957edcf60e3b3"
+  resolved "https://registry.yarnpkg.com/cryptocoins-icons/-/cryptocoins-icons-2.7.0.tgz#53e455f367bd3add9e91a611366957edcf60e3b3"
 
 css-color-names@0.0.4:
   version "0.0.4"
@@ -2690,7 +2690,7 @@ flux@^3.1.3:
 
 font-awesome@^4.7.0:
   version "4.7.0"
-  resolved "http://artifactory-prd.prd.betfair/artifactory/api/npm/npm/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
+  resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
 
 for-in@^1.0.1:
   version "1.0.2"
