@@ -1,8 +1,14 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+// @flow
+import React from 'react'
+import ReactDOM from 'react-dom'
+import AppRoot from './components/app-root'
+import registerServiceWorker from './registerServiceWorker'
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+const rootElement: ?HTMLElement = (document.getElementById('root'): ?HTMLElement)
+
+if (rootElement == null) {
+  throw new Error('Root element is missing!')
+}
+
+ReactDOM.render(<AppRoot />, rootElement)
+registerServiceWorker()

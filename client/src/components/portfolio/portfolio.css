@@ -1,0 +1,3 @@
+.defaultCoinIcon::before {
+  content: "\E028";
+}

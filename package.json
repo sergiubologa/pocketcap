@@ -9,7 +9,7 @@
     "heroku-postbuild": "cd client && yarn --production=false && yarn run build"
   },
   "engines": {
-    "node": "9.3.0"
+    "node": "^9.3.0"
   },
   "dependencies": {
     "axios": "^0.17.1",

@@ -1,11 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { shallow, mount, render } from 'enzyme';
-import App from '../App';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { shallow, mount, render } from 'enzyme'
+import Portfolio from './portfolio'
 
 it('calls componentDidMount', () => {
   // const spy = jest.spyOn(App.prototype, 'componentDidMount');
-  // const wrapper = mount(<App />);
+  // const wrapper = mount(<Portfolio />);
   // expect(spy).toHaveBeenCalled();
 });
 
@@ -17,10 +17,10 @@ it('renders without crashing', () => {
   // });
 
   // const div = document.createElement('div');
-  // ReactDOM.render(<App />, div);
+  // ReactDOM.render(<Portfolio />, div);
 });
 
 it('renders without crashing', () => {
-  // const component = shallow(<App />);
+  // const component = shallow(<Portfolio />);
   // expect(component.find('div.App')).toHaveLength(1);
 });
