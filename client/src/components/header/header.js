@@ -2,32 +2,31 @@
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
 import type { Props } from '../../flow-types/react-generic'
-import type { HeaderData as State } from '../../flow-types/header-data'
-import HeaderStore from '../../stores/header-store'
-import HeaderActions from '../../actions/header-actions'
 import logo from '../../resources/thepocketcap.png'
 import './header.css'
+
+type State = {
+  isBurgerMenuVisible: boolean
+}
 
 class Header extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
-    this.state = HeaderStore.getHeaderState()
-  }
-
-  componentWillMount() {
-    HeaderStore.on('change', this.getHeaderState)
-  }
-
-  componentWillUnmount() {
-    HeaderStore.removeListener('change', this.getHeaderState)
-  }
-
-  getHeaderState = (): void => {
-    this.setState(HeaderStore.getHeaderState())
+    this.state = {
+      isBurgerMenuVisible: false
+    }
+    this.toggleBurgerMenu = this.toggleBurgerMenu.bind(this);
+    this.closeBurgerMenu = this.closeBurgerMenu.bind(this)
   }
 
   toggleBurgerMenu = (): void => {
-    HeaderActions.toggleBurgerMenu()
+    this.setState({isBurgerMenuVisible: !this.state.isBurgerMenuVisible})
+  }
+
+  closeBurgerMenu = (): void => {
+    if (this.state.isBurgerMenuVisible) {
+      this.setState({isBurgerMenuVisible: false})
+    }
   }
 
   render(){
@@ -41,15 +40,15 @@ class Header extends Component<Props, State> {
           </Link>
           <div
             className={'navbar-burger ' + burgerMenuActiveClass}
-            onClick={this.toggleBurgerMenu.bind(this)}>
+            onClick={this.toggleBurgerMenu}>
             <span></span><span></span><span></span>
           </div>
         </div>
 
         <div className={'navbar-menu ' + burgerMenuActiveClass}>
           <div className="navbar-start">
-            <Link to="/" className="navbar-item">Home</Link>
-            <Link to="/contact" className="navbar-item">Contact</Link>
+            <Link to="/" className="navbar-item" onClick={this.closeBurgerMenu}>Home</Link>
+            <Link to="/contact" className="navbar-item" onClick={this.closeBurgerMenu}>Contact</Link>
           </div>
 
           <div className="navbar-end">

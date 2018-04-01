@@ -16,7 +16,6 @@ class CoinsStore extends EventEmitter {
     })
     .then(res => res.json())
     .then(coins => {
-      console.log(coins)
       this.coinsData = {coins}
       this.emit('change')
     })
