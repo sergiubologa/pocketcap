@@ -3,32 +3,32 @@ import React, { Component } from 'react'
 import type {Props} from '../../flow-types/react-generic'
 import type {CoinsData as State} from '../../flow-types/coins'
 import moment from 'moment'
-import CoinsStore from '../../stores/coins-store'
-import CoinsActions from '../../actions/coins-actions'
+import PortfolioStore from '../../stores/portfolio-store'
+import PortfolioActions from '../../actions/portfolio-actions'
 import './portfolio.css'
 
 class Portfolio extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
-    this.state = CoinsStore.getCoinsData()
+    this.state = PortfolioStore.getCoinsData()
     this.getCoinsData = this.getCoinsData.bind(this)
   }
 
   componentWillMount() {
-    CoinsActions.fetchCoinsData()
-    CoinsStore.on('change', this.getCoinsData)
+    PortfolioActions.fetchCoinsData()
+    PortfolioStore.on('change', this.getCoinsData)
   }
 
   componentWillUnmount() {
-    CoinsStore.removeListener('change', this.getCoinsData)
+    PortfolioStore.removeListener('change', this.getCoinsData)
   }
 
   getCoinsData = (): void => {
-    this.setState(CoinsStore.getCoinsData())
+    this.setState(PortfolioStore.getCoinsData())
   }
 
   refreshCoinsData = (): void => {
-    CoinsActions.fetchCoinsData()
+    PortfolioActions.fetchCoinsData()
   }
 
   getAddedAtDate = (): string => {

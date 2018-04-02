@@ -1,3 +1,0 @@
-it('shoul do something...', () => {
-  
-})
