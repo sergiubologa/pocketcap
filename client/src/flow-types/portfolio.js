@@ -1,6 +1,10 @@
 // @flow
+import type {CoinsData} from './coins'
+
 export type Portfolio = {
-  transactions: Array<Transaction>
+  transactions: Array<Transaction>,
+  coins: CoinsData,
+  isAddNewTransactionModalOpen: boolean
 }
 
 export type Transaction = {

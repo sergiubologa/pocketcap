@@ -6,10 +6,12 @@ import type {Portfolio, Transaction} from '../flow-types/portfolio'
 import type {CoinsData} from '../flow-types/coins'
 
 class PortfolioStore extends EventEmitter {
-  portfolio: Portfolio = {
-    transactions: []
-  }
   COINS_DATA_STORAGE_KEY: string = 'COINS_DATA'
+  portfolio: Portfolio = {
+    transactions: [],
+    coins: this.getCoinsData(),
+    isAddNewTransactionModalOpen: false
+  }
 
   addTransaction(transaction: Transaction) {
     this.portfolio.transactions = this.portfolio.transactions.concat(transaction)
@@ -31,14 +33,20 @@ class PortfolioStore extends EventEmitter {
       .catch((err) => console.log(err))
   }
 
+  toggleAddNewTransactionModal() {
+    this.portfolio.isAddNewTransactionModalOpen = !this.portfolio.isAddNewTransactionModalOpen
+    this.emit('change')
+  }
+
   getPortfolio(): Portfolio {
+    this.portfolio.coins = this.getCoinsData()
     return this.portfolio
   }
 
   getCoinsData(): CoinsData {
     const coins: ?string = localStorage.getItem(this.COINS_DATA_STORAGE_KEY)
-    const defaultCoinsData: CoinsData = { coins: { added_at: undefined, data: [] } }
-    return coins ? {coins: JSON.parse(coins)} : defaultCoinsData
+    const defaultCoinsData: CoinsData = { added_at: undefined, data: [] }
+    return coins ? JSON.parse(coins) : defaultCoinsData
   }
 
   handleActions(action) {
@@ -51,6 +59,9 @@ class PortfolioStore extends EventEmitter {
         break
       case PortfolioActionsNames.FETCH_COINS_DATA:
         this.fetchCoinsData()
+        break
+      case PortfolioActionsNames.TOGGLE_ADD_NEW_TRANSACTION_MODAL:
+        this.toggleAddNewTransactionModal()
         break
       default:
         break
