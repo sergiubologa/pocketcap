@@ -16,19 +16,19 @@ class NewTransactionModal extends Component<Props, State> {
 
   render() {
     return (
-      <div class="modal is-active">
-        <div class="modal-background"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Modal title</p>
-            <button class="delete" aria-label="close" onClick={this.closeModal}></button>
+      <div className="modal is-active">
+        <div className="modal-background"></div>
+        <div className="modal-card">
+          <header className="modal-card-head">
+            <p className="modal-card-title">Modal title</p>
+            <button className="delete" aria-label="close" onClick={this.closeModal}></button>
           </header>
-          <section class="modal-card-body">
+          <section className="modal-card-body">
             <p>Content.....</p>
           </section>
-          <footer class="modal-card-foot">
-            <button class="button is-success">Save changes</button>
-            <button class="button" onClick={this.closeModal}>Cancel</button>
+          <footer className="modal-card-foot">
+            <button className="button is-success">Save changes</button>
+            <button className="button" onClick={this.closeModal}>Cancel</button>
           </footer>
         </div>
       </div>

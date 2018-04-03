@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import type { Props, State } from '../flow-types/react-generic'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Header from './header/header'
@@ -16,14 +16,14 @@ class AppRoot extends Component<Props, State> {
   render(){
     return (
       <BrowserRouter>
-        <div>
+        <Fragment>
           <Header />
           <Switch>
             <Route exact path='/' component={Portfolio} />
             <Route path='/contact' component={Contact} />
             <Route component={NotFound} />
           </Switch>
-        </div>
+        </Fragment>
       </BrowserRouter>
     )
   }
