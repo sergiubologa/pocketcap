@@ -22,6 +22,9 @@ app.set('view engine', 'jade');
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+// Delay responses to simulate latency
+//app.use(function(req,res,next){setTimeout(next,2000)});
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));

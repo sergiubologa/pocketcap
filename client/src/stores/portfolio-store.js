@@ -7,10 +7,13 @@ import type {CoinsData} from '../flow-types/coins'
 
 class PortfolioStore extends EventEmitter {
   COINS_DATA_STORAGE_KEY: string = 'COINS_DATA'
+  COINS_UPDATE_INTERVAL: number = 5 * 60 // 5 minutes
   portfolio: Portfolio = {
     transactions: [],
     coins: this.getCoinsData(),
-    isAddNewTransactionModalOpen: false
+    secToNextUpdate: this.COINS_UPDATE_INTERVAL,
+    isAddNewTransactionModalOpen: false,
+    isUpdatingCoinsData: false
   }
 
   addTransaction(transaction: Transaction) {
@@ -24,17 +27,37 @@ class PortfolioStore extends EventEmitter {
   }
 
   fetchCoinsData() {
+    this.portfolio.isUpdatingCoinsData = true
+    this.emit('change')
+
     fetch('/api/coins')
       .then(res => res.json())
       .then(coins => {
         localStorage.setItem(this.COINS_DATA_STORAGE_KEY, JSON.stringify(coins))
-        this.emit('change')
       })
       .catch((err) => console.log(err))
+      // .finally() is not yet supported by flow
+      // see this thread: https://github.com/facebook/flow/issues/5810
+      // $FlowFixMe
+      .finally(() => {
+        this.portfolio.isUpdatingCoinsData = false
+        this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL
+        this.emit('change')
+      })
   }
 
   toggleAddNewTransactionModal() {
     this.portfolio.isAddNewTransactionModalOpen = !this.portfolio.isAddNewTransactionModalOpen
+    this.emit('change')
+  }
+
+  decrementCountdown() {
+    this.portfolio.secToNextUpdate--
+
+    if (this.portfolio.secToNextUpdate === 0) {
+      this.fetchCoinsData()
+    }
+
     this.emit('change')
   }
 
@@ -62,6 +85,9 @@ class PortfolioStore extends EventEmitter {
         break
       case PortfolioActionsNames.TOGGLE_ADD_NEW_TRANSACTION_MODAL:
         this.toggleAddNewTransactionModal()
+        break
+      case PortfolioActionsNames.DECREMENT_COUNTDOWN:
+        this.decrementCountdown()
         break
       default:
         break

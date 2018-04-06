@@ -1,3 +1,9 @@
-.defaultCoinIcon::before {
-  content: "\E028";
+.portfolio{
+
+  .defaultCoinIcon::before {
+    content: "\E028";
+  }
+
+  
+
 }
