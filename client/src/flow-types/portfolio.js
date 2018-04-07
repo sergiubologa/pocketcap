@@ -3,6 +3,10 @@ import type {CoinsData} from './coins'
 
 export type Portfolio = {
   transactions: Array<Transaction>,
+  totalInvested: number,
+  currentTotalValue: number,
+  totalMargin: number,
+  totalProfit: number,
   coins: CoinsData,
   isAddNewTransactionModalOpen: boolean,
   secToNextUpdate: number,
@@ -12,12 +16,13 @@ export type Portfolio = {
 
 export type Transaction = {
   coinId: string,
-  balance: number,
+  coinName: string,
+  units: number,
   initialPrice: number,
-  currentPrice: number,
+  currentPrice: ?number,
   totalInvested: number,
-  total: number,
-  margin: number,
-  profit: number,
+  currentValue: ?number,
+  margin: ?number,
+  profit: ?number,
   editMode: boolean
 }

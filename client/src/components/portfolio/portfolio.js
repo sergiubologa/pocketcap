@@ -1,7 +1,6 @@
 // @flow
 import React, { Component } from 'react'
 import moment from 'moment'
-//import NewTransactionModal from '../new-transaction-modal/new-transaction-modal'
 import PortfolioStore from '../../stores/portfolio-store'
 import PortfolioActions from '../../actions/portfolio-actions'
 import type {Props} from '../../flow-types/react-generic'
@@ -89,23 +88,48 @@ class Portfolio extends Component<Props, State> {
     return '00'
   }
 
+  getTransactionsList = (): any => {
+    const {transactions} = this.state
+
+    if (transactions && transactions.length > 0) {
+      return transactions.map((transaction, i) =>
+        <tr key={i}>
+          <td>
+            <button className="btnRemoveTransaction button is-small is-danger is-outlined">
+              <span className="icon is-small"><i className="fa fa-minus"></i></span>
+            </button>
+            <i className={`cc defaultCoinIcon ${transaction.coinId}`}></i> {transaction.coinName}
+          </td>
+          <td className="has-text-centered">{transaction.units}</td>
+          <td className="has-text-centered">{transaction.initialPrice}</td>
+          <td className="has-text-centered">{transaction.currentPrice}</td>
+          <td className="has-text-centered">{transaction.totalInvested}</td>
+          <td className="has-text-centered">{transaction.currentValue}</td>
+          <td className="has-text-centered">{transaction.margin}</td>
+          <td className="has-text-centered">{transaction.profit}</td>
+        </tr>
+      )
+    }
+    else {
+      return <p className="has-text-centered is-italic has-text-grey">No transactions. Please add a treansaction.</p>
+    }
+  }
+
   render() {
-    // const newTransactionModal = this.state.isAddNewTransactionModalOpen ?
-    //                             <NewTransactionModal /> :
-    //                             ''
-    // <p><i className="fa fa-calendar"></i>Last updated at: {this.getAddedAtDate()}</p>
-    // <button className="button is-primary" onClick={this.refreshCoinsData}>Refresh</button>
-    // <button className="button is-primary" onClick={this.openAddNewTransactionModal}>Add new transaction</button>
-    // <h1>Coins</h1>
-    // {this.state.coins.data.map(coin =>
-    //   <div key={coin.id}><i className={`cc defaultCoinIcon ${coin.symbol.toUpperCase()}`}></i> {coin.id}: {coin.price_usd}</div>
-    // )}
-    // {newTransactionModal}
-    const {isUpdatingCoinsData, isRefreshButtonDisabled} = this.state
+    const {
+      isUpdatingCoinsData,
+      isRefreshButtonDisabled,
+      totalInvested,
+      currentTotalValue,
+      totalMargin,
+      totalProfit
+    } = this.state
     const nextUpdate = this.getNextUpdateRemainingTime()
     const updateButtonClass = `button is-primary ${isUpdatingCoinsData ? 'is-loading' : ''}`
+    const transactionsList = this.getTransactionsList()
     return (
       <div className="portfolio">
+
         <div className="columns">
           <div className="column">
             Next update: <button disabled={isRefreshButtonDisabled} onClick={this.onRefreshBtnClick} className={updateButtonClass}>{nextUpdate}</button>
@@ -114,6 +138,39 @@ class Portfolio extends Component<Props, State> {
             <a href="/">Share view</a>
           </div>
         </div>
+
+        <table className="table is-bordered is-hoverable is-fullwidth">
+          <thead>
+            <tr>
+              <th className="has-text-centered has-text-weight-bold">Coin</th>
+              <th className="has-text-centered has-text-weight-bold">Units</th>
+              <th className="has-text-centered has-text-weight-bold">Initial Price / unit</th>
+              <th className="has-text-centered has-text-weight-bold">Current Price / unit</th>
+              <th className="has-text-centered has-text-weight-bold">Total invested</th>
+              <th className="has-text-centered has-text-weight-bold">Current value</th>
+              <th className="has-text-centered has-text-weight-bold"> Profit margin (%)</th>
+              <th className="has-text-centered has-text-weight-bold">Profit</th>
+            </tr>
+          </thead>
+          <tfoot>
+            <tr>
+              <th colSpan="3" className="has-text-centered">
+                <button className="button is-primary">
+                  <i className="fa fa-plus"></i> &nbsp; Add new transaction
+                </button>
+              </th>
+              <th className="has-text-centered has-text-weight-semibold">Total:</th>
+              <th className="has-text-centered has-text-weight-semibold">{totalInvested}</th>
+              <th className="has-text-centered has-text-weight-semibold">{currentTotalValue}</th>
+              <th className="has-text-centered has-text-weight-semibold">{totalProfit}</th>
+              <th className="has-text-centered has-text-weight-semibold">{totalMargin}</th>
+            </tr>
+          </tfoot>
+          <tbody>
+            {transactionsList}
+          </tbody>
+        </table>
+
       </div>
     );
   }

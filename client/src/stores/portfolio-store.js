@@ -9,8 +9,62 @@ import type {CoinsData} from '../flow-types/coins'
 class PortfolioStore extends EventEmitter {
   COINS_DATA_STORAGE_KEY: string = 'COINS_DATA'
   COINS_UPDATE_INTERVAL: number = 5 * 60 // 5 minutes
+  COINS_UPDATE_INTERVAL_ON_FAILURE: number = 0.5 * 60 // 5 minutes
   portfolio: Portfolio = {
-    transactions: [],
+    transactions: [
+      {
+        coinId: 'BTC',
+        coinName: 'Bitcoin',
+        units: 0.465345,
+        initialPrice: 10232.56,
+        currentPrice: 12354.21,
+        totalInvested: 5765.67,
+        currentValue: 6824.98,
+        margin: 11,
+        profit: 1068.34,
+        editMode: false
+      },
+      {
+        coinId: 'ETH',
+        coinName: 'Ethereum',
+        units: 0.465345,
+        initialPrice: 10232.56,
+        currentPrice: 12354.21,
+        totalInvested: 5765.67,
+        currentValue: 6824.98,
+        margin: 11,
+        profit: 1068.34,
+        editMode: false
+      },
+      {
+        coinId: 'ADA',
+        coinName: 'Cardano',
+        units: 0.465345,
+        initialPrice: 10232.56,
+        currentPrice: 12354.21,
+        totalInvested: 5765.67,
+        currentValue: 6824.98,
+        margin: 11,
+        profit: 1068.34,
+        editMode: false
+      },
+      {
+        coinId: 'MON',
+        coinName: 'Monero',
+        units: 0.465345,
+        initialPrice: 10232.56,
+        currentPrice: 12354.21,
+        totalInvested: 5765.67,
+        currentValue: 6824.98,
+        margin: 11,
+        profit: 1068.34,
+        editMode: false
+      }
+    ],
+    totalInvested: 23344.56,
+    currentTotalValue: 27543.33,
+    totalMargin: 4268.04,
+    totalProfit: 20.4,
     coins: this.getCoinsData(),
     secToNextUpdate: this.COINS_UPDATE_INTERVAL,
     isAddNewTransactionModalOpen: false,
@@ -31,12 +85,19 @@ class PortfolioStore extends EventEmitter {
     this.portfolio.isUpdatingCoinsData = true
     this.emit('change')
 
-    const res = await axios.get('/api/coins')
-    const coins = res.data
-    localStorage.setItem(this.COINS_DATA_STORAGE_KEY, JSON.stringify(coins))
-    this.portfolio.isUpdatingCoinsData = false
-    this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL
-    this.emit('change')
+    try {
+      const res = await axios.get('/api/coins')
+      const coins = res.data
+      localStorage.setItem(this.COINS_DATA_STORAGE_KEY, JSON.stringify(coins))
+      this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL
+    }
+    catch(error) {
+      this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL_ON_FAILURE
+    }
+    finally {
+      this.portfolio.isUpdatingCoinsData = false
+      this.emit('change')
+    }
   }
 
   toggleAddNewTransactionModal() {

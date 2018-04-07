@@ -1,9 +1,7 @@
-.portfolio{
+.portfolio .defaultCoinIcon::before {
+  content: "\E028";
+}
 
-  .defaultCoinIcon::before {
-    content: "\E028";
-  }
-
-  
-
+.portfolio button.btnRemoveTransaction {
+  margin-right: 1rem;
 }
