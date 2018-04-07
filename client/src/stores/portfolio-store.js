@@ -1,4 +1,5 @@
 // @flow
+import axios from 'axios'
 import EventEmitter from 'events'
 import AppDispatcher from '../app-dispatcher'
 import {Names as PortfolioActionsNames} from '../actions/portfolio-actions'
@@ -26,24 +27,16 @@ class PortfolioStore extends EventEmitter {
     this.emit('change')
   }
 
-  fetchCoinsData() {
+  async fetchCoinsData() {
     this.portfolio.isUpdatingCoinsData = true
     this.emit('change')
 
-    fetch('/api/coins')
-      .then(res => res.json())
-      .then(coins => {
-        localStorage.setItem(this.COINS_DATA_STORAGE_KEY, JSON.stringify(coins))
-      })
-      .catch((err) => console.log(err))
-      // .finally() is not yet supported by flow
-      // see this thread: https://github.com/facebook/flow/issues/5810
-      // $FlowFixMe
-      .finally(() => {
-        this.portfolio.isUpdatingCoinsData = false
-        this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL
-        this.emit('change')
-      })
+    const res = await axios.get('/api/coins')
+    const coins = res.data
+    localStorage.setItem(this.COINS_DATA_STORAGE_KEY, JSON.stringify(coins))
+    this.portfolio.isUpdatingCoinsData = false
+    this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL
+    this.emit('change')
   }
 
   toggleAddNewTransactionModal() {
