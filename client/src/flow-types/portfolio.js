@@ -3,7 +3,6 @@ import type {CoinsData} from './coins'
 
 export type Portfolio = {
   transactions: Array<Transaction>,
-  hasEditModeTransactions: boolean,
 
   totalInvested: number,
   currentTotalValue: number,
@@ -34,5 +33,6 @@ export type Transaction = {
 
 export type TransactionRowProps = {
   remove: () => void,
-  data: Transaction
+  transaction: Transaction,
+  coins: CoinsData
 }

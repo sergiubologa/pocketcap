@@ -1,5 +1,5 @@
 // @flow
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import moment from 'moment'
 import PortfolioStore from '../../stores/portfolio-store'
 import PortfolioActions from '../../actions/portfolio-actions'
@@ -25,7 +25,9 @@ export default class Portfolio extends Component<Props, State> {
     this.addLeadingZero = this.addLeadingZero.bind(this)
     this.refreshCoinsData = this.refreshCoinsData.bind(this)
     this.onRefreshBtnClick = this.onRefreshBtnClick.bind(this)
-    this.addNewTransaction = this.addNewTransaction.bind(this)
+    this.onAddNewTransaction = this.onAddNewTransaction.bind(this)
+    this.onSaveNewTransaction = this.onSaveNewTransaction.bind(this)
+    this.onCancelNewTransaction = this.onCancelNewTransaction.bind(this)
   }
 
   componentWillMount() {
@@ -90,12 +92,20 @@ export default class Portfolio extends Component<Props, State> {
     return '00'
   }
 
-  addNewTransaction = (): void => {
+  onAddNewTransaction = (): void => {
     PortfolioActions.addNewTransaction()
   }
 
-  removeTransaction = (index: number): void => {
+  onRemoveTransaction = (index: number): void => {
     PortfolioActions.removeTransaction(index)
+  }
+
+  onSaveNewTransaction = (): void => {
+    PortfolioActions.saveNewTransaction()
+  }
+
+  onCancelNewTransaction = (): void => {
+    PortfolioActions.cancelNewTransaction()
   }
 
   getTransactionsList = (): any => {
@@ -105,8 +115,9 @@ export default class Portfolio extends Component<Props, State> {
       return transactions.map((transaction, i) =>
         <Transaction
           key={i}
-          remove={this.removeTransaction.bind(this, i)}
-          data={transaction}/>
+          remove={this.onRemoveTransaction.bind(this, i)}
+          transaction={transaction}
+          coins={this.state.coins}/>
       )
     }
     else {
@@ -129,12 +140,31 @@ export default class Portfolio extends Component<Props, State> {
       totalInvested,
       currentTotalValue,
       totalMargin,
-      totalProfit,
-      hasEditModeTransactions: isEditMode
+      totalProfit
     } = this.state
+    const isEditMode = this.state.transactions.findIndex((t) => t.editMode) > -1
     const nextUpdate = this.getNextUpdateRemainingTime()
     const updateButtonClass = `button is-primary ${isUpdatingCoinsData ? 'is-loading' : ''}`
     const transactionsList = this.getTransactionsList()
+    const footerButtons = isEditMode ?
+      <Fragment>
+        <button
+          className="button is-light"
+          onClick={this.onCancelNewTransaction}>
+          <i className="fa fa-cancel"></i>&nbsp;Cancel
+        </button>
+        <button
+          className="button is-primary"
+          onClick={this.onSaveNewTransaction}>
+          <i className="fa fa-check"></i>&nbsp;Save
+        </button>
+      </Fragment>
+    :
+      <button
+        className="button is-primary"
+        onClick={this.onAddNewTransaction}>
+        <i className="fa fa-plus"></i>&nbsp;Add new transaction
+      </button>
     return (
       <div className="portfolio">
 
@@ -162,15 +192,7 @@ export default class Portfolio extends Component<Props, State> {
           </thead>
           <tfoot>
             <tr>
-              <th colSpan="3" className="has-text-centered">
-                <button
-                  className="button is-primary"
-                  onClick={this.addNewTransaction}
-                  disabled={isEditMode}
-                >
-                  <i className="fa fa-plus"></i> &nbsp; Add new transaction
-                </button>
-              </th>
+              <th colSpan="3" className="has-text-centered">{footerButtons}</th>
               <th className="has-text-centered has-text-weight-semibold">Total:</th>
               <th className="has-text-centered has-text-weight-semibold">{totalInvested}</th>
               <th className="has-text-centered has-text-weight-semibold">{currentTotalValue}</th>

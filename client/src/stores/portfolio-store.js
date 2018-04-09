@@ -4,15 +4,15 @@ import EventEmitter from 'events'
 import AppDispatcher from '../app-dispatcher'
 import {Names as PortfolioActionsNames} from '../actions/portfolio-actions'
 import type {Portfolio, Transaction} from '../flow-types/portfolio'
-import type {CoinsData} from '../flow-types/coins'
+import type {CoinsData, Coin} from '../flow-types/coins'
 
 class PortfolioStore extends EventEmitter {
   COINS_DATA_STORAGE_KEY: string = 'COINS_DATA'
   COINS_UPDATE_INTERVAL: number = 5 * 60 // 5 minutes
-  COINS_UPDATE_INTERVAL_ON_FAILURE: number = 0.5 * 60 // 5 minutes
+  COINS_UPDATE_INTERVAL_ON_FAILURE: number = 0.5 * 60 // 30 seconds
+
   portfolio: Portfolio = {
     transactions: [],
-    hasEditModeTransactions: false,
     totalInvested: 0,
     currentTotalValue: 0,
     totalMargin: 0,
@@ -37,21 +37,27 @@ class PortfolioStore extends EventEmitter {
       editMode: true
     }
     this.portfolio.transactions.push(newTransaction)
-    this.portfolio.hasEditModeTransactions = true
     this.emit('change')
   }
 
-  saveTransaction(transaction: Transaction) {
-    this.portfolio.transactions = this.portfolio.transactions.concat(transaction)
-    this.emit('change')
+  saveNewTransaction() {
+    // this.portfolio.transactions = this.portfolio.transactions.concat(transaction)
+    // this.emit('change')
+  }
+
+  cancelNewTransaction() {
+    const newTransactionIndex = this.portfolio.transactions
+      .findIndex((t) => t.editMode)
+
+    if (newTransactionIndex > -1) {
+      this.portfolio.transactions.splice(newTransactionIndex, 1)
+      this.emit('change')
+    }
   }
 
   removeTransaction(index) {
     const transaction = this.portfolio.transactions[index]
     if (transaction) {
-        if (transaction.editMode) {
-          this.portfolio.hasEditModeTransactions = false
-        }
         this.portfolio.transactions.splice(index, 1)
     }
 
@@ -82,6 +88,24 @@ class PortfolioStore extends EventEmitter {
     this.emit('change')
   }
 
+  inEditTransactionCoinChanged(newCoinId: string) {
+    const newCoin: ?Coin = this.portfolio.coins.data.find(c => c.id === newCoinId)
+
+    if (newCoin) {
+      const inEditTransactionIndex: number = this.portfolio.transactions.findIndex(t => t.editMode)
+      if (inEditTransactionIndex > -1) {
+        this.portfolio.transactions[inEditTransactionIndex] = {
+          ...this.portfolio.transactions[inEditTransactionIndex],
+          coinId: newCoinId,
+          coinName: newCoin.name,
+          currentPrice: newCoin.price_usd
+        }
+      }
+    }
+
+    this.emit('change')
+  }
+
   decrementCountdown() {
     this.portfolio.secToNextUpdate--
 
@@ -108,6 +132,12 @@ class PortfolioStore extends EventEmitter {
       case PortfolioActionsNames.ADD_NEW_TRANSACTION:
         this.addNewTransaction()
         break
+      case PortfolioActionsNames.SAVE_NEW_TRANSACTION:
+        this.saveNewTransaction()
+        break
+      case PortfolioActionsNames.CANCEL_NEW_TRANSACTION:
+        this.cancelNewTransaction()
+        break
       case PortfolioActionsNames.REMOVE_TRANSACTION:
         this.removeTransaction(action.data)
         break
@@ -116,6 +146,9 @@ class PortfolioStore extends EventEmitter {
         break
       case PortfolioActionsNames.TOGGLE_ADD_NEW_TRANSACTION_MODAL:
         this.toggleAddNewTransactionModal()
+        break
+      case PortfolioActionsNames.IN_EDIT_TRANSACTION_COIN_CHANGED:
+        this.inEditTransactionCoinChanged(action.data)
         break
       case PortfolioActionsNames.DECREMENT_COUNTDOWN:
         this.decrementCountdown()
