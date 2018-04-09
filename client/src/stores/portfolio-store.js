@@ -11,73 +11,50 @@ class PortfolioStore extends EventEmitter {
   COINS_UPDATE_INTERVAL: number = 5 * 60 // 5 minutes
   COINS_UPDATE_INTERVAL_ON_FAILURE: number = 0.5 * 60 // 5 minutes
   portfolio: Portfolio = {
-    transactions: [
-      {
-        coinId: 'BTC',
-        coinName: 'Bitcoin',
-        units: 0.465345,
-        initialPrice: 10232.56,
-        currentPrice: 12354.21,
-        totalInvested: 5765.67,
-        currentValue: 6824.98,
-        margin: 11,
-        profit: 1068.34,
-        editMode: false
-      },
-      {
-        coinId: 'ETH',
-        coinName: 'Ethereum',
-        units: 0.465345,
-        initialPrice: 10232.56,
-        currentPrice: 12354.21,
-        totalInvested: 5765.67,
-        currentValue: 6824.98,
-        margin: 11,
-        profit: 1068.34,
-        editMode: false
-      },
-      {
-        coinId: 'ADA',
-        coinName: 'Cardano',
-        units: 0.465345,
-        initialPrice: 10232.56,
-        currentPrice: 12354.21,
-        totalInvested: 5765.67,
-        currentValue: 6824.98,
-        margin: 11,
-        profit: 1068.34,
-        editMode: false
-      },
-      {
-        coinId: 'MON',
-        coinName: 'Monero',
-        units: 0.465345,
-        initialPrice: 10232.56,
-        currentPrice: 12354.21,
-        totalInvested: 5765.67,
-        currentValue: 6824.98,
-        margin: 11,
-        profit: 1068.34,
-        editMode: false
-      }
-    ],
-    totalInvested: 23344.56,
-    currentTotalValue: 27543.33,
-    totalMargin: 4268.04,
-    totalProfit: 20.4,
+    transactions: [],
+    hasEditModeTransactions: false,
+    totalInvested: 0,
+    currentTotalValue: 0,
+    totalMargin: 0,
+    totalProfit: 0,
     coins: this.getCoinsData(),
     secToNextUpdate: this.COINS_UPDATE_INTERVAL,
     isAddNewTransactionModalOpen: false,
     isUpdatingCoinsData: false
   }
 
-  addTransaction(transaction: Transaction) {
+  addNewTransaction() {
+    const newTransaction: Transaction = {
+      coinId: '',
+      coinName: null,
+      units: null,
+      initialPrice: null,
+      currentPrice: null,
+      totalInvested: 0,
+      currentValue: 0,
+      margin: 0,
+      profit: 0,
+      editMode: true
+    }
+    this.portfolio.transactions.push(newTransaction)
+    this.portfolio.hasEditModeTransactions = true
+    this.emit('change')
+  }
+
+  saveTransaction(transaction: Transaction) {
     this.portfolio.transactions = this.portfolio.transactions.concat(transaction)
     this.emit('change')
   }
 
   removeTransaction(index) {
-    this.portfolio.transactions = this.portfolio.transactions.filter((item, i) => i !== index)
+    const transaction = this.portfolio.transactions[index]
+    if (transaction) {
+        if (transaction.editMode) {
+          this.portfolio.hasEditModeTransactions = false
+        }
+        this.portfolio.transactions.splice(index, 1)
+    }
+
     this.emit('change')
   }
 
@@ -128,8 +105,8 @@ class PortfolioStore extends EventEmitter {
 
   handleActions(action) {
     switch (action.type) {
-      case PortfolioActionsNames.ADD_TRANSACTION:
-        this.addTransaction(action.data)
+      case PortfolioActionsNames.ADD_NEW_TRANSACTION:
+        this.addNewTransaction()
         break
       case PortfolioActionsNames.REMOVE_TRANSACTION:
         this.removeTransaction(action.data)

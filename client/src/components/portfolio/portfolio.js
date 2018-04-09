@@ -5,9 +5,10 @@ import PortfolioStore from '../../stores/portfolio-store'
 import PortfolioActions from '../../actions/portfolio-actions'
 import type {Props} from '../../flow-types/react-generic'
 import type {Portfolio as State} from '../../flow-types/portfolio'
+import Transaction from '../transaction/transaction'
 import './portfolio.css'
 
-class Portfolio extends Component<Props, State> {
+export default class Portfolio extends Component<Props, State> {
   countdownInterval: IntervalID
   enableRefreshBtnTimer: TimeoutID
 
@@ -24,6 +25,7 @@ class Portfolio extends Component<Props, State> {
     this.addLeadingZero = this.addLeadingZero.bind(this)
     this.refreshCoinsData = this.refreshCoinsData.bind(this)
     this.onRefreshBtnClick = this.onRefreshBtnClick.bind(this)
+    this.addNewTransaction = this.addNewTransaction.bind(this)
   }
 
   componentWillMount() {
@@ -88,30 +90,35 @@ class Portfolio extends Component<Props, State> {
     return '00'
   }
 
+  addNewTransaction = (): void => {
+    PortfolioActions.addNewTransaction()
+  }
+
+  removeTransaction = (index: number): void => {
+    PortfolioActions.removeTransaction(index)
+  }
+
   getTransactionsList = (): any => {
     const {transactions} = this.state
 
     if (transactions && transactions.length > 0) {
       return transactions.map((transaction, i) =>
-        <tr key={i}>
-          <td>
-            <button className="btnRemoveTransaction button is-small is-danger is-outlined">
-              <span className="icon is-small"><i className="fa fa-minus"></i></span>
-            </button>
-            <i className={`cc defaultCoinIcon ${transaction.coinId}`}></i> {transaction.coinName}
-          </td>
-          <td className="has-text-centered">{transaction.units}</td>
-          <td className="has-text-centered">{transaction.initialPrice}</td>
-          <td className="has-text-centered">{transaction.currentPrice}</td>
-          <td className="has-text-centered">{transaction.totalInvested}</td>
-          <td className="has-text-centered">{transaction.currentValue}</td>
-          <td className="has-text-centered">{transaction.margin}</td>
-          <td className="has-text-centered">{transaction.profit}</td>
-        </tr>
+        <Transaction
+          key={i}
+          remove={this.removeTransaction.bind(this, i)}
+          data={transaction}/>
       )
     }
     else {
-      return <p className="has-text-centered is-italic has-text-grey">No transactions. Please add a treansaction.</p>
+      return (
+        <tr>
+          <td colSpan="8">
+            <p className="has-text-centered is-italic has-text-grey">
+            No transactions. Please add a transaction.
+            </p>
+          </td>
+        </tr>
+      )
     }
   }
 
@@ -122,7 +129,8 @@ class Portfolio extends Component<Props, State> {
       totalInvested,
       currentTotalValue,
       totalMargin,
-      totalProfit
+      totalProfit,
+      hasEditModeTransactions: isEditMode
     } = this.state
     const nextUpdate = this.getNextUpdateRemainingTime()
     const updateButtonClass = `button is-primary ${isUpdatingCoinsData ? 'is-loading' : ''}`
@@ -155,7 +163,11 @@ class Portfolio extends Component<Props, State> {
           <tfoot>
             <tr>
               <th colSpan="3" className="has-text-centered">
-                <button className="button is-primary">
+                <button
+                  className="button is-primary"
+                  onClick={this.addNewTransaction}
+                  disabled={isEditMode}
+                >
                   <i className="fa fa-plus"></i> &nbsp; Add new transaction
                 </button>
               </th>
@@ -166,14 +178,10 @@ class Portfolio extends Component<Props, State> {
               <th className="has-text-centered has-text-weight-semibold">{totalMargin}</th>
             </tr>
           </tfoot>
-          <tbody>
-            {transactionsList}
-          </tbody>
+          <tbody>{transactionsList}</tbody>
         </table>
 
       </div>
     );
   }
 }
-
-export default Portfolio
