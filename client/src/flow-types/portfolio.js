@@ -1,5 +1,12 @@
 // @flow
 import type {CoinsData} from './coins'
+import type {CoinSelectOption} from './coins-select'
+
+export type PortfolioState = {
+  coin: ?CoinSelectOption,
+  units: ?number,
+  initialPrice: ?number
+}
 
 export type Portfolio = {
   transactions: Array<Transaction>,
