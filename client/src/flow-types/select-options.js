@@ -1,5 +1,6 @@
 // @flow
 export type SelectOption = {
-  value: string,
-  label: string
+  id: string,
+  label: string,
+  symbol: string
 }

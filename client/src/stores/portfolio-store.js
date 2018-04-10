@@ -88,22 +88,26 @@ class PortfolioStore extends EventEmitter {
     this.emit('change')
   }
 
-  inEditTransactionCoinChanged(newCoinId: string) {
-    const newCoin: ?Coin = this.portfolio.coins.data.find(c => c.id === newCoinId)
+  inEditTransactionCoinChanged(newCoinId: ?string) {
+    const inEditTransaction: ?Transaction = this.portfolio.transactions.find(t => t.editMode)
 
-    if (newCoin) {
-      const inEditTransactionIndex: number = this.portfolio.transactions.findIndex(t => t.editMode)
-      if (inEditTransactionIndex > -1) {
-        this.portfolio.transactions[inEditTransactionIndex] = {
-          ...this.portfolio.transactions[inEditTransactionIndex],
-          coinId: newCoinId,
-          coinName: newCoin.name,
-          currentPrice: newCoin.price_usd
+    if (inEditTransaction) {
+      if (!newCoinId) {
+        inEditTransaction.coinId = ''
+        inEditTransaction.coinName = ''
+        inEditTransaction.currentPrice = null
+        this.emit('change')
+      } else {
+        const newCoin: ?Coin = this.portfolio.coins.data.find(c => c.id === newCoinId)
+
+        if (newCoin) {
+          inEditTransaction.coinId = newCoin.id
+          inEditTransaction.coinName = newCoin.name
+          inEditTransaction.currentPrice = newCoin.price_usd
+          this.emit('change')
         }
       }
     }
-
-    this.emit('change')
   }
 
   decrementCountdown() {

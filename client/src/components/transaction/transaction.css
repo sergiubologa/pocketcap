@@ -1,0 +1,23 @@
+.Select-control {
+  cursor: text;
+}
+
+.coinOption {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 1rem;
+}
+
+.coinOption i.cc.defaultCoinIcon,
+.Select-value i.cc.defaultCoinIcon {
+  margin-right: 5px;
+}
+
+.coinOptionFocused {
+  background-color: rgba(0, 126, 255, 0.1);
+}
+
+.coinOptionSelected {
+  font-weight: bold;
+}

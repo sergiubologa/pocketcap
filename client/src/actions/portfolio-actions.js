@@ -32,7 +32,7 @@ const Actions = {
     type: Names.REMOVE_TRANSACTION,
     data: index
   }),
-  inEditTransactionCoinChanged: (coinId: string) => AppDispatcher.dispatch({
+  inEditTransactionCoinChanged: (coinId: ?string) => AppDispatcher.dispatch({
     type: Names.IN_EDIT_TRANSACTION_COIN_CHANGED,
     data: coinId
   }),
