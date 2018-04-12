@@ -3,6 +3,7 @@ import axios from 'axios'
 import EventEmitter from 'events'
 import AppDispatcher from '../app-dispatcher'
 import {Names as PortfolioActionsNames} from '../actions/portfolio-actions'
+import * as Utils from '../utils/utils'
 import type {Portfolio, Transaction} from '../flow-types/portfolio'
 import type {CoinsData, Coin} from '../flow-types/coins'
 
@@ -26,23 +27,36 @@ class PortfolioStore extends EventEmitter {
   addNewTransaction() {
     const newTransaction: Transaction = {
       coinId: '',
-      coinName: null,
-      units: null,
-      initialPrice: null,
+      coinName: '',
+      symbol: '',
+      units: '',
+      initialPrice: '',
       currentPrice: null,
       totalInvested: 0,
       currentValue: 0,
       margin: 0,
       profit: 0,
-      editMode: true
+      editMode: true,
+      isCoinTouched: false, isCoinValid: false,
+      isUnitsTouched: false, isUnitsValid: false,
+      isInitialPriceTouched: false, isInitialPriceValid: false
     }
     this.portfolio.transactions.push(newTransaction)
     this.emit('change')
   }
 
-  saveNewTransaction() {
-    // this.portfolio.transactions = this.portfolio.transactions.concat(transaction)
-    // this.emit('change')
+  saveTransaction() {
+    const inEditTransaction: ?Transaction = this.portfolio.transactions
+      .find(t => t.editMode)
+
+    if (inEditTransaction) {
+      const {isCoinValid, isUnitsValid, isInitialPriceValid} = inEditTransaction
+      if (isCoinValid && isUnitsValid && isInitialPriceValid) {
+        inEditTransaction.editMode = false
+        this.calculateTotalValues()
+        this.emit('change')
+      }
+    }
   }
 
   cancelNewTransaction() {
@@ -59,9 +73,9 @@ class PortfolioStore extends EventEmitter {
     const transaction = this.portfolio.transactions[index]
     if (transaction) {
         this.portfolio.transactions.splice(index, 1)
+        this.calculateTotalValues()
+        this.emit('change')
     }
-
-    this.emit('change')
   }
 
   async fetchCoinsData() {
@@ -88,14 +102,17 @@ class PortfolioStore extends EventEmitter {
     this.emit('change')
   }
 
-  inEditTransactionCoinChanged(newCoinId: ?string) {
+  transactionCoinChanged(newCoinId: ?string) {
     const inEditTransaction: ?Transaction = this.portfolio.transactions.find(t => t.editMode)
 
     if (inEditTransaction) {
       if (!newCoinId) {
         inEditTransaction.coinId = ''
         inEditTransaction.coinName = ''
+        inEditTransaction.symbol = ''
         inEditTransaction.currentPrice = null
+        inEditTransaction.isCoinValid = false
+        this.calculateTransactionValues(inEditTransaction)
         this.emit('change')
       } else {
         const newCoin: ?Coin = this.portfolio.coins.data.find(c => c.id === newCoinId)
@@ -103,10 +120,75 @@ class PortfolioStore extends EventEmitter {
         if (newCoin) {
           inEditTransaction.coinId = newCoin.id
           inEditTransaction.coinName = newCoin.name
+          inEditTransaction.symbol = newCoin.symbol
           inEditTransaction.currentPrice = newCoin.price_usd
+          inEditTransaction.isCoinValid = true
+          this.calculateTransactionValues(inEditTransaction)
           this.emit('change')
         }
       }
+    }
+  }
+
+  transactionUnitsChanged(units: string) {
+    const inEditTransaction: ?Transaction = this.portfolio.transactions.find(t => t.editMode)
+
+    if (inEditTransaction) {
+      inEditTransaction.units = units
+      inEditTransaction.isUnitsValid = Utils.isValidDecimal(units)
+      this.calculateTransactionValues(inEditTransaction)
+      this.emit('change')
+    }
+  }
+
+  transactionInitialPriceChanged(price: string) {
+    const inEditTransaction: ?Transaction = this.portfolio.transactions.find(t => t.editMode)
+
+    if (inEditTransaction) {
+      inEditTransaction.initialPrice = price
+      inEditTransaction.isInitialPriceValid = Utils.isValidDecimal(price)
+      this.calculateTransactionValues(inEditTransaction)
+      this.emit('change')
+    }
+  }
+
+  calculateTransactionValues(transaction: Transaction) {
+    if (transaction) {
+      const {isCoinValid, isUnitsValid, isInitialPriceValid} = transaction
+      const isValid: boolean = isCoinValid && isUnitsValid && isInitialPriceValid
+      transaction.totalInvested = 0
+      transaction.currentValue = 0
+      transaction.margin = transaction.profit = 0
+
+      if (isValid) {
+        const units: number = parseFloat(transaction.units)
+        const initialPrice: number = parseFloat(transaction.initialPrice)
+        const {currentPrice} = transaction
+        transaction.totalInvested = units * initialPrice
+        transaction.currentValue = units * (currentPrice || 0)
+        transaction.profit = transaction.currentValue - transaction.totalInvested
+        transaction.margin = transaction.profit / transaction.totalInvested * 100
+      }
+      this.emit('change')
+    }
+  }
+
+  calculateTotalValues() {
+    const transactions: Array<Transaction> = this.portfolio.transactions
+      .filter(t => !t.editMode)
+
+    this.portfolio.totalInvested = 0
+    this.portfolio.currentTotalValue = 0
+    this.portfolio.totalMargin = 0
+    this.portfolio.totalProfit = 0
+    if (transactions && transactions.length > 0) {
+      transactions.forEach(t => {
+        this.portfolio.totalInvested += t.totalInvested
+        this.portfolio.currentTotalValue += t.currentValue
+      })
+      this.portfolio.totalProfit = this.portfolio.currentTotalValue - this.portfolio.totalInvested
+      this.portfolio.totalMargin = this.portfolio.totalProfit / this.portfolio.totalInvested * 100
+      this.emit('change')
     }
   }
 
@@ -136,8 +218,8 @@ class PortfolioStore extends EventEmitter {
       case PortfolioActionsNames.ADD_NEW_TRANSACTION:
         this.addNewTransaction()
         break
-      case PortfolioActionsNames.SAVE_NEW_TRANSACTION:
-        this.saveNewTransaction()
+      case PortfolioActionsNames.SAVE_TRANSACTION:
+        this.saveTransaction()
         break
       case PortfolioActionsNames.CANCEL_NEW_TRANSACTION:
         this.cancelNewTransaction()
@@ -151,8 +233,14 @@ class PortfolioStore extends EventEmitter {
       case PortfolioActionsNames.TOGGLE_ADD_NEW_TRANSACTION_MODAL:
         this.toggleAddNewTransactionModal()
         break
-      case PortfolioActionsNames.IN_EDIT_TRANSACTION_COIN_CHANGED:
-        this.inEditTransactionCoinChanged(action.data)
+      case PortfolioActionsNames.TRANSACTION_COIN_CHANGED:
+        this.transactionCoinChanged(action.data)
+        break
+      case PortfolioActionsNames.TRANSACTION_UNITS_CHANGED:
+        this.transactionUnitsChanged(action.data)
+        break
+      case PortfolioActionsNames.TRANSACTION_INITIAL_PRICE_CHANGED:
+        this.transactionInitialPriceChanged(action.data)
         break
       case PortfolioActionsNames.DECREMENT_COUNTDOWN:
         this.decrementCountdown()

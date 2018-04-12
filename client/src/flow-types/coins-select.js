@@ -6,8 +6,15 @@ export type CoinsSelectProps = {
   clearable?: boolean,
   searchable?: boolean,
   onChange?: (selectedCoin: ?CoinSelectOption) => void,
+  onBlur?: () => void,
+  value: ?CoinSelectOption,
   placeholder?: React.Node,
-  value: ?CoinSelectOption
+  icon?: React.Node,
+  isValid?: boolean
+}
+
+export type CoinsSelectState = {
+  isTouched: boolean
 }
 
 export type CoinSelectOption = {

@@ -4,11 +4,39 @@ import Select from 'react-virtualized-select'
 import 'react-select/dist/react-select.css'
 import 'react-virtualized/styles.css'
 import 'react-virtualized-select/styles.css'
-import type {CoinsSelectProps as Props} from '../../flow-types/coins-select'
-import type {State} from '../../flow-types/react-generic'
+import type {
+  CoinsSelectProps as Props,
+  CoinsSelectState as State
+} from '../../flow-types/coins-select'
+import type {CoinSelectOption} from '../../flow-types/coins-select'
 import './coins-select.css'
 
 export default class CoinsSelect extends Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+    this.state = {isTouched: false}
+    this.onChange = this.onChange.bind(this)
+    this.onBlur = this.onBlur.bind(this)
+  }
+
+  onChange = (selectedCoin: ?CoinSelectOption): void => {
+    if (this.props.onChange) {
+      this.props.onChange.call(null, selectedCoin)
+    }
+    if (!this.state.isTouched) {
+      this.setState({isTouched: true})
+    }
+  }
+
+  onBlur = (): void => {
+    if (this.props.onBlur) {
+      this.props.onBlur.call(null)
+    }
+    if (!this.state.isTouched) {
+      this.setState({isTouched: true})
+    }
+  }
+
   coinOptionRenderer = ({
     focusedOption, focusedOptionIndex, focusOption, key, labelKey,
     option, options, selectValue, style, valueArray, valueKey }: any) => {
@@ -49,14 +77,19 @@ export default class CoinsSelect extends Component<Props, State> {
 
   render() {
     const {
-      clearable, searchable, onChange, coins, placeholder, value
+      coins, clearable, searchable,
+      value, placeholder, icon, isValid
     } = this.props
-
+    const {isTouched} = this.state
+    const selectClass = !isTouched ? '' : isValid ? 'is-valid' : 'not-valid'
     return (
       <Select
-        clearable={clearable || true}
-        searchable={searchable || true}
-        onChange={onChange}
+        className={selectClass}
+        clearable={clearable}
+        clearValueText="Clear selected coin"
+        searchable={searchable}
+        onChange={this.onChange}
+        onBlur={this.onBlur}
         options={coins}
         placeholder={placeholder}
         value={value}
@@ -64,6 +97,7 @@ export default class CoinsSelect extends Component<Props, State> {
         optionRenderer={this.coinOptionRenderer}
         valueKey="id"
         labelKey="label"
+        arrowRenderer={isTouched ? () => icon : undefined}
         />
     )
   }

@@ -6,6 +6,7 @@ import PortfolioActions from '../../actions/portfolio-actions'
 import type {Props} from '../../flow-types/react-generic'
 import type {Portfolio as State} from '../../flow-types/portfolio'
 import Transaction from '../transaction/transaction'
+import * as Utils from '../../utils/utils'
 import './portfolio.css'
 
 export default class Portfolio extends Component<Props, State> {
@@ -26,7 +27,7 @@ export default class Portfolio extends Component<Props, State> {
     this.refreshCoinsData = this.refreshCoinsData.bind(this)
     this.onRefreshBtnClick = this.onRefreshBtnClick.bind(this)
     this.onAddNewTransaction = this.onAddNewTransaction.bind(this)
-    this.onSaveNewTransaction = this.onSaveNewTransaction.bind(this)
+    this.onSaveTransaction = this.onSaveTransaction.bind(this)
     this.onCancelNewTransaction = this.onCancelNewTransaction.bind(this)
   }
 
@@ -100,8 +101,8 @@ export default class Portfolio extends Component<Props, State> {
     PortfolioActions.removeTransaction(index)
   }
 
-  onSaveNewTransaction = (): void => {
-    PortfolioActions.saveNewTransaction()
+  onSaveTransaction = (): void => {
+    PortfolioActions.saveTransaction()
   }
 
   onCancelNewTransaction = (): void => {
@@ -135,16 +136,18 @@ export default class Portfolio extends Component<Props, State> {
 
   render() {
     const {
-      isUpdatingCoinsData,
-      isRefreshButtonDisabled,
-      totalInvested,
-      currentTotalValue,
-      totalMargin,
-      totalProfit
+      isUpdatingCoinsData, isRefreshButtonDisabled,
+      totalInvested, currentTotalValue, totalMargin, totalProfit
     } = this.state
-    const isEditMode = this.state.transactions.findIndex((t) => t.editMode) > -1
+    const inEditTransaction = this.state.transactions.find((t) => t.editMode)
+    const isEditMode = !!inEditTransaction
+    let isSaveEnabled = false
+    if (inEditTransaction) {
+      const {isCoinValid, isUnitsValid, isInitialPriceValid} = inEditTransaction
+      isSaveEnabled = isCoinValid && isUnitsValid && isInitialPriceValid
+    }
     const nextUpdate = this.getNextUpdateRemainingTime()
-    const updateButtonClass = `button is-primary ${isUpdatingCoinsData ? 'is-loading' : ''}`
+    const updateButtonClass = `button is-primary is-small ${isUpdatingCoinsData ? 'is-loading' : ''}`
     const transactionsList = this.getTransactionsList()
     const footerButtons = isEditMode ?
       <Fragment>
@@ -155,7 +158,8 @@ export default class Portfolio extends Component<Props, State> {
         </button>
         <button
           className="button is-primary"
-          onClick={this.onSaveNewTransaction}>
+          onClick={this.onSaveTransaction}
+          disabled={!isSaveEnabled}>
           <i className="fa fa-check"></i>&nbsp;Save
         </button>
       </Fragment>
@@ -170,7 +174,11 @@ export default class Portfolio extends Component<Props, State> {
 
         <div className="columns">
           <div className="column">
-            Next update: <button disabled={isRefreshButtonDisabled} onClick={this.onRefreshBtnClick} className={updateButtonClass}>{nextUpdate}</button>
+            Next update: <button
+              disabled={isRefreshButtonDisabled}
+              onClick={this.onRefreshBtnClick}
+              className={updateButtonClass}>{nextUpdate}
+            </button>
           </div>
           <div className="column has-text-right">
             <a href="/">Share view</a>
@@ -194,10 +202,10 @@ export default class Portfolio extends Component<Props, State> {
             <tr>
               <th colSpan="3" className="has-text-centered">{footerButtons}</th>
               <th className="has-text-centered has-text-weight-semibold">Total:</th>
-              <th className="has-text-centered has-text-weight-semibold">{totalInvested}</th>
-              <th className="has-text-centered has-text-weight-semibold">{currentTotalValue}</th>
-              <th className="has-text-centered has-text-weight-semibold">{totalProfit}</th>
-              <th className="has-text-centered has-text-weight-semibold">{totalMargin}</th>
+              <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(totalInvested)}</th>
+              <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(currentTotalValue)}</th>
+              <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(totalMargin)}</th>
+              <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(totalProfit)}</th>
             </tr>
           </tfoot>
           <tbody>{transactionsList}</tbody>
