@@ -63,8 +63,8 @@ export default class Transaction extends Component<Props, State> {
     } = this.props
 
     return (
-      <tr>
-        <td width="300">
+      <tr className="trTransaction">
+        <td className={editMode ? '' : 'editable'} width="300">
           { editMode ? (
             <CoinsSelect
               clearable={false}
@@ -85,7 +85,7 @@ export default class Transaction extends Component<Props, State> {
             </Fragment>
           )}
         </td>
-        <td className="has-text-centered">
+        <td className={`has-text-centered ${editMode ? '' : 'editable'}`}>
           { editMode ? (
             <Textbox
               value={this.state.units}
@@ -95,7 +95,7 @@ export default class Transaction extends Component<Props, State> {
             <Fragment>{units}</Fragment>
           )}
         </td>
-        <td className="has-text-centered">
+        <td className={`has-text-centered ${editMode ? '' : 'editable'}`}>
           { editMode ? (
             <Textbox
               value={this.state.initialPrice}

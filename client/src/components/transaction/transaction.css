@@ -1,1 +1,6 @@
-
+tr.trTransaction > td.editable {
+  cursor: text;
+}
+tr.trTransaction > td.editable:hover {
+  border: 1px solid #dcdcdc;
+}
