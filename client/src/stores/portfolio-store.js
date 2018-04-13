@@ -24,6 +24,27 @@ class PortfolioStore extends EventEmitter {
     isUpdatingCoinsData: false
   }
 
+  async fetchCoinsData() {
+    this.portfolio.isUpdatingCoinsData = true
+    this.emit('change')
+
+    try {
+      const res = await axios.get('/api/coins')
+      const coins = res.data
+      localStorage.setItem(this.COINS_DATA_STORAGE_KEY, JSON.stringify(coins))
+      this.portfolio.coins = coins
+      this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL
+      this.updateTransactionsInitialPrices()
+    }
+    catch(error) {
+      this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL_ON_FAILURE
+    }
+    finally {
+      this.portfolio.isUpdatingCoinsData = false
+      this.emit('change')
+    }
+  }
+
   addNewTransaction() {
     const newTransaction: Transaction = {
       coinId: '',
@@ -75,25 +96,6 @@ class PortfolioStore extends EventEmitter {
         this.portfolio.transactions.splice(index, 1)
         this.calculateTotalValues()
         this.emit('change')
-    }
-  }
-
-  async fetchCoinsData() {
-    this.portfolio.isUpdatingCoinsData = true
-    this.emit('change')
-
-    try {
-      const res = await axios.get('/api/coins')
-      const coins = res.data
-      localStorage.setItem(this.COINS_DATA_STORAGE_KEY, JSON.stringify(coins))
-      this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL
-    }
-    catch(error) {
-      this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL_ON_FAILURE
-    }
-    finally {
-      this.portfolio.isUpdatingCoinsData = false
-      this.emit('change')
     }
   }
 
@@ -152,6 +154,20 @@ class PortfolioStore extends EventEmitter {
     }
   }
 
+  decrementCountdown() {
+    this.portfolio.secToNextUpdate--
+
+    if (this.portfolio.secToNextUpdate === 0) {
+      this.fetchCoinsData()
+    }
+
+    this.emit('change')
+  }
+
+  getPortfolio(): Portfolio {
+    return this.portfolio
+  }
+
   calculateTransactionValues(transaction: Transaction) {
     if (transaction) {
       const {isCoinValid, isUnitsValid, isInitialPriceValid} = transaction
@@ -169,7 +185,6 @@ class PortfolioStore extends EventEmitter {
         transaction.profit = transaction.currentValue - transaction.totalInvested
         transaction.margin = transaction.profit / transaction.totalInvested * 100
       }
-      this.emit('change')
     }
   }
 
@@ -188,23 +203,21 @@ class PortfolioStore extends EventEmitter {
       })
       this.portfolio.totalProfit = this.portfolio.currentTotalValue - this.portfolio.totalInvested
       this.portfolio.totalMargin = this.portfolio.totalProfit / this.portfolio.totalInvested * 100
-      this.emit('change')
     }
   }
 
-  decrementCountdown() {
-    this.portfolio.secToNextUpdate--
+  updateTransactionsInitialPrices() {
+    const {coins, transactions} = this.portfolio
 
-    if (this.portfolio.secToNextUpdate === 0) {
-      this.fetchCoinsData()
-    }
+    transactions.forEach(transaction => {
+      const coin: ?Coin = coins.data.find(c => c.id === transaction.coinId)
+      if (coin) {
+        transaction.currentPrice = coin.price_usd
+        this.calculateTransactionValues(transaction)
+      }
+    })
 
-    this.emit('change')
-  }
-
-  getPortfolio(): Portfolio {
-    this.portfolio.coins = this.getCoinsData()
-    return this.portfolio
+    this.calculateTotalValues()
   }
 
   getCoinsData(): CoinsData {
