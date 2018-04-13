@@ -24,7 +24,7 @@ export default class Textbox extends Component<Props, State> {
   }
 
   render() {
-    const {value, isValid, placeholder} = this.props
+    const {value, isValid, placeholder, autoFocus} = this.props
     const {isTouched} = this.state
     const inputClasses = ['input']
     if (isTouched) {
@@ -40,6 +40,7 @@ export default class Textbox extends Component<Props, State> {
         <div className={`control ${isTouched ? 'has-icons-right' : ''}`}>
           <input
             className={inputClasses.join(' ')}
+            autoFocus={autoFocus}
             type="text"
             value={value}
             placeholder={placeholder}

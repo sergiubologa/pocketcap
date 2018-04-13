@@ -6,9 +6,10 @@ const Names = {
   TOGGLE_ADD_NEW_TRANSACTION_MODAL: 'TOGGLE_ADD_NEW_TRANSACTION_MODAL',
   DECREMENT_COUNTDOWN: 'DECREMENT_COUNTDOWN',
   ADD_NEW_TRANSACTION: 'ADD_NEW_TRANSACTION',
-  CANCEL_NEW_TRANSACTION: 'CANCEL_NEW_TRANSACTION',
+  CANCEL_TRANSACTION: 'CANCEL_TRANSACTION',
   SAVE_TRANSACTION: 'SAVE_TRANSACTION',
   REMOVE_TRANSACTION: 'REMOVE_TRANSACTION',
+  EDIT_TRANSACTION: 'EDIT_TRANSACTION',
   TRANSACTION_COIN_CHANGED: 'TRANSACTION_COIN_CHANGED',
   TRANSACTION_UNITS_CHANGED: 'TRANSACTION_UNITS_CHANGED',
   TRANSACTION_INITIAL_PRICE_CHANGED: 'TRANSACTION_INITIAL_PRICE_CHANGED'
@@ -24,14 +25,18 @@ const Actions = {
   addNewTransaction: () => AppDispatcher.dispatch({
     type: Names.ADD_NEW_TRANSACTION
   }),
-  cancelNewTransaction: () => AppDispatcher.dispatch({
-    type: Names.CANCEL_NEW_TRANSACTION
+  cancelTransaction: () => AppDispatcher.dispatch({
+    type: Names.CANCEL_TRANSACTION
   }),
   saveTransaction: () => AppDispatcher.dispatch({
     type: Names.SAVE_TRANSACTION
   }),
   removeTransaction: (index: number) => AppDispatcher.dispatch({
     type: Names.REMOVE_TRANSACTION,
+    data: index
+  }),
+  editTransaction: (index: number) => AppDispatcher.dispatch({
+    type: Names.EDIT_TRANSACTION,
     data: index
   }),
   transactionCoinChanged: (coinId: ?string) => AppDispatcher.dispatch({

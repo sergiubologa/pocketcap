@@ -3,18 +3,11 @@ import type {CoinsData} from './coins'
 import type {CoinSelectOption} from './coins-select'
 
 export type PortfolioState = {
-  coin: ?CoinSelectOption,
-  units: string,
-  initialPrice: string
-}
-
-export type Portfolio = {
   transactions: Array<Transaction>,
   totalInvested: number,
   currentTotalValue: number,
   totalMargin: number,
   totalProfit: number,
-  coins: CoinsData,
   isAddNewTransactionModalOpen: boolean,
   secToNextUpdate: number,
   isUpdatingCoinsData: boolean,
@@ -33,13 +26,20 @@ export type Transaction = {
   margin: ?number,
   profit: ?number,
   editMode: boolean,
+  isNew: boolean,
   isCoinValid: boolean,
   isUnitsValid: boolean,
   isInitialPriceValid: boolean
 }
 
+export type TransactionState = {
+  coin: ?CoinSelectOption,
+  units: string,
+  initialPrice: string,
+  fieldToFocus: string
+}
+
 export type TransactionRowProps = {
-  remove: () => void,
   transaction: Transaction,
-  coins: CoinsData
+  index: number
 }

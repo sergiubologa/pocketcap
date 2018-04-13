@@ -4,7 +4,7 @@ import moment from 'moment'
 import PortfolioStore from '../../stores/portfolio-store'
 import PortfolioActions from '../../actions/portfolio-actions'
 import type {Props} from '../../flow-types/react-generic'
-import type {Portfolio as State} from '../../flow-types/portfolio'
+import type {PortfolioState as State} from '../../flow-types/portfolio'
 import Transaction from '../transaction/transaction'
 import * as Utils from '../../utils/utils'
 import './portfolio.css'
@@ -28,7 +28,7 @@ export default class Portfolio extends Component<Props, State> {
     this.onRefreshBtnClick = this.onRefreshBtnClick.bind(this)
     this.onAddNewTransaction = this.onAddNewTransaction.bind(this)
     this.onSaveTransaction = this.onSaveTransaction.bind(this)
-    this.onCancelNewTransaction = this.onCancelNewTransaction.bind(this)
+    this.onCancelTransaction = this.onCancelTransaction.bind(this)
   }
 
   componentWillMount() {
@@ -97,16 +97,12 @@ export default class Portfolio extends Component<Props, State> {
     PortfolioActions.addNewTransaction()
   }
 
-  onRemoveTransaction = (index: number): void => {
-    PortfolioActions.removeTransaction(index)
-  }
-
   onSaveTransaction = (): void => {
     PortfolioActions.saveTransaction()
   }
 
-  onCancelNewTransaction = (): void => {
-    PortfolioActions.cancelNewTransaction()
+  onCancelTransaction = (): void => {
+    PortfolioActions.cancelTransaction()
   }
 
   getTransactionsList = (): any => {
@@ -116,9 +112,8 @@ export default class Portfolio extends Component<Props, State> {
       return transactions.map((transaction, i) =>
         <Transaction
           key={i}
-          remove={this.onRemoveTransaction.bind(this, i)}
-          transaction={transaction}
-          coins={this.state.coins}/>
+          index={i}
+          transaction={transaction}/>
       )
     }
     else {
@@ -153,7 +148,7 @@ export default class Portfolio extends Component<Props, State> {
       <Fragment>
         <button
           className="button is-light"
-          onClick={this.onCancelNewTransaction}>
+          onClick={this.onCancelTransaction}>
           <i className="fa fa-cancel"></i>&nbsp;Cancel
         </button>
         <button

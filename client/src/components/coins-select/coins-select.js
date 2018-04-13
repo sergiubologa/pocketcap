@@ -77,7 +77,7 @@ export default class CoinsSelect extends Component<Props, State> {
 
   render() {
     const {
-      coins, clearable, searchable,
+      coins, clearable, searchable, autoFocus,
       value, placeholder, icon, isValid
     } = this.props
     const {isTouched} = this.state
@@ -88,6 +88,7 @@ export default class CoinsSelect extends Component<Props, State> {
         clearable={clearable}
         clearValueText="Clear selected coin"
         searchable={searchable}
+        autoFocus={autoFocus}
         onChange={this.onChange}
         onBlur={this.onBlur}
         options={coins}

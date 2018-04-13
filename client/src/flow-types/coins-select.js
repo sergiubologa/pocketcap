@@ -5,6 +5,7 @@ export type CoinsSelectProps = {
   coins: Array<CoinSelectOption>,
   clearable?: boolean,
   searchable?: boolean,
+  autoFocus?: boolean,
   onChange?: (selectedCoin: ?CoinSelectOption) => void,
   onBlur?: () => void,
   value: ?CoinSelectOption,
