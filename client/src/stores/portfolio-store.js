@@ -1,5 +1,6 @@
 // @flow
 import axios from 'axios'
+import JsonUrl from 'json-url/dist/browser/json-url'
 import EventEmitter from 'events'
 import AppDispatcher from '../app-dispatcher'
 import {Names as PortfolioActionsNames} from '../actions/portfolio-actions'
@@ -12,6 +13,7 @@ class PortfolioStore extends EventEmitter {
   COINS_UPDATE_INTERVAL: number = 5 * 60 // 5 minutes
   COINS_UPDATE_INTERVAL_ON_FAILURE: number = 0.5 * 60 // 30 seconds
 
+  previousPortfolio: ?PortfolioState = null
   portfolio: PortfolioState = {
     transactions: [],
     totalInvested: 0,
@@ -45,9 +47,9 @@ class PortfolioStore extends EventEmitter {
 
   addNewTransaction() {
     const newTransaction: Transaction = {
-      coinId: '',
-      coinName: '',
-      symbol: '',
+      coin: {
+        id: '', label: '', symbol: ''
+      },
       units: '',
       initialPrice: '',
       currentPrice: null,
@@ -74,8 +76,34 @@ class PortfolioStore extends EventEmitter {
         inEditTransaction.editMode = false
         inEditTransaction.isNew = false
         this.calculateTotalValues()
+        //this.updateUrl()
         this.emit('change')
       }
+    }
+  }
+
+  updateUrl() {
+    const {transactions} = this.portfolio
+
+    if (transactions && transactions.length > 0) {
+      const codecLzw = JsonUrl('lzw')
+      // const codecLzma= jsonUrl('lzma')
+      // const codecLzString = jsonUrl('lzstring')
+      // const codecPack = jsonUrl('pack')
+      const urlData = transactions.reduce((result: Array<any>, t) => {
+        result.push([t.coin.id, t.units, t.initialPrice])
+        return result
+      }, [])
+
+      console.log('URL data: ', urlData, codecLzw)
+
+      codecLzw.stats(urlData).then(({ rawencoded, compressedencoded, compression }) => {
+        console.log('LZW:')
+  			console.log(`Raw URI-encoded JSON string length: ${rawencoded}`)
+  			console.log(`Compressed URI-encoded JSON string length: ${compressedencoded}`)
+  			console.log(`Compression ratio (raw / compressed): ${compression}`)
+        console.log('\r\n', '\r\n')
+  		})
     }
   }
 
@@ -88,7 +116,8 @@ class PortfolioStore extends EventEmitter {
         const index = this.portfolio.transactions.findIndex(t => t.editMode)
         this.portfolio.transactions.splice(index, 1)
       } else {
-        transaction.editMode = false
+        this.portfolio = JSON.parse(JSON.stringify(this.previousPortfolio))
+        this.previousPortfolio = undefined
       }
 
       this.emit('change')
@@ -105,6 +134,8 @@ class PortfolioStore extends EventEmitter {
   }
 
   editTransaction(index: number) {
+    this.cancelTransaction()
+    this.previousPortfolio = JSON.parse(JSON.stringify(this.portfolio))
     const transaction = this.portfolio.transactions[index]
     if (transaction && !transaction.editMode) {
         transaction.editMode = true
@@ -122,9 +153,9 @@ class PortfolioStore extends EventEmitter {
 
     if (inEditTransaction) {
       if (!newCoinId) {
-        inEditTransaction.coinId = ''
-        inEditTransaction.coinName = ''
-        inEditTransaction.symbol = ''
+        inEditTransaction.coin.id = ''
+        inEditTransaction.coin.label = ''
+        inEditTransaction.coin.symbol = ''
         inEditTransaction.currentPrice = null
         inEditTransaction.isCoinValid = false
         this.calculateTransactionValues(inEditTransaction)
@@ -134,9 +165,9 @@ class PortfolioStore extends EventEmitter {
         const newCoin: ?Coin = coins.data.find(c => c.id === newCoinId)
 
         if (newCoin) {
-          inEditTransaction.coinId = newCoin.id
-          inEditTransaction.coinName = newCoin.name
-          inEditTransaction.symbol = newCoin.symbol
+          inEditTransaction.coin.id = newCoin.id
+          inEditTransaction.coin.label = newCoin.name
+          inEditTransaction.coin.symbol = newCoin.symbol
           inEditTransaction.currentPrice = newCoin.price_usd
           inEditTransaction.isCoinValid = true
           this.calculateTransactionValues(inEditTransaction)
@@ -223,7 +254,7 @@ class PortfolioStore extends EventEmitter {
   updateTransactionsInitialPrices() {
     const coins: CoinsData = this.getCoinsData()
     this.portfolio.transactions.forEach(transaction => {
-      const coin: ?Coin = coins.data.find(c => c.id === transaction.coinId)
+      const coin: ?Coin = coins.data.find(c => c.id === transaction.coin.id)
       if (coin) {
         transaction.currentPrice = coin.price_usd
         this.calculateTransactionValues(transaction)

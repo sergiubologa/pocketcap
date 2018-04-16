@@ -15,9 +15,7 @@ export type PortfolioState = {
 }
 
 export type Transaction = {
-  coinId: string,
-  coinName: string,
-  symbol: string,
+  coin: CoinSelectOption,
   units: string,
   initialPrice: string,
   currentPrice: ?number,
@@ -33,9 +31,6 @@ export type Transaction = {
 }
 
 export type TransactionState = {
-  coin: ?CoinSelectOption,
-  units: string,
-  initialPrice: string,
   fieldToFocus: string
 }
 

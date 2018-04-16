@@ -15,7 +15,7 @@ import './transaction.css'
 export default class Transaction extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
-    this.state = { coin: null, units: '', initialPrice: '', fieldToFocus: '' }
+    this.state = { fieldToFocus: '' }
     this.onCoinChange = this.onCoinChange.bind(this)
     this.onUnitsChange = this.onUnitsChange.bind(this)
     this.onInitialPriceChange = this.onInitialPriceChange.bind(this)
@@ -24,29 +24,16 @@ export default class Transaction extends Component<Props, State> {
   }
 
   onCoinChange = (selectedCoin: ?CoinSelectOption): void => {
-    if (selectedCoin) {
-      const {id: coinId} = selectedCoin
-      PortfolioActions.transactionCoinChanged(coinId)
-
-      const coins: CoinsData = PortfolioStore.getCoinsData()
-      const newCoin: ?Coin = coins.data.find(c => c.id === coinId)
-      if (newCoin) {
-        this.setState({coin: selectedCoin})
-      }
-    } else {
-      PortfolioActions.transactionCoinChanged(null)
-      this.setState({coin: null})
-    }
+    const coinId: ?string = selectedCoin ? selectedCoin.id : null
+    PortfolioActions.transactionCoinChanged(coinId)
   }
 
   onUnitsChange = (units: string): void => {
     PortfolioActions.transactionUnitsChanged(units)
-    this.setState({units})
   }
 
   onInitialPriceChange = (initialPrice: string): void => {
     PortfolioActions.transactionInitialPriceChanged(initialPrice)
-    this.setState({initialPrice})
   }
 
   onCellClick = (e: Event): void => {
@@ -76,11 +63,13 @@ export default class Transaction extends Component<Props, State> {
   render() {
     const {
       transaction: {
-        symbol, coinName, units, initialPrice, currentPrice, totalInvested,
+        coin, units, initialPrice, currentPrice, totalInvested,
         currentValue, margin, profit, editMode,
         isCoinValid, isUnitsValid, isInitialPriceValid
       }
     } = this.props
+    const coinValue = coin.id || coin.symbol || coin.label ? coin : null
+
     const {fieldToFocus} = this.state
 
     return (
@@ -97,7 +86,7 @@ export default class Transaction extends Component<Props, State> {
               isValid={isCoinValid}
     					onChange={this.onCoinChange}
     					coins={this.getCoinsDataForSelect()}
-    					value={this.state.coin}
+    					value={coinValue}
               placeholder=""
               icon={<i className={`fa fa-${isCoinValid ? 'check' : 'ban'}`}></i>} />
           ) : (
@@ -107,7 +96,7 @@ export default class Transaction extends Component<Props, State> {
                 onClick={this.onRemoveTransaction}>
                 <span className="icon is-small"><i className="fa fa-minus"></i></span>
               </button>
-              <i className={`cc defaultCoinIcon ${symbol}`}></i> {coinName}
+              <i className={`cc defaultCoinIcon ${coin.symbol}`}></i> {coin.label}
             </Fragment>
           )}
         </td>
@@ -117,7 +106,7 @@ export default class Transaction extends Component<Props, State> {
           data-field="units">
           { editMode ? (
             <Textbox
-              value={this.state.units}
+              value={units}
               isValid={isUnitsValid}
               autoFocus={fieldToFocus === 'units'}
               onChange={this.onUnitsChange} />
@@ -131,7 +120,7 @@ export default class Transaction extends Component<Props, State> {
           data-field="initial-price">
           { editMode ? (
             <Textbox
-              value={this.state.initialPrice}
+              value={initialPrice}
               isValid={isInitialPriceValid}
               autoFocus={fieldToFocus === 'initial-price'}
               onChange={this.onInitialPriceChange} />
