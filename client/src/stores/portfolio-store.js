@@ -1,6 +1,6 @@
 // @flow
 import axios from 'axios'
-import JsonUrl from 'json-url/dist/browser/json-url'
+//import JsonUrl from 'json-url/dist/browser/json-url'
 import EventEmitter from 'events'
 import AppDispatcher from '../app-dispatcher'
 import {Names as PortfolioActionsNames} from '../actions/portfolio-actions'
@@ -82,30 +82,30 @@ class PortfolioStore extends EventEmitter {
     }
   }
 
-  updateUrl() {
-    const {transactions} = this.portfolio
-
-    if (transactions && transactions.length > 0) {
-      const codecLzw = JsonUrl('lzw')
-      // const codecLzma= jsonUrl('lzma')
-      // const codecLzString = jsonUrl('lzstring')
-      // const codecPack = jsonUrl('pack')
-      const urlData = transactions.reduce((result: Array<any>, t) => {
-        result.push([t.coin.id, t.units, t.initialPrice])
-        return result
-      }, [])
-
-      console.log('URL data: ', urlData, codecLzw)
-
-      codecLzw.stats(urlData).then(({ rawencoded, compressedencoded, compression }) => {
-        console.log('LZW:')
-  			console.log(`Raw URI-encoded JSON string length: ${rawencoded}`)
-  			console.log(`Compressed URI-encoded JSON string length: ${compressedencoded}`)
-  			console.log(`Compression ratio (raw / compressed): ${compression}`)
-        console.log('\r\n', '\r\n')
-  		})
-    }
-  }
+  // updateUrl() {
+  //   const {transactions} = this.portfolio
+  //
+  //   if (transactions && transactions.length > 0) {
+  //     const codecLzw = JsonUrl('lzw')
+  //     // const codecLzma= jsonUrl('lzma')
+  //     // const codecLzString = jsonUrl('lzstring')
+  //     // const codecPack = jsonUrl('pack')
+  //     const urlData = transactions.reduce((result: Array<any>, t) => {
+  //       result.push([t.coin.id, t.units, t.initialPrice])
+  //       return result
+  //     }, [])
+  //
+  //     console.log('URL data: ', urlData, codecLzw)
+  //
+  //     codecLzw.stats(urlData).then(({ rawencoded, compressedencoded, compression }) => {
+  //       console.log('LZW:')
+  // 			console.log(`Raw URI-encoded JSON string length: ${rawencoded}`)
+  // 			console.log(`Compressed URI-encoded JSON string length: ${compressedencoded}`)
+  // 			console.log(`Compression ratio (raw / compressed): ${compression}`)
+  //       console.log('\r\n', '\r\n')
+  // 		})
+  //   }
+  // }
 
   cancelTransaction() {
     const transaction = this.portfolio.transactions
