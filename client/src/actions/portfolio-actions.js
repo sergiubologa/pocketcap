@@ -12,7 +12,9 @@ const Names = {
   EDIT_TRANSACTION: 'EDIT_TRANSACTION',
   TRANSACTION_COIN_CHANGED: 'TRANSACTION_COIN_CHANGED',
   TRANSACTION_UNITS_CHANGED: 'TRANSACTION_UNITS_CHANGED',
-  TRANSACTION_INITIAL_PRICE_CHANGED: 'TRANSACTION_INITIAL_PRICE_CHANGED'
+  TRANSACTION_INITIAL_PRICE_CHANGED: 'TRANSACTION_INITIAL_PRICE_CHANGED',
+  SET_PORTFOLIO_FROM_ENCODED_URL_PARAM: 'SET_PORTFOLIO_FROM_ENCODED_URL_PARAM',
+  CLEAR_PORTFOLIO: 'CLEAR_PORTFOLIO'
 }
 
 const Actions = {
@@ -53,6 +55,13 @@ const Actions = {
   }),
   decrementCountdown: () => AppDispatcher.dispatch({
     type: Names.DECREMENT_COUNTDOWN
+  }),
+  setPortfolioFromEncodedUrlParam: (encodedPortfolio: ?string) => AppDispatcher.dispatch({
+    type: Names.SET_PORTFOLIO_FROM_ENCODED_URL_PARAM,
+    data: encodedPortfolio
+  }),
+  clearPortfolio: () => AppDispatcher.dispatch({
+    type: Names.CLEAR_PORTFOLIO
   })
 }
 

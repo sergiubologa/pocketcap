@@ -11,7 +11,8 @@ export type PortfolioState = {
   isAddNewTransactionModalOpen: boolean,
   secToNextUpdate: number,
   isUpdatingCoinsData: boolean,
-  isRefreshButtonDisabled?: boolean
+  urlHash: ?string,
+  isRefreshButtonDisabled?: boolean,
 }
 
 export type Transaction = {
@@ -38,3 +39,5 @@ export type TransactionRowProps = {
   transaction: Transaction,
   index: number
 }
+
+export type URLPortfolio = Array<[string, string, string]>

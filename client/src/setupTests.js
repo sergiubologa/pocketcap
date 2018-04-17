@@ -9,3 +9,5 @@ global.localStorage = {
   setItem: jest.fn(),
   clear: jest.fn()
 }
+
+global.webpackJsonpJsonUrl = () => {}

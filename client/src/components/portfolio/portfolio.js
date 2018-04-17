@@ -1,12 +1,14 @@
 // @flow
 import React, { Component, Fragment } from 'react'
 import moment from 'moment'
+import queryString from 'query-string'
 import PortfolioStore from '../../stores/portfolio-store'
 import PortfolioActions from '../../actions/portfolio-actions'
 import type {Props} from '../../flow-types/react-generic'
 import type {PortfolioState as State} from '../../flow-types/portfolio'
 import Transaction from '../transaction/transaction'
 import * as Utils from '../../utils/utils'
+import {URL_PARAM_NAMES} from '../../constants/common'
 import './portfolio.css'
 
 export default class Portfolio extends Component<Props, State> {
@@ -33,12 +35,18 @@ export default class Portfolio extends Component<Props, State> {
 
   componentWillMount() {
     PortfolioStore.on('change', this.updateStateData)
+    const urlParams: Object = queryString.parse(window.location.hash)
+    if (urlParams) {
+      const portfolio: ?string = urlParams[URL_PARAM_NAMES.PORTFOLIO]
+      PortfolioActions.setPortfolioFromEncodedUrlParam(portfolio)
+    }
   }
 
   componentWillUnmount() {
     clearInterval(this.countdownInterval)
     clearTimeout(this.enableRefreshBtnTimer)
     PortfolioStore.removeListener('change', this.updateStateData)
+    PortfolioActions.clearPortfolio()
   }
 
   componentDidMount() {

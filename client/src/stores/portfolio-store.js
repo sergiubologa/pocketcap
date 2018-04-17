@@ -1,12 +1,20 @@
 // @flow
 import axios from 'axios'
-//import JsonUrl from 'json-url/dist/browser/json-url'
+import queryString from 'query-string'
+import JsonUrl from 'json-url'
+import 'json-url/dist/browser/json-url-msgpack'
+import 'json-url/dist/browser/json-url-lzw'
+import 'json-url/dist/browser/json-url-lzma'
+import 'json-url/dist/browser/json-url-lzstring'
+import 'json-url/dist/browser/json-url-safe64'
 import EventEmitter from 'events'
 import AppDispatcher from '../app-dispatcher'
 import {Names as PortfolioActionsNames} from '../actions/portfolio-actions'
 import * as Utils from '../utils/utils'
-import type {PortfolioState, Transaction} from '../flow-types/portfolio'
+import {URL_PARAM_NAMES} from '../constants/common'
+import type {PortfolioState, Transaction, URLPortfolio} from '../flow-types/portfolio'
 import type {CoinsData, Coin} from '../flow-types/coins'
+import type {Codec} from '../flow-types/vendors'
 
 class PortfolioStore extends EventEmitter {
   COINS_DATA_STORAGE_KEY: string = 'COINS_DATA'
@@ -14,16 +22,7 @@ class PortfolioStore extends EventEmitter {
   COINS_UPDATE_INTERVAL_ON_FAILURE: number = 0.5 * 60 // 30 seconds
 
   previousPortfolio: ?PortfolioState = null
-  portfolio: PortfolioState = {
-    transactions: [],
-    totalInvested: 0,
-    currentTotalValue: 0,
-    totalMargin: 0,
-    totalProfit: 0,
-    secToNextUpdate: this.COINS_UPDATE_INTERVAL,
-    isAddNewTransactionModalOpen: false,
-    isUpdatingCoinsData: false
-  }
+  portfolio: PortfolioState = this.defaultPortfolio()
 
   async fetchCoinsData() {
     this.portfolio.isUpdatingCoinsData = true
@@ -34,7 +33,7 @@ class PortfolioStore extends EventEmitter {
       const coins = res.data
       localStorage.setItem(this.COINS_DATA_STORAGE_KEY, JSON.stringify(coins))
       this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL
-      this.updateTransactionsInitialPrices()
+      this.updateTransactionsCurrentPrices()
     }
     catch(error) {
       this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL_ON_FAILURE
@@ -46,23 +45,7 @@ class PortfolioStore extends EventEmitter {
   }
 
   addNewTransaction() {
-    const newTransaction: Transaction = {
-      coin: {
-        id: '', label: '', symbol: ''
-      },
-      units: '',
-      initialPrice: '',
-      currentPrice: null,
-      totalInvested: 0,
-      currentValue: 0,
-      margin: 0,
-      profit: 0,
-      editMode: true, isNew: true,
-      isCoinTouched: false, isCoinValid: false,
-      isUnitsTouched: false, isUnitsValid: false,
-      isInitialPriceTouched: false, isInitialPriceValid: false
-    }
-    this.portfolio.transactions.push(newTransaction)
+    this.portfolio.transactions.push(this.newTransaction())
     this.emit('change')
   }
 
@@ -76,36 +59,88 @@ class PortfolioStore extends EventEmitter {
         inEditTransaction.editMode = false
         inEditTransaction.isNew = false
         this.calculateTotalValues()
-        //this.updateUrl()
+        this.updateUrl()
         this.emit('change')
       }
     }
   }
 
-  // updateUrl() {
-  //   const {transactions} = this.portfolio
-  //
-  //   if (transactions && transactions.length > 0) {
-  //     const codecLzw = JsonUrl('lzw')
-  //     // const codecLzma= jsonUrl('lzma')
-  //     // const codecLzString = jsonUrl('lzstring')
-  //     // const codecPack = jsonUrl('pack')
-  //     const urlData = transactions.reduce((result: Array<any>, t) => {
-  //       result.push([t.coin.id, t.units, t.initialPrice])
-  //       return result
-  //     }, [])
-  //
-  //     console.log('URL data: ', urlData, codecLzw)
-  //
-  //     codecLzw.stats(urlData).then(({ rawencoded, compressedencoded, compression }) => {
-  //       console.log('LZW:')
-  // 			console.log(`Raw URI-encoded JSON string length: ${rawencoded}`)
-  // 			console.log(`Compressed URI-encoded JSON string length: ${compressedencoded}`)
-  // 			console.log(`Compression ratio (raw / compressed): ${compression}`)
-  //       console.log('\r\n', '\r\n')
-  // 		})
-  //   }
-  // }
+  updateUrl() {
+    const {transactions} = this.portfolio
+    const codec: Codec = JsonUrl('lzstring')
+    const params: Object = queryString.parse(window.location.hash)
+
+    if (transactions && transactions.length > 0) {
+      const formatForCompression = (result: URLPortfolio, t: Transaction) => {
+        result.push([t.coin.id, t.units, t.initialPrice])
+        return result
+      }
+      const urlData: URLPortfolio = transactions.reduce(formatForCompression, [])
+      codec.compress(urlData).then((result: string) => {
+        params[URL_PARAM_NAMES.PORTFOLIO] = result
+        window.location.hash = queryString.stringify(params)
+        this.portfolio.urlHash = window.location.hash
+        this.emit('change')
+      })
+    } else {
+      params[URL_PARAM_NAMES.PORTFOLIO] = undefined
+      window.location.hash = queryString.stringify(params)
+      this.portfolio.urlHash = window.location.hash
+      this.emit('change')
+    }
+  }
+
+  setPortfolioFromEncodedUrlParam(encodedPortfolio: ?string) {
+    if (encodedPortfolio && encodedPortfolio.length > 0) {
+      const coinsData: CoinsData = this.getCoinsData()
+      if (coinsData.data.length <= 0) {
+        if (!this.portfolio.isUpdatingCoinsData) {
+          this.fetchCoinsData().then(() => {
+            this.setPortfolioFromEncodedUrlParam(encodedPortfolio)
+          })
+        } else {
+          setTimeout(() => this.setPortfolioFromEncodedUrlParam(encodedPortfolio), 200)
+        }
+        return;
+      }
+
+      const codec: Codec = JsonUrl('lzstring')
+      codec.decompress(encodedPortfolio).then((transactions) => {
+        if (transactions && transactions.length > 0) {
+          transactions.forEach(t => {
+            const [coinId, units, initialPrice] = t
+            const coin: ?Coin = coinsData.data.find(c => c.id === coinId)
+            if (coin) {
+              const transaction: Transaction = this.newTransaction({
+                coin: {id: coinId, label: coin.name, symbol: coin.symbol},
+                units, initialPrice, isValid: true, editMode: false, isNew: false,
+                isCoinValid: true, isUnitsValid: true, isInitialPriceValid: true
+              })
+              this.portfolio.transactions.push(transaction)
+              this.calculateTransactionValues(transaction)
+            }
+          })
+          this.calculateTotalValues()
+          this.emit('change')
+          this.updateUrl()
+        }
+      })
+    }
+  }
+
+  clearPortfolio() {
+    const {
+      transactions, totalInvested, currentTotalValue, totalMargin, totalProfit,
+      secToNextUpdate, isAddNewTransactionModalOpen
+    } = this.defaultPortfolio()
+    this.portfolio = {
+      ...this.portfolio,
+      transactions,
+      totalInvested, currentTotalValue, totalMargin, totalProfit,
+      secToNextUpdate, isAddNewTransactionModalOpen
+    }
+    this.emit('change')
+  }
 
   cancelTransaction() {
     const transaction = this.portfolio.transactions
@@ -129,6 +164,7 @@ class PortfolioStore extends EventEmitter {
     if (transaction) {
         this.portfolio.transactions.splice(index, 1)
         this.calculateTotalValues()
+        this.updateUrl()
         this.emit('change')
     }
   }
@@ -251,7 +287,7 @@ class PortfolioStore extends EventEmitter {
     }
   }
 
-  updateTransactionsInitialPrices() {
+  updateTransactionsCurrentPrices() {
     const coins: CoinsData = this.getCoinsData()
     this.portfolio.transactions.forEach(transaction => {
       const coin: ?Coin = coins.data.find(c => c.id === transaction.coin.id)
@@ -268,6 +304,38 @@ class PortfolioStore extends EventEmitter {
     const coins: ?string = localStorage.getItem(this.COINS_DATA_STORAGE_KEY)
     const defaultCoinsData: CoinsData = { added_at: undefined, data: [] }
     return coins ? JSON.parse(coins) : defaultCoinsData
+  }
+
+  defaultPortfolio(): PortfolioState {
+    return {
+      transactions: [],
+      totalInvested: 0,
+      currentTotalValue: 0,
+      totalMargin: 0,
+      totalProfit: 0,
+      secToNextUpdate: this.COINS_UPDATE_INTERVAL,
+      isAddNewTransactionModalOpen: false,
+      isUpdatingCoinsData: false,
+      urlHash: null
+    }
+  }
+
+  newTransaction(details?: Object): Transaction {
+    return {
+      coin: { id: '', label: '', symbol: '' },
+      units: '',
+      initialPrice: '',
+      currentPrice: null,
+      totalInvested: 0,
+      currentValue: 0,
+      margin: 0,
+      profit: 0,
+      editMode: true, isNew: true,
+      isCoinTouched: false, isCoinValid: false,
+      isUnitsTouched: false, isUnitsValid: false,
+      isInitialPriceTouched: false, isInitialPriceValid: false,
+      ...details
+    }
   }
 
   handleActions(action) {
@@ -304,6 +372,12 @@ class PortfolioStore extends EventEmitter {
         break
       case PortfolioActionsNames.DECREMENT_COUNTDOWN:
         this.decrementCountdown()
+        break
+      case PortfolioActionsNames.SET_PORTFOLIO_FROM_ENCODED_URL_PARAM:
+        this.setPortfolioFromEncodedUrlParam(action.data)
+        break
+      case PortfolioActionsNames.CLEAR_PORTFOLIO:
+        this.clearPortfolio()
         break
       default:
         break

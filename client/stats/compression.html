@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>chart created with amCharts | amCharts</title>
+		<meta name="description" content="chart created using amCharts live editor" />
+		
+		<!-- amCharts javascript sources -->
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/serial.js"></script>
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+		
+		<!-- amCharts plugins -->
+		<script type="text/javascript" src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+		<link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css">
+
+		<!-- amCharts javascript code -->
+		<script type="text/javascript">
+			AmCharts.makeChart("chartdiv",
+				{
+					"type": "serial",
+					"categoryField": "transactions",
+					"columnSpacing": 13,
+					"startDuration": 1,
+					"creditsPosition": "bottom-right",
+					"fontSize": 12,
+					"handDrawScatter": 15,
+					"handDrawThickness": 18,
+					"theme": "light",
+					"export": {
+						"enabled": true
+					},
+					"categoryAxis": {
+						"gridPosition": "start"
+					},
+					"chartCursor": {
+						"enabled": true
+					},
+					"trendLines": [],
+					"graphs": [
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"bullet": "round",
+							"id": "AmGraph-1",
+							"title": "LZW",
+							"type": "smoothedLine",
+							"valueField": "lzw"
+						},
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"bullet": "square",
+							"id": "AmGraph-2",
+							"title": "LZString",
+							"type": "smoothedLine",
+							"valueField": "lzstring"
+						},
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"bullet": "round",
+							"id": "AmGraph-3",
+							"title": "LZMA",
+							"type": "smoothedLine",
+							"valueField": "lzma"
+						},
+						{
+							"balloonText": "[[title]] of [[category]]:[[value]]",
+							"bullet": "round",
+							"id": "AmGraph-4",
+							"title": "Pack",
+							"type": "smoothedLine",
+							"valueField": "pack"
+						}
+					],
+					"guides": [],
+					"valueAxes": [
+						{
+							"id": "ValueAxis-1",
+							"title": "Compressed chars length"
+						}
+					],
+					"allLabels": [],
+					"balloon": {},
+					"legend": {
+						"enabled": true,
+						"useGraphSettings": true
+					},
+					"titles": [
+						{
+							"id": "Title-1",
+							"size": 15,
+							"text": "Compressions and transactions"
+						}
+					],
+					"dataProvider": [
+						{
+							"transactions": "1",
+							"lzw": "44",
+							"lzstring": "54",
+							"lzma": "70",
+							"pack": "38"
+						},
+						{
+							"transactions": "2",
+							"lzw": "84",
+							"lzstring": "88",
+							"lzma": "102",
+							"pack": "72"
+						},
+						{
+							"transactions": "3",
+							"lzw": "128",
+							"lzstring": "120",
+							"lzma": "135",
+							"pack": "111"
+						},
+						{
+							"transactions": "4",
+							"lzw": "179",
+							"lzstring": "155",
+							"lzma": "168",
+							"pack": "156"
+						},
+						{
+							"transactions": "5",
+							"lzw": "220",
+							"lzstring": "182",
+							"lzma": "198",
+							"pack": "199"
+						},
+						{
+							"transactions": "6",
+							"lzw": "260",
+							"lzstring": "214",
+							"lzma": "228",
+							"pack": "240"
+						},
+						{
+							"transactions": "7",
+							"lzw": "299",
+							"lzstring": "238",
+							"lzma": "255",
+							"pack": "274"
+						},
+						{
+							"transactions": "8",
+							"lzw": "342",
+							"lzstring": "267",
+							"lzma": "283",
+							"pack": "316"
+						},
+						{
+							"transactions": "9",
+							"lzw": "386",
+							"lzstring": "294",
+							"lzma": "311",
+							"pack": "359"
+						},
+						{
+							"transactions": "10",
+							"lzw": "424",
+							"lzstring": "315",
+							"lzma": "335",
+							"pack": "396"
+						},
+						{
+							"transactions": "11",
+							"lzw": "464",
+							"lzstring": "344",
+							"lzma": "363",
+							"pack": "438"
+						},
+						{
+							"transactions": "12",
+							"lzw": "499",
+							"lzstring": "368",
+							"lzma": "383",
+							"pack": "472"
+						},
+						{
+							"transactions": "13",
+							"lzw": "536",
+							"lzstring": "387",
+							"lzma": "406",
+							"pack": "510"
+						},
+						{
+							"transactions": "14",
+							"lzw": "574",
+							"lzstring": "411",
+							"lzma": "431",
+							"pack": "548"
+						},
+						{
+							"transactions": "15",
+							"lzw": "610",
+							"lzstring": "432",
+							"lzma": "454",
+							"pack": "584"
+						},
+						{
+							"transactions": "16",
+							"lzw": "648",
+							"lzstring": "459",
+							"lzma": "483",
+							"pack": "624"
+						},
+						{
+							"transactions": "17",
+							"lzw": "700",
+							"lzstring": "488",
+							"lzma": "515",
+							"pack": "676"
+						},
+						{
+							"transactions": "18",
+							"lzw": "743",
+							"lzstring": "520",
+							"lzma": "542",
+							"pack": "719"
+						},
+						{
+							"transactions": "19",
+							"lzw": "778",
+							"lzstring": "542",
+							"lzma": "566",
+							"pack": "758"
+						},
+						{
+							"transactions": "20",
+							"lzw": "820",
+							"lzstring": "571",
+							"lzma": "594",
+							"pack": "802"
+						}
+					]
+				}
+			);
+		</script>
+	</head>
+	<body>
+		<div id="chartdiv" style="width: 100%; height: 400px; background-color: #FFFFFF;" ></div>
+	</body>
+</html>
