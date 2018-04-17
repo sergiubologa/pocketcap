@@ -1,6 +1,6 @@
 // @flow
 import axios from 'axios'
-import queryString from 'query-string'
+import qs from 'qs'
 import JsonUrl from 'json-url'
 import 'json-url/dist/browser/json-url-msgpack'
 import 'json-url/dist/browser/json-url-lzw'
@@ -68,7 +68,7 @@ class PortfolioStore extends EventEmitter {
   updateUrl() {
     const {transactions} = this.portfolio
     const codec: Codec = JsonUrl('lzstring')
-    const params: Object = queryString.parse(window.location.hash)
+    const params: Object = qs.parse(window.location.hash.slice(1))
 
     if (transactions && transactions.length > 0) {
       const formatForCompression = (result: URLPortfolio, t: Transaction) => {
@@ -78,13 +78,13 @@ class PortfolioStore extends EventEmitter {
       const urlData: URLPortfolio = transactions.reduce(formatForCompression, [])
       codec.compress(urlData).then((result: string) => {
         params[URL_PARAM_NAMES.PORTFOLIO] = result
-        window.location.hash = queryString.stringify(params)
+        window.location.hash = qs.stringify(params, { skipNulls: true })
         this.portfolio.urlHash = window.location.hash
         this.emit('change')
       })
     } else {
       params[URL_PARAM_NAMES.PORTFOLIO] = undefined
-      window.location.hash = queryString.stringify(params)
+      window.location.hash = qs.stringify(params, { skipNulls: true })
       this.portfolio.urlHash = window.location.hash
       this.emit('change')
     }

@@ -13,7 +13,7 @@
     "font-awesome": "^4.7.0",
     "json-url": "^2.3.4",
     "moment": "^2.22.1",
-    "query-string": "^6.0.0",
+    "qs": "^6.5.1",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-router-dom": "^4.2.2",
