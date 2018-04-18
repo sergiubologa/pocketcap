@@ -165,7 +165,6 @@ export default class Portfolio extends Component<Props, State> {
     }
     const nextUpdate = this.getNextUpdateRemainingTime()
     const updateButtonClass = `button is-primary is-small ${isUpdatingCoinsData ? 'is-loading' : ''}`
-    const transactionsList = this.getTransactionsList()
     const footerButtons = isEditMode ?
       <Fragment>
         <button
@@ -186,6 +185,7 @@ export default class Portfolio extends Component<Props, State> {
         onClick={this.onAddNewTransaction}>
         <i className="fa fa-plus"></i>&nbsp;Add new transaction
       </button>
+      
     return (
       <div className="portfolio">
 
@@ -234,7 +234,7 @@ export default class Portfolio extends Component<Props, State> {
               <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(totalProfit)}</th>
             </tr>
           </tfoot>
-          <tbody>{transactionsList}</tbody>
+          <tbody>{this.getTransactionsList()}</tbody>
         </table>
 
       </div>
