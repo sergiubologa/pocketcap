@@ -125,14 +125,16 @@ export default class Transaction extends Component<Props, State> {
               autoFocus={fieldToFocus === 'initial-price'}
               onChange={this.onInitialPriceChange} />
           ) : (
-            <Fragment>{initialPrice}</Fragment>
+            <Fragment>${initialPrice}</Fragment>
           )}
         </td>
-        <td className="has-text-centered">{Utils.toDecimals(currentPrice, 6)}</td>
-        <td className="has-text-centered">{Utils.toDecimals(totalInvested)}</td>
-        <td className="has-text-centered">{Utils.toDecimals(currentValue)}</td>
-        <td className="has-text-centered">{Utils.toDecimals(margin)}</td>
-        <td className="has-text-centered">{Utils.toDecimals(profit)}</td>
+        <td className="has-text-centered">${Utils.toDecimals(currentPrice, 6)}</td>
+        <td className="has-text-centered">${Utils.toDecimals(totalInvested)}</td>
+        <td className="has-text-centered">${Utils.toDecimals(currentValue)}</td>
+        <td className="has-text-centered">
+          ${Utils.toDecimals(profit)}<br/>
+          <span className="is-size-7">{Utils.toDecimals(margin)}%</span>
+        </td>
       </tr>
     )
   }

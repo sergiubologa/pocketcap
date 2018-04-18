@@ -6,6 +6,7 @@
   margin-right: 1rem;
 }
 
-.portfolio tfoot {
-  
+.portfolio .table td,
+.portfolio .table tfoot th {
+  vertical-align: middle;
 }

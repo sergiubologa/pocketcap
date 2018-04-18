@@ -164,7 +164,7 @@ export default class Portfolio extends Component<Props, State> {
       isSaveEnabled = isCoinValid && isUnitsValid && isInitialPriceValid
     }
     const nextUpdate = this.getNextUpdateRemainingTime()
-    const updateButtonClass = `button is-primary is-small ${isUpdatingCoinsData ? 'is-loading' : ''}`
+    const updateButtonClass = `button is-info is-outlined is-small ${isUpdatingCoinsData ? 'is-loading' : ''}`
     const footerButtons = isEditMode ?
       <Fragment>
         <button
@@ -189,9 +189,9 @@ export default class Portfolio extends Component<Props, State> {
     return (
       <div className="portfolio">
 
-        <div className="columns">
-          <div className="column">
-            Next update: <button
+        <div className="columns is-vcentered is-marginless has-background-light">
+          <div className="column has-text-info">
+            Prices update in: <button
               disabled={isRefreshButtonDisabled}
               onClick={this.onRefreshBtnClick}
               className={updateButtonClass}>{nextUpdate}
@@ -201,7 +201,7 @@ export default class Portfolio extends Component<Props, State> {
             <CopyToClipboard
               onCopy={this.onCopyUrlToClipboard}
               text={window.location.href}>
-              <a className="button is-white">
+              <a className="button is-info is-outlined is-small">
                 <span>{urlCopiedToClipboard ? 'Copied to clipboard!' : 'Get sharable link'}</span>
                 <span className="icon">
                   <i className={'fa fa-' + (urlCopiedToClipboard ? 'check' : 'link')}></i>
@@ -211,27 +211,34 @@ export default class Portfolio extends Component<Props, State> {
           </div>
         </div>
 
-        <table className="table is-bordered is-hoverable is-fullwidth">
+        <table className="table is-hoverable is-fullwidth">
           <thead>
             <tr>
-              <th className="has-text-centered has-text-weight-bold">Coin</th>
+              <th className="has-text-weight-bold">Coin / Token</th>
               <th className="has-text-centered has-text-weight-bold">Units</th>
-              <th className="has-text-centered has-text-weight-bold">Initial Price / unit</th>
-              <th className="has-text-centered has-text-weight-bold">Current Price / unit</th>
+              <th className="has-text-centered has-text-weight-bold">
+                Initial Price<br/>
+                <span className="is-size-7 has-text-weight-light">(per unit)</span>
+              </th>
+              <th className="has-text-centered has-text-weight-bold">
+                Current Price<br/>
+                <span className="is-size-7 has-text-weight-light">(per unit)</span>
+              </th>
               <th className="has-text-centered has-text-weight-bold">Total invested</th>
               <th className="has-text-centered has-text-weight-bold">Current value</th>
-              <th className="has-text-centered has-text-weight-bold"> Profit margin (%)</th>
               <th className="has-text-centered has-text-weight-bold">Profit</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
               <th colSpan="3" className="has-text-centered">{footerButtons}</th>
-              <th className="has-text-centered has-text-weight-semibold">Total:</th>
+              <th className="has-text-centered has-text-weight-semibold is-size-4">Total:</th>
               <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(totalInvested)}</th>
               <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(currentTotalValue)}</th>
-              <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(totalMargin)}</th>
-              <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(totalProfit)}</th>
+              <th className="has-text-centered has-text-weight-semibold">
+                {Utils.toDecimals(totalProfit)}<br/>
+                <span className="is-size-7">{Utils.toDecimals(totalMargin)}%</span>
+              </th>
             </tr>
           </tfoot>
           <tbody>{this.getTransactionsList()}</tbody>
