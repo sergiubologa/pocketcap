@@ -12,3 +12,15 @@ export const toDecimals = (value: ?number, decimals: number = 2) => {
 
   return Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals)
 }
+
+export const getUrlHash = (ignoreQueryPrefix: boolean = true) => {
+  const hash = window.location.hash
+  return ignoreQueryPrefix ? hash.replace(/^#\?/, "") : hash
+}
+
+export const setUrlHash = (hash: string) => {
+  if (hash.charAt(0) !== '?') {
+    hash = `?${hash}`
+  }
+  window.location.hash = hash
+}

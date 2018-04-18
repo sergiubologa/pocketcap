@@ -35,7 +35,7 @@ export default class Portfolio extends Component<Props, State> {
 
   componentWillMount() {
     PortfolioStore.on('change', this.updateStateData)
-    const urlParams: Object = qs.parse(window.location.hash.slice(1))
+    const urlParams: Object = qs.parse(Utils.getUrlHash())
     if (urlParams) {
       const portfolio: ?string = urlParams[URL_PARAM_NAMES.PORTFOLIO]
       PortfolioActions.setPortfolioFromEncodedUrlParam(portfolio)

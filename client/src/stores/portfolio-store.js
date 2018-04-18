@@ -59,16 +59,15 @@ class PortfolioStore extends EventEmitter {
         inEditTransaction.editMode = false
         inEditTransaction.isNew = false
         this.calculateTotalValues()
-        this.updateUrl()
+        this.updateUrlHashForPortfolio()
         this.emit('change')
       }
     }
   }
 
-  updateUrl() {
+  updateUrlHashForPortfolio() {
     const {transactions} = this.portfolio
     const codec: Codec = JsonUrl('lzstring')
-    const params: Object = qs.parse(window.location.hash.slice(1))
 
     if (transactions && transactions.length > 0) {
       const formatForCompression = (result: URLPortfolio, t: Transaction) => {
@@ -77,17 +76,21 @@ class PortfolioStore extends EventEmitter {
       }
       const urlData: URLPortfolio = transactions.reduce(formatForCompression, [])
       codec.compress(urlData).then((result: string) => {
-        params[URL_PARAM_NAMES.PORTFOLIO] = result
-        window.location.hash = qs.stringify(params, { skipNulls: true })
-        this.portfolio.urlHash = window.location.hash
+        this.setPortfolioUrlHash(result)
         this.emit('change')
       })
     } else {
-      params[URL_PARAM_NAMES.PORTFOLIO] = undefined
-      window.location.hash = qs.stringify(params, { skipNulls: true })
-      this.portfolio.urlHash = window.location.hash
+      this.setPortfolioUrlHash(null)
       this.emit('change')
     }
+  }
+
+  setPortfolioUrlHash(portfolioHash: ?string) {
+    const parsedParams: Object = qs.parse(Utils.getUrlHash())
+    parsedParams[URL_PARAM_NAMES.PORTFOLIO] = portfolioHash
+    const hash: string = qs.stringify(parsedParams, { skipNulls: true })
+    Utils.setUrlHash(hash)
+    this.portfolio.urlHash = Utils.getUrlHash(false)
   }
 
   setPortfolioFromEncodedUrlParam(encodedPortfolio: ?string) {
@@ -122,7 +125,7 @@ class PortfolioStore extends EventEmitter {
           })
           this.calculateTotalValues()
           this.emit('change')
-          this.updateUrl()
+          this.updateUrlHashForPortfolio()
         }
       })
     }
@@ -164,7 +167,7 @@ class PortfolioStore extends EventEmitter {
     if (transaction) {
         this.portfolio.transactions.splice(index, 1)
         this.calculateTotalValues()
-        this.updateUrl()
+        this.updateUrlHashForPortfolio()
         this.emit('change')
     }
   }
