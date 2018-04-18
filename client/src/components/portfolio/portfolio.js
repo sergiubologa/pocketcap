@@ -2,6 +2,7 @@
 import React, { Component, Fragment } from 'react'
 import moment from 'moment'
 import qs from 'qs'
+import {CopyToClipboard} from 'react-copy-to-clipboard'
 import PortfolioStore from '../../stores/portfolio-store'
 import PortfolioActions from '../../actions/portfolio-actions'
 import type {Props} from '../../flow-types/react-generic'
@@ -14,12 +15,14 @@ import './portfolio.css'
 export default class Portfolio extends Component<Props, State> {
   countdownInterval: IntervalID
   enableRefreshBtnTimer: TimeoutID
+  resetClipboardButtonTimer: TimeoutID
 
   constructor(props: Props) {
     super(props)
     this.state = {
       ...PortfolioStore.getPortfolio(),
-      isRefreshButtonDisabled: false
+      isRefreshButtonDisabled: false,
+      urlCopiedToClipboard: false
     }
     this.updateStateData = this.updateStateData.bind(this)
     this.openAddNewTransactionModal = this.openAddNewTransactionModal.bind(this)
@@ -31,6 +34,7 @@ export default class Portfolio extends Component<Props, State> {
     this.onAddNewTransaction = this.onAddNewTransaction.bind(this)
     this.onSaveTransaction = this.onSaveTransaction.bind(this)
     this.onCancelTransaction = this.onCancelTransaction.bind(this)
+    this.onCopyUrlToClipboard = this.onCopyUrlToClipboard.bind(this)
   }
 
   componentWillMount() {
@@ -45,6 +49,7 @@ export default class Portfolio extends Component<Props, State> {
   componentWillUnmount() {
     clearInterval(this.countdownInterval)
     clearTimeout(this.enableRefreshBtnTimer)
+    clearTimeout(this.resetClipboardButtonTimer)
     PortfolioStore.removeListener('change', this.updateStateData)
     PortfolioActions.clearPortfolio()
   }
@@ -113,6 +118,15 @@ export default class Portfolio extends Component<Props, State> {
     PortfolioActions.cancelTransaction()
   }
 
+  onCopyUrlToClipboard = (): void => {
+    this.setState({urlCopiedToClipboard: true})
+    const resetButtonSeconds: number = 5
+    clearTimeout(this.resetClipboardButtonTimer)
+    this.resetClipboardButtonTimer = setTimeout(() => {
+      this.setState({urlCopiedToClipboard: false})
+    }, resetButtonSeconds * 1000)
+  }
+
   getTransactionsList = (): any => {
     const {transactions} = this.state
 
@@ -139,7 +153,7 @@ export default class Portfolio extends Component<Props, State> {
 
   render() {
     const {
-      isUpdatingCoinsData, isRefreshButtonDisabled,
+      isUpdatingCoinsData, isRefreshButtonDisabled, urlCopiedToClipboard,
       totalInvested, currentTotalValue, totalMargin, totalProfit
     } = this.state
     const inEditTransaction = this.state.transactions.find((t) => t.editMode)
@@ -184,7 +198,16 @@ export default class Portfolio extends Component<Props, State> {
             </button>
           </div>
           <div className="column has-text-right">
-            <a href="/">Share view</a>
+            <CopyToClipboard
+              onCopy={this.onCopyUrlToClipboard}
+              text={window.location.href}>
+              <a className="button is-white">
+                <span>{urlCopiedToClipboard ? 'Copied to clipboard!' : 'Get sharable link'}</span>
+                <span className="icon">
+                  <i className={'fa fa-' + (urlCopiedToClipboard ? 'check' : 'link')}></i>
+                </span>
+              </a>
+            </CopyToClipboard>
           </div>
         </div>
 
