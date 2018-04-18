@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react'
 import type { Props, State } from '../flow-types/react-generic'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Header from './header/header'
+import Footer from './footer/footer'
 import PortfolioPage from './pages/portfolio-page/portfolio-page'
 import ContactPage from './pages/contact-page/contact-page'
 import NotFoundPage from './pages/not-found-page/not-found-page'
@@ -18,11 +19,14 @@ class AppRoot extends Component<Props, State> {
       <BrowserRouter>
         <Fragment>
           <Header />
-          <Switch>
-            <Route exact path='/' component={PortfolioPage} />
-            <Route path='/contact' component={ContactPage} />
-            <Route component={NotFoundPage} />
-          </Switch>
+          <div id="page-content">
+            <Switch>
+              <Route exact path='/' component={PortfolioPage} />
+              <Route path='/contact' component={ContactPage} />
+              <Route component={NotFoundPage} />
+            </Switch>
+          </div>
+          <Footer />
         </Fragment>
       </BrowserRouter>
     )

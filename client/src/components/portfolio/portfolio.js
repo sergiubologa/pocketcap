@@ -185,7 +185,7 @@ export default class Portfolio extends Component<Props, State> {
         onClick={this.onAddNewTransaction}>
         <i className="fa fa-plus"></i>&nbsp;Add new transaction
       </button>
-      
+
     return (
       <div className="portfolio">
 
@@ -238,6 +238,6 @@ export default class Portfolio extends Component<Props, State> {
         </table>
 
       </div>
-    );
+    )
   }
 }

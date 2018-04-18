@@ -1,1 +1,10 @@
+#root {
+  display: flex;
+  min-height: calc(100vh - 52px);
+  flex-direction: column;
+}
 
+#page-content {
+  padding: 15px;
+  flex: 1 0 auto;
+}
