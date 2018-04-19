@@ -233,10 +233,10 @@ export default class Portfolio extends Component<Props, State> {
             <tr>
               <th colSpan="3" className="has-text-centered">{footerButtons}</th>
               <th className="has-text-centered has-text-weight-semibold is-size-4">Total:</th>
-              <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(totalInvested)}</th>
-              <th className="has-text-centered has-text-weight-semibold">{Utils.toDecimals(currentTotalValue)}</th>
-              <th className="has-text-centered has-text-weight-semibold">
-                {Utils.toDecimals(totalProfit)}<br/>
+              <th className="has-text-centered has-text-weight-semibold has-background-light">${Utils.toDecimals(totalInvested)}</th>
+              <th className="has-text-centered has-text-weight-semibold has-background-light">${Utils.toDecimals(currentTotalValue)}</th>
+              <th className="has-text-centered has-text-weight-semibold has-background-light">
+                ${Utils.toDecimals(totalProfit)}<br/>
                 <span className="is-size-7">{Utils.toDecimals(totalMargin)}%</span>
               </th>
             </tr>

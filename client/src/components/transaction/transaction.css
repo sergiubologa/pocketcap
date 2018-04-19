@@ -1,6 +1,13 @@
-tr.trTransaction > td.editable {
-  cursor: text;
+tr.trTransaction td .coin-cell {
+  display: flex;
+  align-items: flex-start;
 }
-tr.trTransaction > td.editable:hover {
-  border: 1px solid #dcdcdc;
+
+tr.trTransaction td .coin-cell .btnRemoveTransaction {
+  align-self: center;
+  margin-right: 1rem;
+}
+
+tr.trTransaction td .coin-cell .field {
+  flex-grow: 1;
 }

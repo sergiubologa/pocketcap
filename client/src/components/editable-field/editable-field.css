@@ -1,0 +1,30 @@
+.editable-field {
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  border-radius: 4px;
+  cursor: text;
+}
+
+.editable-field:hover {
+  background-color: #fff6be;
+}
+
+.editable-field .field-items {
+  flex: 0 0 auto;
+}
+
+.editable-field .field-items:hover {
+
+}
+
+.editable-field i.field-icon {
+  flex: 1 0 auto;
+  align-self: center;
+  text-align: right;
+  visibility: hidden;
+}
+
+.editable-field:hover i.field-icon {
+  visibility: visible;
+}
