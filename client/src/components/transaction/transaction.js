@@ -16,7 +16,7 @@ import './transaction.css'
 export default class Transaction extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
-    this.state = { fieldToFocus: '' }
+    this.state = { fieldToFocus: 'coin' }
     this.onCoinChange = this.onCoinChange.bind(this)
     this.onUnitsChange = this.onUnitsChange.bind(this)
     this.onInitialPriceChange = this.onInitialPriceChange.bind(this)
@@ -28,7 +28,7 @@ export default class Transaction extends Component<Props, State> {
   componentDidMount(){
     document.addEventListener("keydown", this.onKeyDown, false);
   }
-  
+
   componentWillUnmount(){
     document.removeEventListener("keydown", this.onKeyDown, false);
   }
@@ -56,16 +56,21 @@ export default class Transaction extends Component<Props, State> {
   }
 
   onKeyDown = (e: KeyboardEvent) => {
-    const {
-      editMode: isEditMode,
-      // isCoinValid, isUnitsValid, isInitialPriceValid
-    } = this.props.transaction
+    const { editMode: isEditMode } = this.props.transaction
+
     if (isEditMode) {
-      e.key === 'Escape' && PortfolioActions.cancelTransaction()
-      // TODO - fix Enter behaviour
-      // if (e.key === 'Enter' && isCoinValid && isUnitsValid && isInitialPriceValid) {
-      //   PortfolioActions.saveTransaction()
-      // }
+      switch (e.key) {
+        case 'Escape':
+          PortfolioActions.cancelTransaction()
+          break;
+        case 'Enter':
+          const {isCoinValid, isUnitsValid, isInitialPriceValid} = this.props.transaction
+          const isValid = isCoinValid && isUnitsValid && isInitialPriceValid
+          isValid && PortfolioActions.saveTransaction()
+          break
+        default:
+          break
+      }
     }
   }
 
