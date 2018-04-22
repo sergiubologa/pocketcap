@@ -1,12 +1,15 @@
 // @flow
 import React, { Component } from 'react'
+import DocumentTitle from 'react-document-title'
 import type { Props, State } from '../../../flow-types/react-generic'
 import './not-found-page.css'
 
 class NotFoundPage extends Component<Props, State> {
   render(){
     return (
-      <h1>Page not fund</h1>
+      <DocumentTitle title='404 Not Found'>
+        <h1>Page not found</h1>
+      </DocumentTitle>
     )
   }
 }

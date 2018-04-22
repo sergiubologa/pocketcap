@@ -5,7 +5,8 @@ export type TextboxProps = {
   isValid?: boolean,
   placeholder?: string,
   autoFocus?: boolean,
-  onChange?: (value: string) => void
+  onChange?: (value: string) => void,
+  className?: string
 }
 
 export type TextboxState = {

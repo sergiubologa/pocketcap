@@ -24,12 +24,13 @@ export default class Textbox extends Component<Props, State> {
   }
 
   render() {
-    const {value, isValid, placeholder, autoFocus} = this.props
+    const {value, isValid, placeholder, autoFocus, className} = this.props
     const {isTouched} = this.state
     const inputClasses = ['input']
     if (isTouched) {
       inputClasses.push(isValid ? 'is-success' : 'is-danger')
     }
+    inputClasses.push(className)
     const validationIcon = !isTouched ? undefined :
       <span className="icon is-small is-right">
         <i className={`fa fa-${isValid ? 'check has-text-success' : 'ban has-text-danger'}`}></i>

@@ -8,6 +8,7 @@ import PortfolioActions from '../../actions/portfolio-actions'
 import type {Props} from '../../flow-types/react-generic'
 import type {PortfolioState as State} from '../../flow-types/portfolio'
 import Transaction from '../transaction/transaction'
+import AnimatedCheckIcon from '../animated-check-icon/animated-check-icon'
 import * as Utils from '../../utils/utils'
 import {URL_PARAM_NAMES} from '../../constants/common'
 import './portfolio.css'
@@ -156,6 +157,10 @@ export default class Portfolio extends Component<Props, State> {
       isUpdatingCoinsData, isRefreshButtonDisabled, urlCopiedToClipboard,
       totalInvested, currentTotalValue, totalMargin, totalProfit
     } = this.state
+    const displayTotalInvested = Utils.toDecimals(totalInvested)
+    const displayCurrentTotalValue = Utils.toDecimals(currentTotalValue)
+    const displayTotalMargin = Utils.toDecimals(totalMargin)
+    const displayTotalProfit = Utils.toDecimals(totalProfit)
     const inEditTransaction = this.state.transactions.find((t) => t.editMode)
     const isEditMode = !!inEditTransaction
     let isSaveEnabled = false
@@ -164,7 +169,7 @@ export default class Portfolio extends Component<Props, State> {
       isSaveEnabled = isCoinValid && isUnitsValid && isInitialPriceValid
     }
     const nextUpdate = this.getNextUpdateRemainingTime()
-    const updateButtonClass = `button is-info is-outlined is-small ${isUpdatingCoinsData ? 'is-loading' : ''}`
+    const updateButtonClass = `button is-info is-outlined ${isUpdatingCoinsData ? 'is-loading' : ''}`
     const footerButtons = isEditMode ?
       <Fragment>
         <button
@@ -190,21 +195,29 @@ export default class Portfolio extends Component<Props, State> {
       <div className="portfolio">
 
         <div className="columns is-vcentered is-marginless has-background-light">
-          <div className="column has-text-info">
-            Prices update in: <button
-              disabled={isRefreshButtonDisabled}
-              onClick={this.onRefreshBtnClick}
-              className={updateButtonClass}>{nextUpdate}
-            </button>
+          <div className="column has-text-info" id="nextRefreshContainer">
+            <div className="refreshMessage">Prices update in:</div>
+            <div className="refreshButtonContainer">
+              <button
+                disabled={isRefreshButtonDisabled}
+                onClick={this.onRefreshBtnClick}
+                className={updateButtonClass}>{nextUpdate}
+              </button>
+            </div>
           </div>
           <div className="column has-text-right">
             <CopyToClipboard
               onCopy={this.onCopyUrlToClipboard}
               text={window.location.href}>
-              <a className="button is-info is-outlined is-small">
-                <span>{urlCopiedToClipboard ? 'Copied to clipboard!' : 'Get sharable link'}</span>
+              <a className={`button is-info is-outlined btnCopyToClipboard ${urlCopiedToClipboard ? 'copied' : ''}`}>
+                <span>Get sharable link</span>
+                <span>Copied to clipboard!</span>
                 <span className="icon">
-                  <i className={'fa fa-' + (urlCopiedToClipboard ? 'check' : 'link')}></i>
+                  {
+                    urlCopiedToClipboard
+                      ? <AnimatedCheckIcon />
+                      : <i className="fa fa-link"></i>
+                  }
                 </span>
               </a>
             </CopyToClipboard>
@@ -212,32 +225,33 @@ export default class Portfolio extends Component<Props, State> {
         </div>
 
         <table className="table is-hoverable is-fullwidth">
-          <thead>
+          <thead className="has-background-light">
             <tr>
               <th className="has-text-weight-bold">Coin / Token</th>
-              <th className="has-text-centered has-text-weight-bold">Units</th>
-              <th className="has-text-centered has-text-weight-bold">
+              <th className="has-text-right has-text-weight-bold">Units</th>
+              <th className="has-text-right has-text-weight-bold">
                 Initial Price<br/>
                 <span className="is-size-7 has-text-weight-light">(per unit)</span>
               </th>
-              <th className="has-text-centered has-text-weight-bold">
+              <th className="has-text-right has-text-weight-bold">
                 Current Price<br/>
                 <span className="is-size-7 has-text-weight-light">(per unit)</span>
               </th>
-              <th className="has-text-centered has-text-weight-bold">Total invested</th>
-              <th className="has-text-centered has-text-weight-bold">Current value</th>
-              <th className="has-text-centered has-text-weight-bold">Profit</th>
+              <th className="has-text-right has-text-weight-bold">Total invested</th>
+              <th className="has-text-right has-text-weight-bold">Current value</th>
+              <th className="has-text-right has-text-weight-bold">Profit</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
               <th colSpan="3" className="has-text-centered">{footerButtons}</th>
-              <th className="has-text-centered has-text-weight-semibold is-size-4">Total:</th>
-              <th className="has-text-centered has-text-weight-semibold has-background-light">${Utils.toDecimals(totalInvested)}</th>
-              <th className="has-text-centered has-text-weight-semibold has-background-light">${Utils.toDecimals(currentTotalValue)}</th>
-              <th className="has-text-centered has-text-weight-semibold has-background-light">
-                ${Utils.toDecimals(totalProfit)}<br/>
-                <span className="is-size-7">{Utils.toDecimals(totalMargin)}%</span>
+              <th className="has-text-right has-text-weight-semibold is-size-4">Total:</th>
+              <th className="has-text-right has-text-weight-semibold has-background-light">{Utils.toMoneyString(displayTotalInvested)}</th>
+              <th className="has-text-right has-text-weight-semibold has-background-light">{Utils.toMoneyString(displayCurrentTotalValue)}</th>
+              <th className={`has-text-right has-text-weight-semibold has-background-light has-text-${displayTotalProfit && displayTotalProfit > 0 ? 'green' : 'danger'}`}>
+                {Utils.toMoneyString(displayTotalProfit)}<br/>
+                <i className={`fa fa-${displayTotalProfit && displayTotalProfit > 0 ? 'caret-up' : 'caret-down'}`}></i>
+                <span className="is-size-7">{displayTotalMargin}%</span>
               </th>
             </tr>
           </tfoot>

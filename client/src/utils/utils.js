@@ -9,8 +9,14 @@ export const toDecimals = (value: ?number, decimals: number = 2) => {
   if (!value && value !== 0) {
     return value
   }
-
   return Math.round(value * Math.pow(10, decimals)) / Math.pow(10, decimals)
+}
+
+export const toMoneyString = (value: ?number) => {
+  if (!value && value !== 0) {
+    return ''
+  }
+  return `$${value.toLocaleString()}`
 }
 
 export const getUrlHash = (ignoreQueryPrefix: boolean = true) => {

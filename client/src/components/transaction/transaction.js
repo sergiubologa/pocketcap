@@ -98,6 +98,12 @@ export default class Transaction extends Component<Props, State> {
     } = this.props
     const coinValue = coin.id || coin.symbol || coin.label ? coin : null
 
+    const displayCurrentPrice = Utils.toDecimals(currentPrice, 6)
+    const displayTotalInvested = Utils.toDecimals(totalInvested)
+    const displayCurrentValue = Utils.toDecimals(currentValue)
+    const displayProfit = Utils.toDecimals(profit)
+    const displayMargin = Utils.toDecimals(margin)
+
     const {fieldToFocus} = this.state
 
     return (
@@ -116,7 +122,7 @@ export default class Transaction extends Component<Props, State> {
           ) : (
             <div className="coin-cell">
               <button
-                className="btnRemoveTransaction button is-small is-danger is-outlined"
+                className="btnRemoveTransaction button is-dwarf is-warning is-outlined"
                 onClick={this.onRemoveTransaction}>
                 <span className="icon is-small"><i className="fa fa-minus"></i></span>
               </button>
@@ -129,42 +135,47 @@ export default class Transaction extends Component<Props, State> {
             </div>
           )}
         </td>
-        <td width="180" className="has-text-centered">
+        <td width="180" className="has-text-right">
           { editMode ? (
             <Textbox
               value={units}
               isValid={isUnitsValid}
               autoFocus={fieldToFocus === 'units'}
+              className="has-text-right"
               onChange={this.onUnitsChange} />
           ) : (
             <EditableField
               onClick={this.onCellClick}
-              name="units">
+              name="units"
+              align="right">
               {units}
             </EditableField>
           )}
         </td>
-        <td width="180" className="has-text-centered">
+        <td width="180" className="has-text-right">
           { editMode ? (
             <Textbox
               value={initialPrice}
               isValid={isInitialPriceValid}
               autoFocus={fieldToFocus === 'initial-price'}
+              className="has-text-right"
               onChange={this.onInitialPriceChange} />
           ) : (
             <EditableField
               onClick={this.onCellClick}
-              name="initial-price">
-              ${initialPrice}
+              name="initial-price"
+              align="right">
+              {Utils.toMoneyString(Number(initialPrice))}
             </EditableField>
           )}
         </td>
-        <td className="has-text-centered">${Utils.toDecimals(currentPrice, 6)}</td>
-        <td className="has-text-centered">${Utils.toDecimals(totalInvested)}</td>
-        <td className="has-text-centered">${Utils.toDecimals(currentValue)}</td>
-        <td className="has-text-centered">
-          ${Utils.toDecimals(profit)}<br/>
-          <span className="is-size-7">{Utils.toDecimals(margin)}%</span>
+        <td className="has-text-right">{Utils.toMoneyString(displayCurrentPrice)}</td>
+        <td className="has-text-right">{Utils.toMoneyString(displayTotalInvested)}</td>
+        <td className="has-text-right">{Utils.toMoneyString(displayCurrentValue)}</td>
+        <td className={`has-text-right has-text-${displayProfit && displayProfit > 0 ? 'green' : 'danger'}`}>
+          {Utils.toMoneyString(displayProfit)}<br/>
+          <i className={`fa fa-${displayProfit && displayProfit > 0 ? 'caret-up' : 'caret-down'}`}></i>
+          <span className="is-size-7">{displayMargin}%</span>
         </td>
       </tr>
     )

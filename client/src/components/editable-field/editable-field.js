@@ -7,14 +7,21 @@ type Props = {
   children: React.Node,
   onClick: (name: string) => void,
   name: string,
-  className?: string
+  className?: string,
+  align?: string
 }
 
 export default class EditableField extends React.Component<Props, State> {
   render() {
+    const {className, align} = this.props
+    const containerClasses = [
+      'editable-field',
+      align && align === 'right' ? 'align-right' : '',
+      className || ''
+    ]
     return (
       <div
-        className={`editable-field ${this.props.className || ''}`}
+        className={containerClasses.join(" ")}
         onClick={this.props.onClick.bind(this, this.props.name)}
         >
         <div className="field-items">{this.props.children}</div>
