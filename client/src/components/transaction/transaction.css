@@ -1,3 +1,16 @@
+.portfolio .table.is-edit-mode tbody tr.is-edit-mode {
+  opacity: 1;
+}
+
+tr.trTransaction {
+  transition: box-shadow 0.4s ease-in-out, border-width 0.4s ease-in-out;
+}
+
+tr.trTransaction.is-edit-mode {
+  border: 2px solid #dcdcdc;
+  box-shadow: 1px 1px 22px 5px slategrey;
+}
+
 tr.trTransaction td .coin-cell {
   display: flex;
   align-items: flex-start;
@@ -10,4 +23,42 @@ tr.trTransaction td .coin-cell .btnRemoveTransaction {
 
 tr.trTransaction td .coin-cell .field {
   flex-grow: 1;
+}
+
+tr.trTransaction .initial-price-cell-wrapper {
+  position: relative;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .textbox.field {
+  margin-bottom: 0px;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .action-buttons {
+  transition: opacity .4s ease-in-out;
+  z-index: 9999;
+  display: flex;
+  position: absolute;
+  top: 50px; left: -190px;
+  padding: 12px 0px 0px 0px;
+  width: 360px;
+  justify-content: flex-end;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .action-buttons button {
+  margin-right: 10px;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .action-buttons.invisible {
+  opacity: 0;
+  z-index: -9999;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .action-buttons.invisible button {
+  height: 0px;
+  padding: 0;
+  border: 0 none;
+}
+
+tr.trTransaction.is-edit-mode .initial-price-cell-wrapper .action-buttons.visible {
+  opacity: 1;
 }

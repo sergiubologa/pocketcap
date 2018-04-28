@@ -78,13 +78,13 @@ export default class CoinsSelect extends Component<Props, State> {
   render() {
     const {
       coins, clearable, searchable, autoFocus,
-      value, placeholder, icon, isValid
+      value, placeholder, icon, isValid, className = ''
     } = this.props
     const {isTouched} = this.state
     const selectClass = !isTouched ? '' : isValid ? 'is-valid' : 'not-valid'
     return (
       <Select
-        className={selectClass}
+        className={`${className} ${selectClass}`}
         clearable={clearable}
         clearValueText="Clear selected coin"
         searchable={searchable}

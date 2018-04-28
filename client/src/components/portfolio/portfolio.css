@@ -7,6 +7,23 @@
   vertical-align: middle;
 }
 
+.portfolio .table thead th.coin {
+  padding-left: 55px;
+}
+
+.portfolio .table .btn-add-new-transaction {
+  opacity: 1;
+}
+
+.portfolio .table.is-edit-mode .btn-add-new-transaction {
+  opacity: 0;
+}
+
+.portfolio .table.is-edit-mode tbody tr:not(.is-edit-mode) {
+  opacity: 0.1;
+  transform: translateZ(0);
+}
+
 .portfolio #nextRefreshContainer {
   display: flex;
 }
@@ -21,7 +38,7 @@
 }
 
 .portfolio .btnCopyToClipboard span {
-  transition: opacity 0.9s ease-in-out 0s;
+  transition: opacity 0.5s ease-in-out 0s;
   display: inline-flex;
   overflow: hidden;
 }

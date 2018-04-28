@@ -260,7 +260,7 @@ class PortfolioStore extends EventEmitter {
       transaction.currentValue = 0
       transaction.margin = transaction.profit = 0
 
-      if (isValid) {
+      if (isValid && transaction.currentPrice) {
         const units: number = parseFloat(transaction.units)
         const initialPrice: number = parseFloat(transaction.initialPrice)
         const {currentPrice} = transaction

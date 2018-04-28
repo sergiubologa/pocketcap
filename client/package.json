@@ -15,6 +15,7 @@
     "moment": "^2.22.1",
     "qs": "^6.5.1",
     "react": "^16.3.2",
+    "react-animated-number": "^0.4.4",
     "react-copy-to-clipboard": "^5.0.1",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.3.2",
@@ -33,6 +34,6 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
-    "flow-bin": "^0.70.0"
+    "flow-bin": "^0.71.0"
   }
 }

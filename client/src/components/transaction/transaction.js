@@ -1,5 +1,6 @@
 // @flow
 import React, {Component} from 'react'
+import AnimatedStyledNumber from '../animated-styled-number/animated-styled-number'
 import PortfolioActions from '../../actions/portfolio-actions'
 import PortfolioStore from '../../stores/portfolio-store'
 import CoinsSelect from '../coins-select/coins-select'
@@ -23,6 +24,8 @@ export default class Transaction extends Component<Props, State> {
     this.onCellClick = this.onCellClick.bind(this)
     this.onKeyDown = this.onKeyDown.bind(this)
     this.onRemoveTransaction = this.onRemoveTransaction.bind(this)
+    this.onSaveTransaction = this.onSaveTransaction.bind(this)
+    this.onCancelTransaction = this.onCancelTransaction.bind(this)
   }
 
   componentDidMount(){
@@ -53,6 +56,14 @@ export default class Transaction extends Component<Props, State> {
       PortfolioActions.editTransaction(this.props.index)
       this.setState({ fieldToFocus: name })
     }
+  }
+
+  onSaveTransaction = (): void => {
+    PortfolioActions.saveTransaction()
+  }
+
+  onCancelTransaction = (): void => {
+    PortfolioActions.cancelTransaction()
   }
 
   onKeyDown = (e: KeyboardEvent) => {
@@ -96,7 +107,9 @@ export default class Transaction extends Component<Props, State> {
         isCoinValid, isUnitsValid, isInitialPriceValid
       }
     } = this.props
+
     const coinValue = coin.id || coin.symbol || coin.label ? coin : null
+    const isSaveEnabled = isCoinValid && isUnitsValid && isInitialPriceValid
 
     const displayCurrentPrice = Utils.toDecimals(currentPrice, 6)
     const displayTotalInvested = Utils.toDecimals(totalInvested)
@@ -107,7 +120,7 @@ export default class Transaction extends Component<Props, State> {
     const {fieldToFocus} = this.state
 
     return (
-      <tr className="trTransaction">
+      <tr className={`trTransaction ${editMode ? 'is-edit-mode' : ''}`}>
         <td width="300">
           { editMode ? (
             <CoinsSelect
@@ -153,6 +166,7 @@ export default class Transaction extends Component<Props, State> {
           )}
         </td>
         <td width="180" className="has-text-right">
+          <div className="initial-price-cell-wrapper">
           { editMode ? (
             <Textbox
               value={initialPrice}
@@ -168,16 +182,41 @@ export default class Transaction extends Component<Props, State> {
               {Utils.toMoneyString(Number(initialPrice))}
             </EditableField>
           )}
+            <div className={`action-buttons buttons ${editMode ? 'visible' : 'invisible'}`}>
+              <button
+                className="button is-dark"
+                onClick={this.onCancelTransaction}>
+                <i className="fa fa-cancel"></i>&nbsp;Cancel
+              </button>
+              <button
+                className="button is-primary is-medium"
+                onClick={this.onSaveTransaction}
+                disabled={!isSaveEnabled}>
+                <i className="fa fa-check"></i>&nbsp;Save transaction
+              </button>
+            </div>
+          </div>
         </td>
-        <td className="has-text-right">{Utils.toMoneyString(displayCurrentPrice)}</td>
-        <td className="has-text-right">{Utils.toMoneyString(displayTotalInvested)}</td>
-        <td className="has-text-right">{Utils.toMoneyString(displayCurrentValue)}</td>
-        <td className={`has-text-right has-text-${displayProfit && displayProfit > 0 ? 'green' : 'danger'}`}>
-          {Utils.toMoneyString(displayProfit)}<br/>
-          <i className={`fa fa-${displayProfit && displayProfit > 0 ? 'caret-up' : 'caret-down'}`}></i>
-          <span className="is-size-7">{displayMargin}%</span>
+        <td className="has-text-right">
+          $<AnimatedStyledNumber value={displayCurrentPrice} decimalPlaces={6} />
+        </td>
+        <td className="has-text-right">
+          $<AnimatedStyledNumber value={displayTotalInvested} />
+        </td>
+        <td className="has-text-right">
+          $<AnimatedStyledNumber value={displayCurrentValue} />
+        </td>
+        <td className={`has-text-right ${Utils.colorClassForNumbers(displayProfit)}`}>
+          $<AnimatedStyledNumber value={displayProfit} />
+          <br/>
+          <i className={`fa ${Utils.faIconNameForNumbers(displayProfit)}`}></i>&nbsp;
+          <span className="is-size-7">
+            <AnimatedStyledNumber value={displayMargin} />%
+          </span>
         </td>
       </tr>
     )
   }
 }
+
+// {Utils.toMoneyString(displayProfit)}

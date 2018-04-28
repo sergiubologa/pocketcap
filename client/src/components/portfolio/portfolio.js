@@ -1,15 +1,16 @@
 // @flow
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import moment from 'moment'
 import qs from 'qs'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
+import * as Utils from '../../utils/utils'
+import AnimatedStyledNumber from '../animated-styled-number/animated-styled-number'
 import PortfolioStore from '../../stores/portfolio-store'
 import PortfolioActions from '../../actions/portfolio-actions'
 import type {Props} from '../../flow-types/react-generic'
 import type {PortfolioState as State} from '../../flow-types/portfolio'
 import Transaction from '../transaction/transaction'
 import AnimatedCheckIcon from '../animated-check-icon/animated-check-icon'
-import * as Utils from '../../utils/utils'
 import {URL_PARAM_NAMES} from '../../constants/common'
 import './portfolio.css'
 
@@ -33,8 +34,6 @@ export default class Portfolio extends Component<Props, State> {
     this.refreshCoinsData = this.refreshCoinsData.bind(this)
     this.onRefreshBtnClick = this.onRefreshBtnClick.bind(this)
     this.onAddNewTransaction = this.onAddNewTransaction.bind(this)
-    this.onSaveTransaction = this.onSaveTransaction.bind(this)
-    this.onCancelTransaction = this.onCancelTransaction.bind(this)
     this.onCopyUrlToClipboard = this.onCopyUrlToClipboard.bind(this)
   }
 
@@ -111,14 +110,6 @@ export default class Portfolio extends Component<Props, State> {
     PortfolioActions.addNewTransaction()
   }
 
-  onSaveTransaction = (): void => {
-    PortfolioActions.saveTransaction()
-  }
-
-  onCancelTransaction = (): void => {
-    PortfolioActions.cancelTransaction()
-  }
-
   onCopyUrlToClipboard = (): void => {
     this.setState({urlCopiedToClipboard: true})
     const resetButtonSeconds: number = 5
@@ -163,33 +154,8 @@ export default class Portfolio extends Component<Props, State> {
     const displayTotalProfit = Utils.toDecimals(totalProfit)
     const inEditTransaction = this.state.transactions.find((t) => t.editMode)
     const isEditMode = !!inEditTransaction
-    let isSaveEnabled = false
-    if (inEditTransaction) {
-      const {isCoinValid, isUnitsValid, isInitialPriceValid} = inEditTransaction
-      isSaveEnabled = isCoinValid && isUnitsValid && isInitialPriceValid
-    }
     const nextUpdate = this.getNextUpdateRemainingTime()
     const updateButtonClass = `button is-info is-outlined ${isUpdatingCoinsData ? 'is-loading' : ''}`
-    const footerButtons = isEditMode ?
-      <Fragment>
-        <button
-          className="button is-light"
-          onClick={this.onCancelTransaction}>
-          <i className="fa fa-cancel"></i>&nbsp;Cancel
-        </button>
-        <button
-          className="button is-primary"
-          onClick={this.onSaveTransaction}
-          disabled={!isSaveEnabled}>
-          <i className="fa fa-check"></i>&nbsp;Save
-        </button>
-      </Fragment>
-    :
-      <button
-        className="button is-primary"
-        onClick={this.onAddNewTransaction}>
-        <i className="fa fa-plus"></i>&nbsp;Add new transaction
-      </button>
 
     return (
       <div className="portfolio">
@@ -210,7 +176,7 @@ export default class Portfolio extends Component<Props, State> {
               onCopy={this.onCopyUrlToClipboard}
               text={window.location.href}>
               <a className={`button is-info is-outlined btnCopyToClipboard ${urlCopiedToClipboard ? 'copied' : ''}`}>
-                <span>Get sharable link</span>
+                <span>Get bookmarkable link</span>
                 <span>Copied to clipboard!</span>
                 <span className="icon">
                   {
@@ -224,10 +190,10 @@ export default class Portfolio extends Component<Props, State> {
           </div>
         </div>
 
-        <table className="table is-hoverable is-fullwidth">
+        <table className={`table is-fullwidth ${isEditMode ? 'is-edit-mode' : 'is-hoverable'}`}>
           <thead className="has-background-light">
             <tr>
-              <th className="has-text-weight-bold">Coin / Token</th>
+              <th className="coin has-text-weight-bold">Coin / Token</th>
               <th className="has-text-right has-text-weight-bold">Units</th>
               <th className="has-text-right has-text-weight-bold">
                 Initial Price<br/>
@@ -244,14 +210,26 @@ export default class Portfolio extends Component<Props, State> {
           </thead>
           <tfoot>
             <tr>
-              <th colSpan="3" className="has-text-centered">{footerButtons}</th>
+              <th colSpan="3" className="has-text-centered">
+                <button
+                  className="btn-add-new-transaction button is-primary"
+                  onClick={this.onAddNewTransaction}>
+                  <i className="fa fa-plus"></i>&nbsp;Add new transaction
+                </button>
+              </th>
               <th className="has-text-right has-text-weight-semibold is-size-4">Total:</th>
-              <th className="has-text-right has-text-weight-semibold has-background-light">{Utils.toMoneyString(displayTotalInvested)}</th>
-              <th className="has-text-right has-text-weight-semibold has-background-light">{Utils.toMoneyString(displayCurrentTotalValue)}</th>
-              <th className={`has-text-right has-text-weight-semibold has-background-light has-text-${displayTotalProfit && displayTotalProfit > 0 ? 'green' : 'danger'}`}>
-                {Utils.toMoneyString(displayTotalProfit)}<br/>
-                <i className={`fa fa-${displayTotalProfit && displayTotalProfit > 0 ? 'caret-up' : 'caret-down'}`}></i>
-                <span className="is-size-7">{displayTotalMargin}%</span>
+              <th className="has-text-right has-text-weight-semibold has-background-light">
+                $<AnimatedStyledNumber value={displayTotalInvested} />
+              </th>
+              <th className="has-text-right has-text-weight-semibold has-background-light">
+                $<AnimatedStyledNumber value={displayCurrentTotalValue} />
+              </th>
+              <th className={`has-text-right has-text-weight-semibold has-background-light ${Utils.colorClassForNumbers(displayTotalProfit)}`}>
+                $<AnimatedStyledNumber value={displayTotalProfit} /><br/>
+                <i className={`fa ${Utils.faIconNameForNumbers(displayTotalProfit)}`}></i>&nbsp;
+                <span className="is-size-7">
+                  <AnimatedStyledNumber value={displayTotalMargin} />%
+                </span>
               </th>
             </tr>
           </tfoot>

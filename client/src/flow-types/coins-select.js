@@ -11,7 +11,8 @@ export type CoinsSelectProps = {
   value: ?CoinSelectOption,
   placeholder?: React.Node,
   icon?: React.Node,
-  isValid?: boolean
+  isValid?: boolean,
+  className?: string
 }
 
 export type CoinsSelectState = {
