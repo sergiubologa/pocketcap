@@ -13,7 +13,8 @@ export type PortfolioState = {
   isUpdatingCoinsData: boolean,
   urlHash: ?string,
   isRefreshButtonDisabled?: boolean,
-  urlCopiedToClipboard?: boolean
+  urlCopiedToClipboard?: boolean,
+  shakeCopyToClipboardButton: boolean
 }
 
 export type Transaction = {

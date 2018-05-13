@@ -19,12 +19,12 @@ export const toMoneyString = (value: ?number) => {
   return `$${value.toLocaleString()}`
 }
 
-export const getUrlHash = (ignoreQueryPrefix: boolean = true) => {
+export const getHashFromUrl = (ignoreQueryPrefix: boolean = true) => {
   const hash = window.location.hash
   return ignoreQueryPrefix ? hash.replace(/^#\?/, "") : hash
 }
 
-export const setUrlHash = (hash: string) => {
+export const setHashInUrl = (hash: string) => {
   if (hash.charAt(0) !== '?') {
     hash = `?${hash}`
   }

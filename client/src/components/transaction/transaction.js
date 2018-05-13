@@ -9,7 +9,8 @@ import EditableField from '../editable-field/editable-field'
 import * as Utils from '../../utils/utils'
 import type {
   TransactionRowProps as Props,
-  TransactionState as State} from '../../flow-types/portfolio'
+  TransactionState as State
+} from '../../flow-types/portfolio'
 import type {Coin, CoinsData} from '../../flow-types/coins'
 import type {CoinSelectOption} from '../../flow-types/coins-select'
 import './transaction.css'
@@ -161,7 +162,7 @@ export default class Transaction extends Component<Props, State> {
               onClick={this.onCellClick}
               name="units"
               align="right">
-              {units}
+              {Number(units).toString()}
             </EditableField>
           )}
         </td>

@@ -20,6 +20,8 @@ class PortfolioStore extends EventEmitter {
   COINS_DATA_STORAGE_KEY: string = 'COINS_DATA'
   COINS_UPDATE_INTERVAL: number = 5 * 60 // 5 minutes
   COINS_UPDATE_INTERVAL_ON_FAILURE: number = 0.5 * 60 // 30 seconds
+  SECONDS_TO_SHAKE_BUTTON: number = 1
+  SHAKE_BUTTON_TIMEOUT: TimeoutID
 
   previousPortfolio: ?PortfolioState = null
   portfolio: PortfolioState = this.defaultPortfolio()
@@ -76,21 +78,34 @@ class PortfolioStore extends EventEmitter {
       }
       const urlData: URLPortfolio = transactions.reduce(formatForCompression, [])
       codec.compress(urlData).then((result: string) => {
-        this.setPortfolioUrlHash(result)
+        this.setPortfolioHashInUrl(result)
         this.emit('change')
       })
     } else {
-      this.setPortfolioUrlHash(null)
+      this.setPortfolioHashInUrl(null)
       this.emit('change')
     }
   }
 
-  setPortfolioUrlHash(portfolioHash: ?string) {
-    const parsedParams: Object = qs.parse(Utils.getUrlHash())
+  setPortfolioHashInUrl(portfolioHash: ?string) {
+    const parsedParams: Object = qs.parse(Utils.getHashFromUrl())
     parsedParams[URL_PARAM_NAMES.PORTFOLIO] = portfolioHash
     const hash: string = qs.stringify(parsedParams, { skipNulls: true })
-    Utils.setUrlHash(hash)
-    this.portfolio.urlHash = Utils.getUrlHash(false)
+    Utils.setHashInUrl(hash)
+    if (this.portfolio.urlHash !== null) {
+      this.setButtonToShake()
+    }
+    this.portfolio.urlHash = Utils.getHashFromUrl(false)
+  }
+
+  setButtonToShake() {
+    this.portfolio.shakeCopyToClipboardButton = true
+    clearTimeout(this.SHAKE_BUTTON_TIMEOUT)
+
+    this.SHAKE_BUTTON_TIMEOUT = setTimeout(() => {
+      this.portfolio.shakeCopyToClipboardButton = false;
+      this.emit('change')
+    }, this.SECONDS_TO_SHAKE_BUTTON * 1000)
   }
 
   setPortfolioFromEncodedUrlParam(encodedPortfolio: ?string) {
@@ -319,7 +334,8 @@ class PortfolioStore extends EventEmitter {
       secToNextUpdate: this.COINS_UPDATE_INTERVAL,
       isAddNewTransactionModalOpen: false,
       isUpdatingCoinsData: false,
-      urlHash: null
+      urlHash: null,
+      shakeCopyToClipboardButton: false
     }
   }
 

@@ -67,6 +67,7 @@ class Header extends Component<Props, State> {
         <div className={'navbar-menu ' + burgerMenuActiveClass}>
           <div className="navbar-start">
             <Link to={homePageUrl} className="navbar-item" onClick={this.closeBurgerMenu}>Home</Link>
+            <Link to="/about" className="navbar-item" onClick={this.closeBurgerMenu}>About</Link>
             <Link to="/contact" className="navbar-item" onClick={this.closeBurgerMenu}>Contact</Link>
           </div>
 

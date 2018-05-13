@@ -55,3 +55,19 @@
   width: auto;
   opacity: 1;
 }
+
+.portfolio .btnCopyToClipboard.shake-it {
+  animation-name: shake;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(.36,.07,.19,.97);
+  animation-iteration-count: infinite;
+  animation-direction: both;
+  animation-delay: 0.5s;
+}
+
+@keyFrames shake {
+  15%, 85% {transform: translateX(-2px);}
+  20%, 80% {transform: translateX(3px)}
+  30%, 50%, 70% {transform: translateX(-5px)}
+  40%, 60% {transform: translateX(5px)}
+}

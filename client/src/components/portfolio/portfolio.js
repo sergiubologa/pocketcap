@@ -39,7 +39,7 @@ export default class Portfolio extends Component<Props, State> {
 
   componentWillMount() {
     PortfolioStore.on('change', this.updateStateData)
-    const urlParams: Object = qs.parse(Utils.getUrlHash())
+    const urlParams: Object = qs.parse(Utils.getHashFromUrl())
     if (urlParams) {
       const portfolio: ?string = urlParams[URL_PARAM_NAMES.PORTFOLIO]
       PortfolioActions.setPortfolioFromEncodedUrlParam(portfolio)
@@ -135,7 +135,13 @@ export default class Portfolio extends Component<Props, State> {
         <tr>
           <td colSpan="8">
             <p className="has-text-centered is-italic has-text-grey">
-            No transactions. Please add a transaction.
+            No transactions yet.<br />Add some transactions to track your profit.
+            <br/><br/>
+            <button
+              className="btn-add-new-transaction button is-primary"
+              onClick={this.onAddNewTransaction}>
+              <i className="fa fa-plus"></i>&nbsp;Add my first transaction
+            </button>
             </p>
           </td>
         </tr>
@@ -146,7 +152,8 @@ export default class Portfolio extends Component<Props, State> {
   render() {
     const {
       isUpdatingCoinsData, isRefreshButtonDisabled, urlCopiedToClipboard,
-      totalInvested, currentTotalValue, totalMargin, totalProfit
+      totalInvested, currentTotalValue, totalMargin, totalProfit,
+      transactions, shakeCopyToClipboardButton
     } = this.state
     const displayTotalInvested = Utils.toDecimals(totalInvested)
     const displayCurrentTotalValue = Utils.toDecimals(currentTotalValue)
@@ -155,40 +162,45 @@ export default class Portfolio extends Component<Props, State> {
     const inEditTransaction = this.state.transactions.find((t) => t.editMode)
     const isEditMode = !!inEditTransaction
     const nextUpdate = this.getNextUpdateRemainingTime()
+    const hasTransactions = transactions && transactions.length > 0
     const updateButtonClass = `button is-info is-outlined ${isUpdatingCoinsData ? 'is-loading' : ''}`
 
     return (
       <div className="portfolio">
 
-        <div className="columns is-vcentered is-marginless has-background-light">
-          <div className="column has-text-info" id="nextRefreshContainer">
-            <div className="refreshMessage">Prices update in:</div>
-            <div className="refreshButtonContainer">
-              <button
-                disabled={isRefreshButtonDisabled}
-                onClick={this.onRefreshBtnClick}
-                className={updateButtonClass}>{nextUpdate}
-              </button>
+        {hasTransactions && (
+          <div className="columns is-vcentered is-marginless has-background-light">
+            <div className="column has-text-info" id="nextRefreshContainer">
+              <div className="refreshMessage">Prices update in:</div>
+              <div className="refreshButtonContainer">
+                <button
+                  disabled={isRefreshButtonDisabled}
+                  onClick={this.onRefreshBtnClick}
+                  className={updateButtonClass}>{nextUpdate}
+                </button>
+              </div>
+            </div>
+            <div className="column has-text-right">
+              <CopyToClipboard
+                onCopy={this.onCopyUrlToClipboard}
+                text={window.location.href}>
+                <a className={`button is-info is-outlined btnCopyToClipboard
+                  ${urlCopiedToClipboard ? 'copied' : ''}
+                  ${shakeCopyToClipboardButton ? 'shake-it' : ''}`}>
+                  <span>Get bookmarkable link</span>
+                  <span>Copied to clipboard!</span>
+                  <span className="icon">
+                    {
+                      urlCopiedToClipboard
+                        ? <AnimatedCheckIcon />
+                        : <i className="fa fa-link"></i>
+                    }
+                  </span>
+                </a>
+              </CopyToClipboard>
             </div>
           </div>
-          <div className="column has-text-right">
-            <CopyToClipboard
-              onCopy={this.onCopyUrlToClipboard}
-              text={window.location.href}>
-              <a className={`button is-info is-outlined btnCopyToClipboard ${urlCopiedToClipboard ? 'copied' : ''}`}>
-                <span>Get bookmarkable link</span>
-                <span>Copied to clipboard!</span>
-                <span className="icon">
-                  {
-                    urlCopiedToClipboard
-                      ? <AnimatedCheckIcon />
-                      : <i className="fa fa-link"></i>
-                  }
-                </span>
-              </a>
-            </CopyToClipboard>
-          </div>
-        </div>
+        )}
 
         <table className={`table is-fullwidth ${isEditMode ? 'is-edit-mode' : 'is-hoverable'}`}>
           <thead className="has-background-light">
@@ -208,31 +220,33 @@ export default class Portfolio extends Component<Props, State> {
               <th className="has-text-right has-text-weight-bold">Profit</th>
             </tr>
           </thead>
-          <tfoot>
-            <tr>
-              <th colSpan="3" className="has-text-centered">
-                <button
-                  className="btn-add-new-transaction button is-primary"
-                  onClick={this.onAddNewTransaction}>
-                  <i className="fa fa-plus"></i>&nbsp;Add new transaction
-                </button>
-              </th>
-              <th className="has-text-right has-text-weight-semibold is-size-4">Total:</th>
-              <th className="has-text-right has-text-weight-semibold has-background-light">
-                $<AnimatedStyledNumber value={displayTotalInvested} />
-              </th>
-              <th className="has-text-right has-text-weight-semibold has-background-light">
-                $<AnimatedStyledNumber value={displayCurrentTotalValue} />
-              </th>
-              <th className={`has-text-right has-text-weight-semibold has-background-light ${Utils.colorClassForNumbers(displayTotalProfit)}`}>
-                $<AnimatedStyledNumber value={displayTotalProfit} /><br/>
-                <i className={`fa ${Utils.faIconNameForNumbers(displayTotalProfit)}`}></i>&nbsp;
-                <span className="is-size-7">
-                  <AnimatedStyledNumber value={displayTotalMargin} />%
-                </span>
-              </th>
-            </tr>
-          </tfoot>
+          {hasTransactions && (
+            <tfoot>
+              <tr>
+                <th colSpan="3" className="has-text-centered">
+                  <button
+                    className="btn-add-new-transaction button is-primary"
+                    onClick={this.onAddNewTransaction}>
+                    <i className="fa fa-plus"></i>&nbsp;Add new transaction
+                  </button>
+                </th>
+                <th className="has-text-right has-text-weight-semibold is-size-4">Total:</th>
+                <th className="has-text-right has-text-weight-semibold has-background-light">
+                  $<AnimatedStyledNumber value={displayTotalInvested} />
+                </th>
+                <th className="has-text-right has-text-weight-semibold has-background-light">
+                  $<AnimatedStyledNumber value={displayCurrentTotalValue} />
+                </th>
+                <th className={`has-text-right has-text-weight-semibold has-background-light ${Utils.colorClassForNumbers(displayTotalProfit)}`}>
+                  $<AnimatedStyledNumber value={displayTotalProfit} /><br/>
+                  <i className={`fa ${Utils.faIconNameForNumbers(displayTotalProfit)}`}></i>&nbsp;
+                  <span className="is-size-7">
+                    <AnimatedStyledNumber value={displayTotalMargin} />%
+                  </span>
+                </th>
+              </tr>
+            </tfoot>
+          )}
           <tbody>{this.getTransactionsList()}</tbody>
         </table>
 
