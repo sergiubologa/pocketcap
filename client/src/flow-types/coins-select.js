@@ -8,6 +8,8 @@ export type CoinsSelectProps = {
   autoFocus?: boolean,
   onChange?: (selectedCoin: ?CoinSelectOption) => void,
   onBlur?: () => void,
+  onOpen?: () => void,
+  onClose?: () => void,
   value: ?CoinSelectOption,
   placeholder?: React.Node,
   icon?: React.Node,

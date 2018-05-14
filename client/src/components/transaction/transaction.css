@@ -7,8 +7,8 @@ tr.trTransaction {
 }
 
 tr.trTransaction.is-edit-mode {
-  border: 2px solid #dcdcdc;
-  box-shadow: 1px 1px 10px 0px slategrey;
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
 }
 
 tr.trTransaction td .coin-cell {

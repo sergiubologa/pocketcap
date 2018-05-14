@@ -169,7 +169,7 @@ export default class Portfolio extends Component<Props, State> {
       <div className="portfolio">
 
         {hasTransactions && (
-          <div className="card portfolio-actions">
+          <div className="card portfolio-actions has-background-white-bis">
             <div className="card-content">
               <div className="columns is-vcentered">
                 <div className="column has-text-info" id="nextRefreshContainer">
@@ -186,7 +186,7 @@ export default class Portfolio extends Component<Props, State> {
                   <CopyToClipboard
                     onCopy={this.onCopyUrlToClipboard}
                     text={window.location.href}>
-                    <a className={`button is-info is-outlined btnCopyToClipboard
+                    <a className={`button is-info btnCopyToClipboard
                       ${urlCopiedToClipboard ? 'copied' : ''}
                       ${shakeCopyToClipboardButton ? 'shake-it' : ''}`}>
                       <span>Get bookmarkable link</span>

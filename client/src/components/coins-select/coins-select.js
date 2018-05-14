@@ -78,7 +78,7 @@ export default class CoinsSelect extends Component<Props, State> {
 
   render() {
     const {
-      coins, clearable, searchable, autoFocus,
+      coins, clearable, searchable, autoFocus, onOpen, onClose,
       value, placeholder, icon, isValid, className = ''
     } = this.props
     const {isTouched} = this.state
@@ -92,6 +92,8 @@ export default class CoinsSelect extends Component<Props, State> {
         autoFocus={autoFocus}
         onChange={this.onChange}
         onBlur={this.onBlur}
+        onOpen={onOpen}
+        onClose={onClose}
         options={coins}
         placeholder={placeholder}
         value={value}
@@ -99,6 +101,7 @@ export default class CoinsSelect extends Component<Props, State> {
         optionRenderer={this.coinOptionRenderer}
         valueKey="id"
         labelKey="label"
+        openOnFocus={true}
         arrowRenderer={isTouched ? () => icon : undefined}
         />
     )

@@ -19,7 +19,7 @@ import './transaction.css'
 export default class Transaction extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
-    this.state = { fieldToFocus: 'coin' }
+    this.state = { fieldToFocus: 'coin', isCoinMenuOpen: false }
     this.onCoinChange = this.onCoinChange.bind(this)
     this.onUnitsChange = this.onUnitsChange.bind(this)
     this.onInitialPriceChange = this.onInitialPriceChange.bind(this)
@@ -70,8 +70,9 @@ export default class Transaction extends Component<Props, State> {
 
   onKeyDown = (e: KeyboardEvent) => {
     const { editMode: isEditMode } = this.props.transaction
+    const {isCoinMenuOpen} = this.state
 
-    if (isEditMode) {
+    if (isEditMode && !isCoinMenuOpen) {
       switch (e.key) {
         case 'Escape':
           PortfolioActions.cancelTransaction()
@@ -130,6 +131,8 @@ export default class Transaction extends Component<Props, State> {
               autoFocus={fieldToFocus === 'coin'}
               isValid={isCoinValid}
     					onChange={this.onCoinChange}
+              onOpen={() => this.setState({isCoinMenuOpen: true})}
+              onClose={() => this.setState({isCoinMenuOpen: false})}
     					coins={this.getCoinsDataForSelect()}
     					value={coinValue}
               placeholder=""

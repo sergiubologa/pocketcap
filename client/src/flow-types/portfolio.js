@@ -34,7 +34,8 @@ export type Transaction = {
 }
 
 export type TransactionState = {
-  fieldToFocus: string
+  fieldToFocus: string,
+  isCoinMenuOpen: boolean
 }
 
 export type TransactionRowProps = {
