@@ -27,16 +27,16 @@ export default class MarketStatsCard extends Component<Props, State> {
           <p className="is-size-5 has-text-weight-semibold">Best 24h performers</p>
         </div>
 
-        <footer class="card-footer">
-          <div class="card-footer-item has-text-centered">
+        <footer className="card-footer">
+          <div className="card-footer-item has-text-centered">
             <div><CoinIcon symbol={'BTC'} /> BTC</div>
             <div className="has-text-green">24%</div>
           </div>
-          <div class="card-footer-item has-text-centered">
+          <div className="card-footer-item has-text-centered">
             <div><CoinIcon symbol={'FUN'} /> FUN</div>
             <div className="has-text-green">16%</div>
           </div>
-          <div class="card-footer-item has-text-centered">
+          <div className="card-footer-item has-text-centered">
             <div><CoinIcon symbol={'ADA'} /> ADA</div>
             <div className="has-text-green">13%</div>
           </div>

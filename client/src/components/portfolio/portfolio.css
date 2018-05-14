@@ -6,6 +6,11 @@
   padding: 1rem;
 }
 
+.portfolio .table {
+  table-layout: fixed;
+  white-space: nowrap;
+}
+
 .portfolio .table td,
 .portfolio .table tfoot th {
   vertical-align: middle;

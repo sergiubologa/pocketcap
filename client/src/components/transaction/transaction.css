@@ -21,8 +21,16 @@ tr.trTransaction td .coin-cell .btnRemoveTransaction {
   margin-right: 1rem;
 }
 
-tr.trTransaction td .coin-cell .field {
-  flex-grow: 1;
+tr.trTransaction td .coin-cell .field,
+tr.trTransaction td .coin-cell .field .field-items {
+  min-width: 0;
+}
+
+tr.trTransaction td .coin-cell .field .field-items > span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
 }
 
 tr.trTransaction .initial-price-cell-wrapper {

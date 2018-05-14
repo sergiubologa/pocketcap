@@ -209,19 +209,19 @@ export default class Portfolio extends Component<Props, State> {
         <table className={`table is-fullwidth ${isEditMode ? 'is-edit-mode' : 'is-hoverable'}`}>
           <thead className="has-background-light">
             <tr>
-              <th className="coin has-text-weight-bold">Coin / Token</th>
-              <th className="has-text-right has-text-weight-bold">Units</th>
-              <th className="has-text-right has-text-weight-bold">
+              <th style={{width: "25%"}} className="coin has-text-weight-bold">Coin / Token</th>
+              <th style={{width: "15%"}} className="has-text-right has-text-weight-bold">Units</th>
+              <th style={{width: "12%"}} className="has-text-right has-text-weight-bold">
                 Initial Price<br/>
                 <span className="is-size-7 has-text-weight-light">(per unit)</span>
               </th>
-              <th className="has-text-right has-text-weight-bold">
+              <th style={{width: "12%"}} className="has-text-right has-text-weight-bold">
                 Current Price<br/>
                 <span className="is-size-7 has-text-weight-light">(per unit)</span>
               </th>
-              <th className="has-text-right has-text-weight-bold">Total invested</th>
-              <th className="has-text-right has-text-weight-bold">Current value</th>
-              <th className="has-text-right has-text-weight-bold">Profit</th>
+              <th style={{width: "12%"}} className="has-text-right has-text-weight-bold">Total invested</th>
+              <th style={{width: "12%"}} className="has-text-right has-text-weight-bold">Current value</th>
+              <th style={{width: "12%"}} className="has-text-right has-text-weight-bold">Profit</th>
             </tr>
           </thead>
           {hasTransactions && (

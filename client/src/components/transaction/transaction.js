@@ -124,7 +124,7 @@ export default class Transaction extends Component<Props, State> {
 
     return (
       <tr className={`trTransaction ${editMode ? 'is-edit-mode' : ''}`}>
-        <td width="300">
+        <td>
           { editMode ? (
             <CoinsSelect
               clearable={false}
@@ -153,7 +153,7 @@ export default class Transaction extends Component<Props, State> {
             </div>
           )}
         </td>
-        <td width="180" className="has-text-right">
+        <td className="has-text-right">
           { editMode ? (
             <Textbox
               value={units}
@@ -170,7 +170,7 @@ export default class Transaction extends Component<Props, State> {
             </EditableField>
           )}
         </td>
-        <td width="180" className="has-text-right">
+        <td className="has-text-right">
           <div className="initial-price-cell-wrapper">
           { editMode ? (
             <Textbox

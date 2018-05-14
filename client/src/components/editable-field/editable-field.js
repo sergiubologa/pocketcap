@@ -24,7 +24,9 @@ export default class EditableField extends React.Component<Props, State> {
         className={containerClasses.join(" ")}
         onClick={this.props.onClick.bind(this, this.props.name)}
         >
-        <div className="field-items">{this.props.children}</div>
+        <div className="field-items">
+          <span>{this.props.children}</span>
+        </div>
         <i className="field-icon fa fa-pencil has-text-primary"></i>
       </div>
     )

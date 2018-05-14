@@ -4,6 +4,7 @@
   padding: 5px;
   border-radius: 4px;
   cursor: text;
+  width: 100%;
 }
 .editable-field.align-right {
   flex-direction: row-reverse;
@@ -14,14 +15,6 @@
   -webkit-transition: background-color 300ms ease;
   -ms-transition: background-color 300ms ease;
   transition: background-color 300ms ease;
-}
-
-.editable-field .field-items {
-  flex: 0 0 auto;
-}
-
-.editable-field .field-items:hover {
-
 }
 
 .editable-field i.field-icon {
