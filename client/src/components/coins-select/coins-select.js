@@ -1,6 +1,7 @@
 // @flow
 import React, {Component} from 'react'
 import Select from 'react-virtualized-select'
+import CoinIcon from '../coin-icon/coin-icon'
 import 'react-select/dist/react-select.css'
 import 'react-virtualized/styles.css'
 import 'react-virtualized-select/styles.css'
@@ -58,7 +59,7 @@ export default class CoinsSelect extends Component<Props, State> {
         onMouseEnter={() => focusOption(option)}
         style={style}
       >
-        <i className={`cc defaultCoinIcon ${option.symbol.toUpperCase()}`}></i>
+        <CoinIcon symbol={option.symbol.toUpperCase()} />
         <label>{option.label}</label>
       </div>
     )
@@ -68,7 +69,7 @@ export default class CoinsSelect extends Component<Props, State> {
     return (
       <div className="Select-value">
 				<span className="Select-value-label">
-					<i className={`cc defaultCoinIcon ${coin.symbol.toUpperCase()}`}></i>
+          <CoinIcon symbol={coin.symbol.toUpperCase()} />
 					{children}
 				</span>
 			</div>

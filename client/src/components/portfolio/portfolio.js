@@ -169,35 +169,39 @@ export default class Portfolio extends Component<Props, State> {
       <div className="portfolio">
 
         {hasTransactions && (
-          <div className="columns is-vcentered is-marginless has-background-light">
-            <div className="column has-text-info" id="nextRefreshContainer">
-              <div className="refreshMessage">Prices update in:</div>
-              <div className="refreshButtonContainer">
-                <button
-                  disabled={isRefreshButtonDisabled}
-                  onClick={this.onRefreshBtnClick}
-                  className={updateButtonClass}>{nextUpdate}
-                </button>
+          <div className="card portfolio-actions">
+            <div className="card-content">
+              <div className="columns is-vcentered">
+                <div className="column has-text-info" id="nextRefreshContainer">
+                  <div className="refreshMessage">Prices update in:</div>
+                  <div className="refreshButtonContainer">
+                    <button
+                      disabled={isRefreshButtonDisabled}
+                      onClick={this.onRefreshBtnClick}
+                      className={updateButtonClass}>{nextUpdate}
+                    </button>
+                  </div>
+                </div>
+                <div className="column has-text-right">
+                  <CopyToClipboard
+                    onCopy={this.onCopyUrlToClipboard}
+                    text={window.location.href}>
+                    <a className={`button is-info is-outlined btnCopyToClipboard
+                      ${urlCopiedToClipboard ? 'copied' : ''}
+                      ${shakeCopyToClipboardButton ? 'shake-it' : ''}`}>
+                      <span>Get bookmarkable link</span>
+                      <span>Copied to clipboard!</span>
+                      <span className="icon">
+                        {
+                          urlCopiedToClipboard
+                            ? <AnimatedCheckIcon />
+                            : <i className="fa fa-link"></i>
+                        }
+                      </span>
+                    </a>
+                  </CopyToClipboard>
+                </div>
               </div>
-            </div>
-            <div className="column has-text-right">
-              <CopyToClipboard
-                onCopy={this.onCopyUrlToClipboard}
-                text={window.location.href}>
-                <a className={`button is-info is-outlined btnCopyToClipboard
-                  ${urlCopiedToClipboard ? 'copied' : ''}
-                  ${shakeCopyToClipboardButton ? 'shake-it' : ''}`}>
-                  <span>Get bookmarkable link</span>
-                  <span>Copied to clipboard!</span>
-                  <span className="icon">
-                    {
-                      urlCopiedToClipboard
-                        ? <AnimatedCheckIcon />
-                        : <i className="fa fa-link"></i>
-                    }
-                  </span>
-                </a>
-              </CopyToClipboard>
             </div>
           </div>
         )}

@@ -53,6 +53,7 @@ class Header extends Component<Props, State> {
 
     return (
       <nav className="navbar is-fixed-top is-light">
+
         <div className="navbar-brand">
           <Link to={homePageUrl} className="navbar-item">
             <img src={logo} alt="The Pocket Cap logo" height="28" />

@@ -1,5 +1,9 @@
-.portfolio .defaultCoinIcon::before {
-  content: "\E028";
+.portfolio .portfolio-actions {
+  margin-bottom: 1rem;
+}
+
+.portfolio .portfolio-actions .card-content {
+  padding: 1rem;
 }
 
 .portfolio .table td,

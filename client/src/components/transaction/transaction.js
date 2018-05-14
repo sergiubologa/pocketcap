@@ -6,6 +6,7 @@ import PortfolioStore from '../../stores/portfolio-store'
 import CoinsSelect from '../coins-select/coins-select'
 import Textbox from '../textbox/textbox'
 import EditableField from '../editable-field/editable-field'
+import CoinIcon from '../coin-icon/coin-icon'
 import * as Utils from '../../utils/utils'
 import type {
   TransactionRowProps as Props,
@@ -144,7 +145,7 @@ export default class Transaction extends Component<Props, State> {
                 className="field"
                 onClick={this.onCellClick}
                 name="coin">
-                <i className={`cc defaultCoinIcon ${coin.symbol}`}></i> {coin.label}
+                <CoinIcon symbol={coin.symbol} /> {coin.label}
               </EditableField>
             </div>
           )}
