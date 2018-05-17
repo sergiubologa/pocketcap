@@ -1,6 +1,8 @@
 // @flow
 import React, { Component } from 'react'
 import {Link} from 'react-router-dom'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faDonate from '@fortawesome/fontawesome-free-solid/faHandHoldingHeart'
 import PortfolioStore from '../../stores/portfolio-store'
 import type { Props } from '../../flow-types/react-generic'
 import logo from '../../resources/thepocketcap.png'
@@ -76,7 +78,7 @@ class Header extends Component<Props, State> {
             <div className="navbar-item">
               <button className="button is-primary">
                 <span className="icon">
-                  <i className="fa fa-heart-o"></i>
+                  <FontAwesomeIcon icon={faDonate} />
                 </span>
                 <span>Donate!</span>
               </button>

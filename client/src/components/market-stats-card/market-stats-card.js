@@ -1,5 +1,7 @@
 // @flow
 import React, {Component} from 'react'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
 import CoinIcon from '../coin-icon/coin-icon'
 import type {Props, State} from '../../flow-types/react-generic'
 import './market-stats-card.css'
@@ -23,10 +25,15 @@ export default class MarketStatsCard extends Component<Props, State> {
               <div className="column is-half">34.65%</div>
             </div>
           </div>
-
-          <p className="is-size-5 has-text-weight-semibold">Best 24h performers</p>
         </div>
+        <div>
 
+          <p className="is-size-7 has-text-weight-semibold is-marginless has-text-centered has-text-grey">
+            <FontAwesomeIcon icon={faAngleDown} />&nbsp;
+            <span>best 3 performers in the last 24 hrs</span>&nbsp;
+            <FontAwesomeIcon icon={faAngleDown} />
+          </p>
+        </div>
         <footer className="card-footer">
           <div className="card-footer-item has-text-centered">
             <div><CoinIcon symbol={'BTC'} /> BTC</div>

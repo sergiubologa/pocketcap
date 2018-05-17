@@ -42,15 +42,3 @@ export const colorClassForNumbers = (value: ?number): string => {
 
   return `has-text-${value > 0 ? 'green' : 'danger'}`
 }
-
-export const faIconNameForNumbers = (value: ?number): string => {
-  if (!value && value !== 0) {
-    return ''
-  }
-
-  if (value === 0) {
-    return 'fa-caret-right'
-  }
-
-  return `fa-${value > 0 ? 'caret-up' : 'caret-down'}`
-}

@@ -2,9 +2,13 @@
 import React, { Component } from 'react'
 import moment from 'moment'
 import qs from 'qs'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
+import faLink from '@fortawesome/fontawesome-free-solid/faLink'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import * as Utils from '../../utils/utils'
 import AnimatedStyledNumber from '../animated-styled-number/animated-styled-number'
+import TrendIcon from '../trend-icon/trend-icon'
 import PortfolioStore from '../../stores/portfolio-store'
 import PortfolioActions from '../../actions/portfolio-actions'
 import type {Props} from '../../flow-types/react-generic'
@@ -94,7 +98,7 @@ export default class Portfolio extends Component<Props, State> {
       return `${mins}:${sec}`
     }
 
-    return <span className="fa fa-spinner fa-pulse"></span>
+    return ""
   }
 
   addLeadingZero = (val: number): string => {
@@ -140,7 +144,7 @@ export default class Portfolio extends Component<Props, State> {
             <button
               className="btn-add-new-transaction button is-primary"
               onClick={this.onAddNewTransaction}>
-              <i className="fa fa-plus"></i>&nbsp;Add my first transaction
+              <FontAwesomeIcon icon={faPlus} />&nbsp;Add my first transaction
             </button>
             </p>
           </td>
@@ -195,7 +199,7 @@ export default class Portfolio extends Component<Props, State> {
                         {
                           urlCopiedToClipboard
                             ? <AnimatedCheckIcon />
-                            : <i className="fa fa-link"></i>
+                            : <FontAwesomeIcon icon={faLink} />
                         }
                       </span>
                     </a>
@@ -231,7 +235,7 @@ export default class Portfolio extends Component<Props, State> {
                   <button
                     className="btn-add-new-transaction button is-primary"
                     onClick={this.onAddNewTransaction}>
-                    <i className="fa fa-plus"></i>&nbsp;Add new transaction
+                    <FontAwesomeIcon icon={faPlus} />&nbsp;Add new transaction
                   </button>
                 </th>
                 <th className="has-text-right has-text-weight-semibold is-size-4">Total:</th>
@@ -243,7 +247,7 @@ export default class Portfolio extends Component<Props, State> {
                 </th>
                 <th className={`has-text-right has-text-weight-semibold has-background-light ${Utils.colorClassForNumbers(displayTotalProfit)}`}>
                   $<AnimatedStyledNumber value={displayTotalProfit} /><br/>
-                  <i className={`fa ${Utils.faIconNameForNumbers(displayTotalProfit)}`}></i>&nbsp;
+                  <TrendIcon value={displayTotalProfit} />&nbsp;
                   <span className="is-size-7">
                     <AnimatedStyledNumber value={displayTotalMargin} />%
                   </span>

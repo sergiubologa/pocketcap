@@ -101,7 +101,7 @@ export default class CoinsSelect extends Component<Props, State> {
         optionRenderer={this.coinOptionRenderer}
         valueKey="id"
         labelKey="label"
-        openOnFocus={true}
+        openOnFocus={false}
         arrowRenderer={isTouched ? () => icon : undefined}
         />
     )

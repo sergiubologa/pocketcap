@@ -28,8 +28,9 @@
   opacity: 0;
 }
 
-.portfolio .table.is-edit-mode tbody tr:not(.is-edit-mode) {
-  opacity: 0.1;
+.portfolio .table.is-edit-mode tbody tr:not(.is-edit-mode),
+.portfolio .table.is-edit-mode tfoot {
+  opacity: 0.2;
   transform: translateZ(0);
 }
 

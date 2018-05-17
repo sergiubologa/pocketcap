@@ -1,10 +1,15 @@
 // @flow
 import React, {Component} from 'react'
+import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import faMinus from '@fortawesome/fontawesome-free-solid/faMinus'
+import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
+import faBan from '@fortawesome/fontawesome-free-solid/faBan'
 import AnimatedStyledNumber from '../animated-styled-number/animated-styled-number'
 import PortfolioActions from '../../actions/portfolio-actions'
 import PortfolioStore from '../../stores/portfolio-store'
 import CoinsSelect from '../coins-select/coins-select'
 import Textbox from '../textbox/textbox'
+import TrendIcon from '../trend-icon/trend-icon'
 import EditableField from '../editable-field/editable-field'
 import CoinIcon from '../coin-icon/coin-icon'
 import * as Utils from '../../utils/utils'
@@ -136,13 +141,13 @@ export default class Transaction extends Component<Props, State> {
     					coins={this.getCoinsDataForSelect()}
     					value={coinValue}
               placeholder=""
-              icon={<i className={`fa fa-${isCoinValid ? 'check' : 'ban'}`}></i>} />
+              icon={<FontAwesomeIcon icon={isCoinValid ? faCheck : faBan} />} />
           ) : (
             <div className="coin-cell">
               <button
                 className="btnRemoveTransaction button is-dwarf is-warning is-outlined"
                 onClick={this.onRemoveTransaction}>
-                <span className="icon is-small"><i className="fa fa-minus"></i></span>
+                <span className="icon is-small"><FontAwesomeIcon icon={faMinus} /></span>
               </button>
               <EditableField
                 className="field"
@@ -191,13 +196,13 @@ export default class Transaction extends Component<Props, State> {
               <button
                 className="button is-dark"
                 onClick={this.onCancelTransaction}>
-                <i className="fa fa-cancel"></i>&nbsp;Cancel
+                Cancel
               </button>
               <button
-                className="button is-primary is-medium"
+                className="button is-primary"
                 onClick={this.onSaveTransaction}
                 disabled={!isSaveEnabled}>
-                <i className="fa fa-check"></i>&nbsp;Save transaction
+                <FontAwesomeIcon icon={faCheck} />&nbsp;Save transaction
               </button>
             </div>
           </div>
@@ -214,7 +219,7 @@ export default class Transaction extends Component<Props, State> {
         <td className={`has-text-right ${Utils.colorClassForNumbers(displayProfit)}`}>
           $<AnimatedStyledNumber value={displayProfit} />
           <br/>
-          <i className={`fa ${Utils.faIconNameForNumbers(displayProfit)}`}></i>&nbsp;
+          <TrendIcon value={displayProfit} />&nbsp;
           <span className="is-size-7">
             <AnimatedStyledNumber value={displayMargin} />%
           </span>
