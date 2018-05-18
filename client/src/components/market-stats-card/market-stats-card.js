@@ -30,7 +30,7 @@ export default class MarketStatsCard extends Component<Props, State> {
 
           <p className="is-size-7 has-text-weight-semibold is-marginless has-text-centered has-text-grey">
             <FontAwesomeIcon icon={faAngleDown} />&nbsp;
-            <span>best 3 performers in the last 24 hrs</span>&nbsp;
+            <span>best performers in the last 24 hrs</span>&nbsp;
             <FontAwesomeIcon icon={faAngleDown} />
           </p>
         </div>

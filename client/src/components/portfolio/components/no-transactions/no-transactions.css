@@ -1,0 +1,9 @@
+.portfolio .noTransactionsContainer {
+  padding-top: 1.5rem;
+}
+.portfolio .strenghts {
+  margin-top: 0.5rem;
+}
+.portfolio .strenghts > span:not(:last-child) {
+  margin-right: 1rem;
+}

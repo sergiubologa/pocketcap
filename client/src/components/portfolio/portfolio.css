@@ -1,10 +1,3 @@
-.portfolio .portfolio-actions {
-  margin-bottom: 1rem;
-}
-
-.portfolio .portfolio-actions .card-content {
-  padding: 1rem;
-}
 
 .portfolio .table {
   table-layout: fixed;
@@ -32,52 +25,4 @@
 .portfolio .table.is-edit-mode tfoot {
   opacity: 0.2;
   transform: translateZ(0);
-}
-
-.portfolio #nextRefreshContainer {
-  display: flex;
-}
-
-.portfolio #nextRefreshContainer > div.refreshMessage {
-  align-self: center;
-  margin-right: 5px;
-}
-
-.portfolio #nextRefreshContainer > div.refreshButtonContainer {
-  flex-grow: 1;
-}
-
-.portfolio .btnCopyToClipboard span {
-  transition: opacity 0.5s ease-in-out 0s;
-  display: inline-flex;
-  overflow: hidden;
-}
-
-.portfolio .btnCopyToClipboard.copied span:nth-child(1),
-.portfolio .btnCopyToClipboard span:nth-child(2) {
-  height: 0;
-  width: 0;
-  opacity: 0;
-}
-
-.portfolio .btnCopyToClipboard.copied span:nth-child(2) {
-  height: auto;
-  width: auto;
-  opacity: 1;
-}
-
-.portfolio .btnCopyToClipboard.shake-it {
-  animation-name: shake;
-  animation-duration: 1s;
-  animation-timing-function: cubic-bezier(.36,.07,.19,.97);
-  animation-iteration-count: infinite;
-  animation-direction: both;
-  animation-delay: 0.5s;
-}
-
-@keyFrames shake {
-  15%, 85% {transform: translateX(-2px);}
-  20%, 80% {transform: translateX(3px)}
-  30%, 50%, 70% {transform: translateX(-5px)}
-  40%, 60% {transform: translateX(5px)}
 }
