@@ -7,11 +7,13 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const { coinsCronJob } = require('cron-jobs/coins-cron');
+const { marketStatsCronJob } = require('cron-jobs/market-stats-cron');
 const { cleanDBCronJob } = require('cron-jobs/clean-db-cron');
 
-var index = require('routes/index');
-var coins = require('routes/coins');
-var allOthers = require('routes/all-others');
+const index = require('routes/index');
+const coins = require('routes/coins');
+const marketStats = require('routes/market-stats');
+const allOthers = require('routes/all-others');
 
 var app = express();
 
@@ -35,11 +37,13 @@ app.use(cookieParser());
 
 app.use('/api', index);
 app.use('/api/coins', coins);
+app.use('/api/market-stats', marketStats);
 app.use('*', allOthers);
 
 // Start cron jobs
 if (process.env.NODE_ENV != 'testing'){
     coinsCronJob.start();
+    marketStatsCronJob.start();
     cleanDBCronJob.start();
     // TODO - use logger
     console.log('Cron jobs started');

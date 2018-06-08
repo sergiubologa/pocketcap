@@ -32,7 +32,7 @@ function getMostRecentCoinsData(){
 }
 
 function cleanupDatabase(){
-    // remove coins data older than 5 days
+    // remove coins data older than X days
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - process.env.DAYS_TO_KEEP_COINS_DATA);
     return CoinsModel.remove({ added_at: { $lt: cutoff }})
