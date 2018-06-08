@@ -5,12 +5,12 @@
 }
 
 #page-content {
-  padding: 15px;
+  display: flex;
   flex: 1 0 auto;
 }
 
 .button.is-dwarf {
-  font-size: 0.6rem
+  font-size: 0.6rem;
 }
 
 .has-text-green {

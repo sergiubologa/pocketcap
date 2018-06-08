@@ -10,7 +10,7 @@ export default class PortfolioPage extends Component<Props, State> {
   render() {
     return (
       <DocumentTitle title='Pocket Cap'>
-        <div className="columns">
+        <div className="columns" id="portfolio-container">
           <div className="column is-three-quarters">
             <Portfolio />
           </div>

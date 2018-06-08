@@ -36,11 +36,11 @@ export default class Transaction extends Component<Props, State> {
   }
 
   componentDidMount(){
-    document.addEventListener("keydown", this.onKeyDown, false);
+    document.addEventListener("keydown", this.onKeyDown, true);
   }
 
   componentWillUnmount(){
-    document.removeEventListener("keydown", this.onKeyDown, false);
+    document.removeEventListener("keydown", this.onKeyDown, true);
   }
 
   onCoinChange = (selectedCoin: ?CoinSelectOption): void => {

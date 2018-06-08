@@ -110,6 +110,8 @@ class PortfolioStore extends EventEmitter {
 
   setPortfolioFromEncodedUrlParam(encodedPortfolio: ?string) {
     if (encodedPortfolio && encodedPortfolio.length > 0) {
+      // If coins data is not available, trigger a fetch and wait until is available
+      // We don't want to load the portfolio until coins data is not available
       const coinsData: CoinsData = this.getCoinsData()
       if (coinsData.data.length <= 0) {
         if (!this.portfolio.isUpdatingCoinsData) {
@@ -236,7 +238,7 @@ class PortfolioStore extends EventEmitter {
 
     if (inEditTransaction) {
       inEditTransaction.units = units
-      inEditTransaction.isUnitsValid = Utils.isValidDecimal(units)
+      inEditTransaction.isUnitsValid = Utils.isValidDecimal(units) && parseFloat(units) > 0
       this.calculateTransactionValues(inEditTransaction)
       this.emit('change')
     }
@@ -247,7 +249,7 @@ class PortfolioStore extends EventEmitter {
 
     if (inEditTransaction) {
       inEditTransaction.initialPrice = price
-      inEditTransaction.isInitialPriceValid = Utils.isValidDecimal(price)
+      inEditTransaction.isInitialPriceValid = Utils.isValidDecimal(price) && parseFloat(price) > 0
       this.calculateTransactionValues(inEditTransaction)
       this.emit('change')
     }

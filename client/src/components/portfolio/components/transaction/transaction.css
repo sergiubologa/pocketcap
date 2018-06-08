@@ -46,10 +46,15 @@ tr.trTransaction .initial-price-cell-wrapper .action-buttons {
   z-index: 9999;
   display: flex;
   position: absolute;
-  top: 50px; left: -190px;
-  padding: 12px 0px 0px 0px;
-  width: 360px;
+  top: 50px; right: 0px;
+  padding: 10px 0px 0px 0px;
+  width: 278px;
   justify-content: flex-end;
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  border-top: 0 none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 tr.trTransaction .initial-price-cell-wrapper .action-buttons button {

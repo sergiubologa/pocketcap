@@ -4,7 +4,7 @@ import moment from 'moment'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import AnimatedCheckIcon from '../../../animated-check-icon/animated-check-icon'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faLink from '@fortawesome/fontawesome-free-solid/faLink'
+import faCopy from '@fortawesome/fontawesome-free-solid/faCopy'
 import PortfolioActions from '../../../../actions/portfolio-actions'
 import PortfolioStore from '../../../../stores/portfolio-store'
 import type {Props} from '../../../../flow-types/react-generic'
@@ -22,6 +22,7 @@ export default class Toolbar extends Component<Props, State> {
   countdownInterval: IntervalID
   enableRefreshBtnTimer: TimeoutID
   resetClipboardButtonTimer: TimeoutID
+  txtCopyToClipboard: ?HTMLInputElement
 
   constructor(props: Props) {
     super(props)
@@ -79,6 +80,10 @@ export default class Toolbar extends Component<Props, State> {
   }
 
   onCopyUrlToClipboard = (): void => {
+    if (this.txtCopyToClipboard) {
+      this.txtCopyToClipboard.select()
+    }
+
     this.setState({urlCopiedToClipboard: true})
     const resetButtonSeconds: number = 5
     clearTimeout(this.resetClipboardButtonTimer)
@@ -119,6 +124,7 @@ export default class Toolbar extends Component<Props, State> {
       <div className="card toolbar has-background-white-bis">
         <div className="card-content">
           <div className="columns is-vcentered">
+
             <div className="column has-text-info" id="nextRefreshContainer">
               <div className="refreshMessage">Prices update in:</div>
               <div className="refreshButtonContainer">
@@ -129,24 +135,36 @@ export default class Toolbar extends Component<Props, State> {
                 </button>
               </div>
             </div>
-            <div className="column has-text-right">
-              <CopyToClipboard
-                onCopy={this.onCopyUrlToClipboard}
-                text={window.location.href}>
-                <a className={`button is-info btnCopyToClipboard
-                  ${urlCopiedToClipboard ? 'copied' : ''}
-                  ${shakeCopyToClipboardButton ? 'shake-it' : ''}`}>
-                  <span>Get bookmarkable link</span>
-                  <span>Copied to clipboard!</span>
-                  <span className="icon">
-                    {
-                      urlCopiedToClipboard
-                        ? <AnimatedCheckIcon />
-                        : <FontAwesomeIcon icon={faLink} />
-                    }
-                  </span>
-                </a>
-              </CopyToClipboard>
+
+            <div className="column" id="copyToClipboardContainer">
+              <div className="field has-addons">
+                <div className="control">
+                  <input className="input" type="text"
+                  value={window.location.href}
+                  ref={txt => this.txtCopyToClipboard = txt} readOnly
+                  onClick={e => e.target.select()} />
+                </div>
+                <div className="control">
+                  <CopyToClipboard
+                    onCopy={this.onCopyUrlToClipboard}
+                    text={window.location.href}>
+                    <a className={`button is-info btnCopyToClipboard
+                      ${urlCopiedToClipboard ? 'copied' : ''}
+                      ${shakeCopyToClipboardButton ? 'shake-it' : ''}`}>
+                      <span>Copy to clipboard</span>
+                      <span>Copied to clipboard!</span>
+                      <span className="icon">
+                        {
+                          urlCopiedToClipboard
+                            ? <AnimatedCheckIcon />
+                            : <FontAwesomeIcon icon={faCopy} />
+                        }
+                      </span>
+                    </a>
+                  </CopyToClipboard>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
