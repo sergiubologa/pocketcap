@@ -42,3 +42,17 @@ export const colorClassForNumbers = (value: ?number): string => {
 
   return `has-text-${value > 0 ? 'green' : 'danger'}`
 }
+
+export const safePick = (obj: Object, ...props: Array<string>): any => {
+    if (props && props.length > 0) {
+        try {
+            const value = obj[props[0]];
+            props.shift();
+            return safePick(value, ...props);
+        } catch (error) {
+            return null;
+        }
+    }
+
+    return obj === undefined ? null : obj;
+};
