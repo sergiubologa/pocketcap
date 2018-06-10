@@ -53,6 +53,12 @@ class Header extends Component<Props, State> {
     const burgerMenuActiveClass = isBurgerMenuVisible ? 'is-active' : ''
     const homePageUrl = `/${homePageHash || ''}`
 
+    // <div className="navbar-start">
+    //   <Link to={homePageUrl} className="navbar-item" onClick={this.closeBurgerMenu}>Home</Link>
+    //   <Link to="/about" className="navbar-item" onClick={this.closeBurgerMenu}>About</Link>
+    //   <Link to="/contact" className="navbar-item" onClick={this.closeBurgerMenu}>Contact</Link>
+    // </div>
+
     return (
       <nav className="navbar is-fixed-top is-light">
 
@@ -68,12 +74,6 @@ class Header extends Component<Props, State> {
         </div>
 
         <div className={'navbar-menu ' + burgerMenuActiveClass}>
-          <div className="navbar-start">
-            <Link to={homePageUrl} className="navbar-item" onClick={this.closeBurgerMenu}>Home</Link>
-            <Link to="/about" className="navbar-item" onClick={this.closeBurgerMenu}>About</Link>
-            <Link to="/contact" className="navbar-item" onClick={this.closeBurgerMenu}>Contact</Link>
-          </div>
-
           <div className="navbar-end">
             <div className="navbar-item">
               <button className="button is-primary">
