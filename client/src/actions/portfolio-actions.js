@@ -3,7 +3,6 @@ import AppDispatcher from '../app-dispatcher'
 
 const Names = {
   FETCH_COINS_DATA: 'FETCH_COINS_DATA',
-  TOGGLE_ADD_NEW_TRANSACTION_MODAL: 'TOGGLE_ADD_NEW_TRANSACTION_MODAL',
   DECREMENT_COUNTDOWN: 'DECREMENT_COUNTDOWN',
   ADD_NEW_TRANSACTION: 'ADD_NEW_TRANSACTION',
   CANCEL_TRANSACTION: 'CANCEL_TRANSACTION',
@@ -20,9 +19,6 @@ const Names = {
 const Actions = {
   fetchCoinsData: () => AppDispatcher.dispatch({
     type: Names.FETCH_COINS_DATA
-  }),
-  toggleAddNewTransactionModal: () => AppDispatcher.dispatch({
-    type: Names.TOGGLE_ADD_NEW_TRANSACTION_MODAL
   }),
   addNewTransaction: () => AppDispatcher.dispatch({
     type: Names.ADD_NEW_TRANSACTION

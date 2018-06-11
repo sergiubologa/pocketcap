@@ -2,7 +2,7 @@
 import React, {Component} from 'react'
 import moment from 'moment'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
-import AnimatedCheckIcon from '../../../animated-check-icon/animated-check-icon'
+import AnimatedCheckIcon from '../../../elements/animated-check-icon/animated-check-icon'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faCopy from '@fortawesome/fontawesome-free-solid/faCopy'
 import PortfolioActions from '../../../../actions/portfolio-actions'

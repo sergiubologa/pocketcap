@@ -4,13 +4,18 @@ import {Link} from 'react-router-dom'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faDonate from '@fortawesome/fontawesome-free-solid/faHandHoldingHeart'
 import PortfolioStore from '../../stores/portfolio-store'
+import DonateModal from '../donate-modal/donate-modal'
+import DonateModalStore from '../../stores/donate-modal-store'
+import {Actions as DonateModalActions} from '../../actions/donate-modal-actions'
+import type {DonateModalState} from '../../flow-types/donate-modal'
 import type { Props } from '../../flow-types/react-generic'
 import logo from '../../resources/thepocketcap.png'
 import './header.css'
 
 type State = {
   isBurgerMenuVisible: boolean,
-  homePageHash: ?string
+  homePageHash: ?string,
+  isDonateModalOpen: boolean
 }
 
 class Header extends Component<Props, State> {
@@ -18,24 +23,33 @@ class Header extends Component<Props, State> {
     super(props)
     this.state = {
       isBurgerMenuVisible: false,
-      homePageHash: PortfolioStore.getPortfolio().urlHash
+      homePageHash: PortfolioStore.getPortfolio().urlHash,
+      isDonateModalOpen: DonateModalStore.isOpen()
     }
     this.toggleBurgerMenu = this.toggleBurgerMenu.bind(this);
     this.closeBurgerMenu = this.closeBurgerMenu.bind(this)
+    this.toggleDonateModal = this.toggleDonateModal.bind(this)
+    this.updateDonateModalState = this.updateDonateModalState.bind(this)
   }
 
   componentWillMount() {
     PortfolioStore.on('change', this.updateStateData)
+    DonateModalStore.on('change', this.updateDonateModalState)
   }
 
   componentWillUnmount() {
     PortfolioStore.removeListener('change', this.updateStateData)
+    DonateModalStore.removeListener('change', this.updateDonateModalState)
   }
 
   updateStateData = (): void => {
     this.setState({
       homePageHash: PortfolioStore.getPortfolio().urlHash
     })
+  }
+
+  updateDonateModalState = (changes: DonateModalState): void => {
+    this.setState({isDonateModalOpen: changes.isOpen})
   }
 
   toggleBurgerMenu = (): void => {
@@ -48,8 +62,12 @@ class Header extends Component<Props, State> {
     }
   }
 
+  toggleDonateModal = (): void => {
+    DonateModalActions.togleModalVisibility()
+  }
+
   render(){
-    const {isBurgerMenuVisible, homePageHash} = this.state
+    const {isBurgerMenuVisible, homePageHash, isDonateModalOpen} = this.state
     const burgerMenuActiveClass = isBurgerMenuVisible ? 'is-active' : ''
     const homePageUrl = `/${homePageHash || ''}`
 
@@ -76,7 +94,8 @@ class Header extends Component<Props, State> {
         <div className={'navbar-menu ' + burgerMenuActiveClass}>
           <div className="navbar-end">
             <div className="navbar-item">
-              <button className="button is-primary">
+              <DonateModal isOpen={isDonateModalOpen} onCloseRequest={this.toggleDonateModal} />
+              <button className="button is-primary" onClick={this.toggleDonateModal}>
                 <span className="icon">
                   <FontAwesomeIcon icon={faDonate} />
                 </span>

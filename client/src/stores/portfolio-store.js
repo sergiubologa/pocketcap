@@ -151,13 +151,13 @@ class PortfolioStore extends EventEmitter {
   clearPortfolio() {
     const {
       transactions, totalInvested, currentTotalValue, totalMargin, totalProfit,
-      secToNextUpdate, isAddNewTransactionModalOpen
+      secToNextUpdate
     } = this.defaultPortfolio()
     this.portfolio = {
       ...this.portfolio,
       transactions,
       totalInvested, currentTotalValue, totalMargin, totalProfit,
-      secToNextUpdate, isAddNewTransactionModalOpen
+      secToNextUpdate
     }
     this.emit('change')
   }
@@ -197,11 +197,6 @@ class PortfolioStore extends EventEmitter {
         transaction.editMode = true
         this.emit('change')
     }
-  }
-
-  toggleAddNewTransactionModal() {
-    this.portfolio.isAddNewTransactionModalOpen = !this.portfolio.isAddNewTransactionModalOpen
-    this.emit('change')
   }
 
   transactionCoinChanged(newCoinId: ?string) {
@@ -334,7 +329,6 @@ class PortfolioStore extends EventEmitter {
       totalMargin: 0,
       totalProfit: 0,
       secToNextUpdate: this.COINS_UPDATE_INTERVAL,
-      isAddNewTransactionModalOpen: false,
       isUpdatingCoinsData: false,
       urlHash: null,
       shakeCopyToClipboardButton: false
@@ -378,9 +372,6 @@ class PortfolioStore extends EventEmitter {
         break
       case PortfolioActionsNames.FETCH_COINS_DATA:
         this.fetchCoinsData()
-        break
-      case PortfolioActionsNames.TOGGLE_ADD_NEW_TRANSACTION_MODAL:
-        this.toggleAddNewTransactionModal()
         break
       case PortfolioActionsNames.TRANSACTION_COIN_CHANGED:
         this.transactionCoinChanged(action.data)

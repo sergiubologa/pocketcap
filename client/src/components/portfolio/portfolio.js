@@ -4,8 +4,8 @@ import qs from 'qs'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 import * as Utils from '../../utils/utils'
-import AnimatedStyledNumber from '../animated-styled-number/animated-styled-number'
-import TrendIcon from '../trend-icon/trend-icon'
+import AnimatedStyledNumber from '../elements/animated-styled-number/animated-styled-number'
+import TrendIcon from '../elements/trend-icon/trend-icon'
 import NoTransactions from './components/no-transactions/no-transactions'
 import Transaction from './components/transaction/transaction'
 import Toolbar from './components/toolbar/toolbar'
@@ -23,7 +23,6 @@ export default class Portfolio extends Component<Props, State> {
       ...PortfolioStore.getPortfolio()
     }
     this.updateStateData = this.updateStateData.bind(this)
-    this.openAddNewTransactionModal = this.openAddNewTransactionModal.bind(this)
     this.onAddNewTransaction = this.onAddNewTransaction.bind(this)
   }
 
@@ -47,12 +46,6 @@ export default class Portfolio extends Component<Props, State> {
 
   updateStateData = (): void => {
     this.setState(PortfolioStore.getPortfolio())
-  }
-
-  openAddNewTransactionModal = (): void => {
-    if (!this.state.isAddNewTransactionModalOpen) {
-      PortfolioActions.toggleAddNewTransactionModal()
-    }
   }
 
   onAddNewTransaction = (): void => {

@@ -8,8 +8,8 @@ import 'react-virtualized-select/styles.css'
 import type {
   CoinsSelectProps as Props,
   CoinsSelectState as State
-} from '../../flow-types/coins-select'
-import type {CoinSelectOption} from '../../flow-types/coins-select'
+} from '../../../flow-types/coins-select'
+import type {CoinSelectOption} from '../../../flow-types/coins-select'
 import './coins-select.css'
 
 export default class CoinsSelect extends Component<Props, State> {

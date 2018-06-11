@@ -1,7 +1,7 @@
 // @flow
 import React, {Component} from 'react'
 import AnimatedNumber from 'react-animated-number'
-import type {State} from '../../flow-types/react-generic'
+import type {State} from '../../../flow-types/react-generic'
 
 type Props = {
   value: ?number,

@@ -6,7 +6,7 @@ type Props = {
   showDefault?: boolean
 }
 
-const CoinIcon = (props: Props) => {
+export default (props: Props) => {
   const {symbol, showDefault = true} = props
   const classes = ['cc']
 
@@ -19,5 +19,3 @@ const CoinIcon = (props: Props) => {
     <i className={classes.join(' ')}></i>
   )
 }
-
-export default CoinIcon

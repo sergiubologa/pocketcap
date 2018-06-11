@@ -8,7 +8,6 @@ export type PortfolioState = {
   currentTotalValue: number,
   totalMargin: number,
   totalProfit: number,
-  isAddNewTransactionModalOpen: boolean,
   secToNextUpdate: number,
   isUpdatingCoinsData: boolean,
   urlHash: ?string,
