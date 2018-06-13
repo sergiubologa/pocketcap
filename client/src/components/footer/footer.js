@@ -38,8 +38,8 @@ export default (props: Props) => {
               <h4>
                 Show some &nbsp;<FontAwesomeIcon icon={faHeart} className="love-heart has-text-danger" />
               </h4>
-              <p>If you like the app and want to suport {'it\'s'} maintenance and development, make a donation!</p>
-              <button className="button is-info" onClick={DonateModalActions.togleModalVisibility}>
+              <p>If you like the app and want to support its maintenance and development, make a donation!</p>
+              <button className="button" onClick={DonateModalActions.togleModalVisibility}>
                 <span className="icon">
                   <FontAwesomeIcon icon={faDonate} />
                 </span>

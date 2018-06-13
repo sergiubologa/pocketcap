@@ -1,10 +1,7 @@
 // @flow
 import React, {Component} from 'react'
 import moment from 'moment'
-import {CopyToClipboard} from 'react-copy-to-clipboard'
-import AnimatedCheckIcon from '../../../elements/animated-check-icon/animated-check-icon'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
-import faCopy from '@fortawesome/fontawesome-free-solid/faCopy'
+import TextToClipboard from '../../../elements/text-to-clipboard/text-to-clipboard'
 import PortfolioActions from '../../../../actions/portfolio-actions'
 import PortfolioStore from '../../../../stores/portfolio-store'
 import type {Props} from '../../../../flow-types/react-generic'
@@ -12,7 +9,6 @@ import './toolbar.css'
 
 type State = {
   isRefreshButtonDisabled: boolean,
-  urlCopiedToClipboard: boolean,
   isUpdatingCoinsData: boolean,
   secToNextUpdate: number,
   shakeCopyToClipboardButton: boolean
@@ -21,15 +17,12 @@ type State = {
 export default class Toolbar extends Component<Props, State> {
   countdownInterval: IntervalID
   enableRefreshBtnTimer: TimeoutID
-  resetClipboardButtonTimer: TimeoutID
-  txtCopyToClipboard: ?HTMLInputElement
 
   constructor(props: Props) {
     super(props)
 
     this.state = {
       isRefreshButtonDisabled: false,
-      urlCopiedToClipboard: false,
       isUpdatingCoinsData: PortfolioStore.getPortfolio().isUpdatingCoinsData,
       secToNextUpdate: PortfolioStore.getPortfolio().secToNextUpdate,
       shakeCopyToClipboardButton: PortfolioStore.getPortfolio().shakeCopyToClipboardButton
@@ -39,7 +32,7 @@ export default class Toolbar extends Component<Props, State> {
     this.startCountDown = this.startCountDown.bind(this)
     this.getNextUpdateRemainingTime = this.getNextUpdateRemainingTime.bind(this)
     this.addLeadingZero = this.addLeadingZero.bind(this)
-    this.onCopyUrlToClipboard = this.onCopyUrlToClipboard.bind(this)
+
     this.onRefreshBtnClick = this.onRefreshBtnClick.bind(this)
   }
 
@@ -55,7 +48,6 @@ export default class Toolbar extends Component<Props, State> {
     PortfolioStore.removeListener('change', this.updateStateData)
     clearInterval(this.countdownInterval)
     clearTimeout(this.enableRefreshBtnTimer)
-    clearTimeout(this.resetClipboardButtonTimer)
   }
 
   updateStateData = (): void => {
@@ -77,19 +69,6 @@ export default class Toolbar extends Component<Props, State> {
     this.enableRefreshBtnTimer = setTimeout(() => {
       this.setState({isRefreshButtonDisabled: false})
     }, disableRefreshButtnInterval)
-  }
-
-  onCopyUrlToClipboard = (): void => {
-    if (this.txtCopyToClipboard) {
-      this.txtCopyToClipboard.select()
-    }
-
-    this.setState({urlCopiedToClipboard: true})
-    const resetButtonSeconds: number = 5
-    clearTimeout(this.resetClipboardButtonTimer)
-    this.resetClipboardButtonTimer = setTimeout(() => {
-      this.setState({urlCopiedToClipboard: false})
-    }, resetButtonSeconds * 1000)
   }
 
   getNextUpdateRemainingTime = (): any => {
@@ -114,8 +93,7 @@ export default class Toolbar extends Component<Props, State> {
 
   render() {
     const {
-      isRefreshButtonDisabled, urlCopiedToClipboard,
-      isUpdatingCoinsData, shakeCopyToClipboardButton
+      isRefreshButtonDisabled, isUpdatingCoinsData, shakeCopyToClipboardButton
     } = this.state
     const updateButtonClass = `button is-info is-outlined ${isUpdatingCoinsData ? 'is-loading' : ''}`
     const nextUpdate = this.getNextUpdateRemainingTime()
@@ -136,35 +114,13 @@ export default class Toolbar extends Component<Props, State> {
               </div>
             </div>
 
-            <div className="column" id="copyToClipboardContainer">
-              <div className="field has-addons">
-                <div className="control">
-                  <input className="input" type="text"
-                  value={window.location.href}
-                  ref={txt => this.txtCopyToClipboard = txt} readOnly
-                  onClick={e => e.target.select()} />
-                </div>
-                <div className="control">
-                  <CopyToClipboard
-                    onCopy={this.onCopyUrlToClipboard}
-                    text={window.location.href}>
-                    <a className={`button is-info btnCopyToClipboard
-                      ${urlCopiedToClipboard ? 'copied' : ''}
-                      ${shakeCopyToClipboardButton ? 'shake-it' : ''}`}>
-                      <span>Copy to clipboard</span>
-                      <span>Copied to clipboard!</span>
-                      <span className="icon">
-                        {
-                          urlCopiedToClipboard
-                            ? <AnimatedCheckIcon />
-                            : <FontAwesomeIcon icon={faCopy} />
-                        }
-                      </span>
-                    </a>
-                  </CopyToClipboard>
-                </div>
-
-              </div>
+            <div className="column">
+              <TextToClipboard
+                text={window.location.href}
+                buttonText="Copy to clipboard"
+                copiedStateText="Copied to clipboard!"
+                buttonClass={`btnCopyToClipboard ${shakeCopyToClipboardButton ? 'shake-it' : ''}`}
+              />
             </div>
           </div>
         </div>

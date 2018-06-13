@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
 import faBan from '@fortawesome/fontawesome-free-solid/faBan'
-import type {TextboxProps as Props, TextboxState as State} from '../../../flow-types/textbox'
+import type {TextboxProps as Props, TextboxState as State} from '../../../../flow-types/textbox'
 
 export default class Textbox extends Component<Props, State> {
   constructor(props: Props) {

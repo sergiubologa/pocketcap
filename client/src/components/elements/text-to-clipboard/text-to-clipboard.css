@@ -1,0 +1,21 @@
+.text-to-clipboard.field,
+.text-to-clipboard.field .control:first-child {
+  width: 100%;
+}
+
+.text-to-clipboard .button span {
+  transition: opacity 0.5s ease-in-out 0s;
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.text-to-clipboard .button.copied span:nth-child(1),
+.text-to-clipboard .button span:nth-child(2) {
+  height: 0; width: 0;
+  opacity: 0;
+}
+
+.text-to-clipboard .button.copied span:nth-child(2) {
+  height: auto; width: auto;
+  opacity: 1;
+}

@@ -19,29 +19,6 @@
   flex-grow: 1;
 }
 
-.portfolio .toolbar #copyToClipboardContainer .field .control:first-child {
-  width: 100%;
-}
-
-.portfolio .toolbar .btnCopyToClipboard span {
-  transition: opacity 0.5s ease-in-out 0s;
-  display: inline-flex;
-  overflow: hidden;
-}
-
-.portfolio .toolbar .btnCopyToClipboard.copied span:nth-child(1),
-.portfolio .toolbar .btnCopyToClipboard span:nth-child(2) {
-  height: 0;
-  width: 0;
-  opacity: 0;
-}
-
-.portfolio .toolbar .btnCopyToClipboard.copied span:nth-child(2) {
-  height: auto;
-  width: auto;
-  opacity: 1;
-}
-
 .portfolio .toolbar .btnCopyToClipboard.shake-it {
   animation-name: shake;
   animation-duration: 1s;

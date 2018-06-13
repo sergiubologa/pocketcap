@@ -8,7 +8,7 @@ import AnimatedStyledNumber from '../../../elements/animated-styled-number/anima
 import PortfolioActions from '../../../../actions/portfolio-actions'
 import PortfolioStore from '../../../../stores/portfolio-store'
 import CoinsSelect from '../../../elements/coins-select/coins-select'
-import Textbox from '../../../elements/textbox/textbox'
+import Textbox from '../textbox/textbox'
 import TrendIcon from '../../../elements/trend-icon/trend-icon'
 import EditableField from '../../../elements/editable-field/editable-field'
 import CoinIcon from '../../../elements/coin-icon/coin-icon'

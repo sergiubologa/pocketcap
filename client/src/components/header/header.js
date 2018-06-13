@@ -94,7 +94,6 @@ class Header extends Component<Props, State> {
         <div className={'navbar-menu ' + burgerMenuActiveClass}>
           <div className="navbar-end">
             <div className="navbar-item">
-              <DonateModal isOpen={isDonateModalOpen} onCloseRequest={this.toggleDonateModal} />
               <button className="button is-primary" onClick={this.toggleDonateModal}>
                 <span className="icon">
                   <FontAwesomeIcon icon={faDonate} />
@@ -104,6 +103,8 @@ class Header extends Component<Props, State> {
             </div>
           </div>
         </div>
+
+        <DonateModal isOpen={isDonateModalOpen} onCloseRequest={this.toggleDonateModal} />
       </nav>
     )
   }
