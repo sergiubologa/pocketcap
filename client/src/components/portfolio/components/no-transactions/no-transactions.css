@@ -7,3 +7,15 @@
 .portfolio .strenghts > span:not(:last-child) {
   margin-right: 1rem;
 }
+.portfolio .noTransactionsContainer .btn-add-new-transaction {
+  animation: pulseButton 5s ease-in-out 5s infinite;
+}
+
+@keyFrames pulseButton {
+  0%, 70% {
+    box-shadow: 0px 0px 0px 0px rgba(0, 209, 178, .5);
+  }
+  100% {
+    box-shadow: 0px 0px 0px 25px rgba(0, 209, 178, 0);
+  }
+}
