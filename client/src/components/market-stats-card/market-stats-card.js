@@ -3,6 +3,8 @@ import React, {Component} from 'react'
 import moment from 'moment'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
+import faQuestionCircle from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
+import Tooltip from '../elements/tooltip/tooltip'
 import CoinIcon from '../elements/coin-icon/coin-icon'
 import MarketStatsStore from '../../stores/market-stats-store'
 import PortfolioStore from '../../stores/portfolio-store'
@@ -88,7 +90,12 @@ export default class MarketStatsCard extends Component<Props, State> {
       <div className="card market-stats-card">
 
         <div className="card-content">
-          <p className="title">Market Stats</p>
+          <p className="title">
+            Market Stats
+            <Tooltip tip="Data from CoinMarketCap" className="is-pulled-right is-size-5" style={{marginTop: '8px'}}>
+              <FontAwesomeIcon icon={faQuestionCircle} className="has-text-grey" />
+            </Tooltip>
+          </p>
           <p className="subtitle is-6">last update:
             {
               isUpdatingStatsData ?

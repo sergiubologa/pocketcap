@@ -5,7 +5,9 @@ import './tooltip.css'
 
 type Props = {
   tip: string,
-  children: React.Node
+  children: React.Node,
+  style?: Object,
+  className?: string
 }
 
 type State = {
@@ -25,11 +27,14 @@ export default class Tooltip extends React.Component<Props, State> {
     this.setState(({ isHovering }) => ({ isHovering: !isHovering }))
 
   render() {
-    const {tip, children} = this.props
+    const {tip, children, style, className} = this.props
     const { isHovering } = this.state
+    const classes = ["tooltip-container", className]
+
     return (
-      <div
-        className="tooltip-container"
+      <span
+        className={classes.join(" ")}
+        style={style}
         onMouseEnter={this.hover}
         onMouseLeave={this.hover}>
         <Manager>
@@ -53,15 +58,15 @@ export default class Tooltip extends React.Component<Props, State> {
               }}
             >
               {({ ref, style, placement, arrowProps }) => (
-                <div ref={ref} style={style} data-placement={placement} className="tooltip">
+                <span ref={ref} style={style} data-placement={placement} className="tooltip">
                   {tip}
-                  <div ref={arrowProps.ref} style={arrowProps.style} className="tooltip-arrow" />
-                </div>
+                  <span ref={arrowProps.ref} style={arrowProps.style} className="tooltip-arrow" />
+                </span>
               )}
             </Popper>
           )}
         </Manager>
-      </div>
+      </span>
     )
   }
 }
