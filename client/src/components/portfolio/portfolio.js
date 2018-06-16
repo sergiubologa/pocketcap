@@ -3,8 +3,10 @@ import React, { Component } from 'react'
 import qs from 'qs'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
+import faQuestionCircle from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 import * as Utils from '../../utils/utils'
 import AnimatedStyledNumber from '../elements/animated-styled-number/animated-styled-number'
+import Tooltip from '../elements/tooltip/tooltip'
 import TrendIcon from '../elements/trend-icon/trend-icon'
 import NoTransactions from './components/no-transactions/no-transactions'
 import Transaction from './components/transaction/transaction'
@@ -82,7 +84,10 @@ export default class Portfolio extends Component<Props, State> {
                   </th>
                   <th style={{width: "12%"}} className="has-text-right has-text-weight-bold">
                     Current Price<br/>
-                    <span className="is-size-7 has-text-weight-light">(per unit)</span>
+                    <span className="is-size-7 has-text-weight-light">(per unit)</span>&nbsp;
+                    <Tooltip tip="Prices from CoinMarketCap">
+                      <FontAwesomeIcon icon={faQuestionCircle} className="has-text-grey" />
+                    </Tooltip>
                   </th>
                   <th style={{width: "12%"}} className="has-text-right has-text-weight-bold">Total invested</th>
                   <th style={{width: "12%"}} className="has-text-right has-text-weight-bold">Current value</th>

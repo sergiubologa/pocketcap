@@ -12,7 +12,7 @@ export default (props: Props) => {
   return (
     <footer className="footer">
       <div className="container">
-        <div className="content">
+        <div className="content is-small">
           <div className="columns">
             <div className="column">
               <h4 className="created-by">
