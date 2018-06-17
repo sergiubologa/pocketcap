@@ -10,20 +10,29 @@ class MarketStatsStore extends EventEmitter {
   marketStats: MarketStatsState = this.defaultState()
 
   async fetchMarketStatsData() {
-    this.marketStats.isUpdatingStatsData = true
+    this.marketStats = {
+      ...this.marketStats,
+      isUpdatingStatsData: true
+    }
     this.emit('change')
 
     try {
       const res = await axios.get('/api/market-stats')
       const stats = res.data
       localStorage.setItem(this.MARKET_STATS_DATA_STORAGE_KEY, JSON.stringify(stats))
-      this.marketStats.stats = stats
+      this.marketStats = {
+        ...this.marketStats,
+        stats
+      }
     }
     catch(error) {
       // TODO - log the error
     }
     finally {
-      this.marketStats.isUpdatingStatsData = false
+      this.marketStats = {
+        ...this.marketStats,
+        isUpdatingStatsData: false
+      }
       this.emit('change')
     }
   }

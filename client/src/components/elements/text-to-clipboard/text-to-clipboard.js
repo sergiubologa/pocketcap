@@ -1,6 +1,6 @@
 // @flow
-import React, {Component} from 'react'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import React, {PureComponent} from 'react'
+import Icon from '../icon/icon'
 import faCopy from '@fortawesome/fontawesome-free-solid/faCopy'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import AnimatedCheckIcon from '../../elements/animated-check-icon/animated-check-icon'
@@ -15,7 +15,7 @@ type State = {
   copied: boolean
 }
 
-export default class TextToClipboard extends Component<Props, State> {
+export default class TextToClipboard extends PureComponent<Props, State> {
   resetClipboardButtonTimer: TimeoutID
   txtCopyToClipboard: ?HTMLInputElement
 
@@ -74,7 +74,7 @@ export default class TextToClipboard extends Component<Props, State> {
                 {
                   copied
                     ? <AnimatedCheckIcon />
-                    : <FontAwesomeIcon icon={faCopy} />
+                    : <Icon icon={faCopy} />
                 }
               </span>
             </a>

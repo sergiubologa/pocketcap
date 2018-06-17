@@ -56,3 +56,6 @@ export const safePick = (obj: Object, ...props: Array<string>): any => {
 
     return obj === undefined ? null : obj;
 };
+
+export const setArrayImmutable = (arr: Array<any>, index: number, value: any) =>
+  Object.assign([...arr], {[index]: value})

@@ -1,7 +1,7 @@
 // @flow
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import moment from 'moment'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import Icon from '../elements/icon/icon'
 import faAngleDown from '@fortawesome/fontawesome-free-solid/faAngleDown'
 import faQuestionCircle from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 import Tooltip from '../elements/tooltip/tooltip'
@@ -14,7 +14,13 @@ import type {MarketStatsState as State} from '../../flow-types/market-stats'
 import type {Coin, CoinsData} from '../../flow-types/coins'
 import './market-stats-card.css'
 
-export default class MarketStatsCard extends Component<Props, State> {
+type Best3CoinsCache = {
+  [key: string]: Array<Coin>
+}
+
+export default class MarketStatsCard extends PureComponent<Props, State> {
+  best3CoinsCache: Best3CoinsCache = {}
+
   constructor(props: Props) {
     super(props)
 
@@ -49,31 +55,51 @@ export default class MarketStatsCard extends Component<Props, State> {
   }
 
   getBest3Coins = (): Array<Coin> => {
+    var t0 = performance.now()
     const coinsData: CoinsData = PortfolioStore.getCoinsData()
     const best3Coins: Array<Coin> = []
+    const activateCache = false
 
-    for (let i = 0; i < coinsData.data.length; i++) {
-      const currentCoin: Coin = coinsData.data[i]
-
-      if (currentCoin.percent_change_24h) {
-        const firstCoin: Coin = best3Coins[0]
-        const secondCoin: Coin = best3Coins[1]
-        const thirdCoin: Coin = best3Coins[2]
-
-        if (firstCoin && firstCoin.percent_change_24h && currentCoin.percent_change_24h > firstCoin.percent_change_24h) {
-          best3Coins.unshift(currentCoin)
-          if (thirdCoin) best3Coins.splice(-1, 1)
-        } else if (secondCoin && secondCoin.percent_change_24h && currentCoin.percent_change_24h > secondCoin.percent_change_24h) {
-          best3Coins.splice(1, 0, currentCoin)
-          if (thirdCoin) best3Coins.splice(-1, 1)
-        } else if (thirdCoin && thirdCoin.percent_change_24h && currentCoin.percent_change_24h > thirdCoin.percent_change_24h) {
-          best3Coins.splice(2, 1, currentCoin)
-        } else if (best3Coins.length < 3) {
-          best3Coins.push(currentCoin)
+    if (coinsData) {
+      if (coinsData.added_at && activateCache) {
+        const cachedData = this.best3CoinsCache[coinsData.added_at]
+        if (cachedData) {
+          var t1 = performance.now()
+          console.log('from cache: ' + (t1 - t0) + " milliseconds.")
+          console.log('items in cache: ' + Object.keys(this.best3CoinsCache).length)
+          return cachedData
         }
+      }
+
+      for (let i = 0, len = coinsData.data.length; i < len; i++) {
+        const currentCoin: Coin = coinsData.data[i]
+
+        if (currentCoin.percent_change_24h) {
+          const firstCoin: Coin = best3Coins[0]
+          const secondCoin: Coin = best3Coins[1]
+          const thirdCoin: Coin = best3Coins[2]
+
+          if (firstCoin && firstCoin.percent_change_24h && currentCoin.percent_change_24h > firstCoin.percent_change_24h) {
+            best3Coins.unshift(currentCoin)
+            if (thirdCoin) best3Coins.splice(-1, 1)
+          } else if (secondCoin && secondCoin.percent_change_24h && currentCoin.percent_change_24h > secondCoin.percent_change_24h) {
+            best3Coins.splice(1, 0, currentCoin)
+            if (thirdCoin) best3Coins.splice(-1, 1)
+          } else if (thirdCoin && thirdCoin.percent_change_24h && currentCoin.percent_change_24h > thirdCoin.percent_change_24h) {
+            best3Coins.splice(2, 1, currentCoin)
+          } else if (best3Coins.length < 3) {
+            best3Coins.push(currentCoin)
+          }
+        }
+      }
+
+      if (coinsData.added_at && activateCache) {
+        this.best3CoinsCache[coinsData.added_at] = best3Coins
       }
     }
 
+    var t2 = performance.now()
+    console.log('from iterating: ' + (t2 - t0) + " milliseconds.")
     return best3Coins
   }
 
@@ -93,7 +119,7 @@ export default class MarketStatsCard extends Component<Props, State> {
           <p className="title">
             Market Stats
             <Tooltip tip="Data from CoinMarketCap" className="is-pulled-right is-size-5" style={{marginTop: '8px'}}>
-              <FontAwesomeIcon icon={faQuestionCircle} className="has-text-grey" />
+              <Icon icon={faQuestionCircle} className="has-text-grey" />
             </Tooltip>
           </p>
           <p className="subtitle is-6">last update:
@@ -118,9 +144,9 @@ export default class MarketStatsCard extends Component<Props, State> {
         <div>
 
           <p className="is-size-7 has-text-weight-semibold is-marginless has-text-centered has-text-grey">
-            <FontAwesomeIcon icon={faAngleDown} />&nbsp;
+            <Icon icon={faAngleDown} />&nbsp;
             <span>best performers in the last 24 hrs</span>&nbsp;
-            <FontAwesomeIcon icon={faAngleDown} />
+            <Icon icon={faAngleDown} />
           </p>
         </div>
         <footer className="card-footer">

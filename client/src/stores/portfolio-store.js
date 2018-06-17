@@ -27,39 +27,62 @@ class PortfolioStore extends EventEmitter {
   portfolio: PortfolioState = this.defaultPortfolio()
 
   async fetchCoinsData() {
-    this.portfolio.isUpdatingCoinsData = true
+    this.portfolio = {
+      ...this.portfolio,
+      isUpdatingCoinsData: true
+    }
     this.emit('change')
 
     try {
       const res = await axios.get('/api/coins')
       const coins = res.data
       localStorage.setItem(this.COINS_DATA_STORAGE_KEY, JSON.stringify(coins))
-      this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL
+      this.portfolio = {
+        ...this.portfolio,
+        secToNextUpdate: this.COINS_UPDATE_INTERVAL
+      }
       this.updateTransactionsCurrentPrices()
     }
     catch(error) {
-      this.portfolio.secToNextUpdate = this.COINS_UPDATE_INTERVAL_ON_FAILURE
+      this.portfolio = {
+        ...this.portfolio,
+        secToNextUpdate: this.COINS_UPDATE_INTERVAL_ON_FAILURE
+      }
     }
     finally {
-      this.portfolio.isUpdatingCoinsData = false
+      this.portfolio = {
+        ...this.portfolio,
+        isUpdatingCoinsData: false
+      }
       this.emit('change')
     }
   }
 
   addNewTransaction() {
-    this.portfolio.transactions.push(this.newTransaction())
+    this.portfolio = {
+      ...this.portfolio,
+      transactions: [...this.portfolio.transactions, this.newTransaction()]
+    }
     this.emit('change')
   }
 
   saveTransaction() {
-    const inEditTransaction: ?Transaction = this.portfolio.transactions
-      .find(t => t.editMode)
+    const inEditTransactionIndex: number = this.portfolio.transactions
+      .findIndex(t => t.editMode)
 
-    if (inEditTransaction) {
-      const {isCoinValid, isUnitsValid, isInitialPriceValid} = inEditTransaction
+    if (inEditTransactionIndex > -1) {
+      const inEditTransaction: Transaction = this.portfolio.transactions[inEditTransactionIndex]
+      const {
+        isCoinValid, isUnitsValid, isInitialPriceValid
+      } = inEditTransaction
+
       if (isCoinValid && isUnitsValid && isInitialPriceValid) {
-        inEditTransaction.editMode = false
-        inEditTransaction.isNew = false
+        this.portfolio.transactions = Utils.setArrayImmutable(this.portfolio.transactions, inEditTransactionIndex, {
+          ...inEditTransaction,
+          editMode: false,
+          isNew: false
+        })
+
         this.calculateTotalValues()
         this.updateUrlHashForPortfolio()
         this.emit('change')
@@ -95,15 +118,24 @@ class PortfolioStore extends EventEmitter {
     if (this.portfolio.urlHash !== null) {
       this.setButtonToShake()
     }
-    this.portfolio.urlHash = Utils.getHashFromUrl(false)
+    this.portfolio = {
+      ...this.portfolio,
+      urlHash: Utils.getHashFromUrl(false)
+    }
   }
 
   setButtonToShake() {
-    this.portfolio.shakeCopyToClipboardButton = true
+    this.portfolio = {
+      ...this.portfolio,
+      shakeCopyToClipboardButton: true
+    }
     clearTimeout(this.SHAKE_BUTTON_TIMEOUT)
 
     this.SHAKE_BUTTON_TIMEOUT = setTimeout(() => {
-      this.portfolio.shakeCopyToClipboardButton = false;
+      this.portfolio = {
+        ...this.portfolio,
+        shakeCopyToClipboardButton: false
+      }
       this.emit('change')
     }, this.SECONDS_TO_SHAKE_BUTTON * 1000)
   }
@@ -127,6 +159,7 @@ class PortfolioStore extends EventEmitter {
       const codec: Codec = JsonUrl('lzstring')
       codec.decompress(encodedPortfolio).then((transactions) => {
         if (transactions && transactions.length > 0) {
+          const stateTransactions: Array<Transaction> = []
           transactions.forEach(t => {
             const [coinId, units, initialPrice] = t
             const coin: ?Coin = coinsData.data.find(c => c.id === coinId)
@@ -136,10 +169,11 @@ class PortfolioStore extends EventEmitter {
                 units, initialPrice, isValid: true, editMode: false, isNew: false,
                 isCoinValid: true, isUnitsValid: true, isInitialPriceValid: true
               })
-              this.portfolio.transactions.push(transaction)
-              this.calculateTransactionValues(transaction)
+              stateTransactions.push(transaction)
             }
           })
+          this.portfolio.transactions = stateTransactions
+          this.portfolio.transactions.forEach((t, index) => this.calculateTransactionValues(index))
           this.calculateTotalValues()
           this.emit('change')
           this.updateUrlHashForPortfolio()
@@ -168,8 +202,10 @@ class PortfolioStore extends EventEmitter {
 
     if (transaction) {
       if (transaction.isNew) {
-        const index = this.portfolio.transactions.findIndex(t => t.editMode)
-        this.portfolio.transactions.splice(index, 1)
+        this.portfolio = {
+          ...this.portfolio,
+          transactions: this.portfolio.transactions.filter(t => !t.editMode)
+        }
       } else {
         this.portfolio = JSON.parse(JSON.stringify(this.previousPortfolio))
         this.previousPortfolio = undefined
@@ -180,12 +216,17 @@ class PortfolioStore extends EventEmitter {
   }
 
   removeTransaction(index: number) {
-    const transaction = this.portfolio.transactions[index]
+    const transaction: Transaction = this.portfolio.transactions[index]
+
     if (transaction) {
-        this.portfolio.transactions.splice(index, 1)
-        this.calculateTotalValues()
-        this.updateUrlHashForPortfolio()
-        this.emit('change')
+      this.portfolio = {
+        ...this.portfolio,
+        transactions: this.portfolio.transactions.filter((t: Transaction, i: number) => i !== index)
+      }
+
+      this.calculateTotalValues()
+      this.updateUrlHashForPortfolio()
+      this.emit('change')
     }
   }
 
@@ -194,8 +235,21 @@ class PortfolioStore extends EventEmitter {
     this.previousPortfolio = JSON.parse(JSON.stringify(this.portfolio))
     const transaction = this.portfolio.transactions[index]
     if (transaction && !transaction.editMode) {
-        transaction.editMode = true
-        this.emit('change')
+      this.portfolio = {
+        ...this.portfolio,
+        transactions: Utils.setArrayImmutable(this.portfolio.transactions, index, {
+          ...transaction,
+          editMode: true
+        })
+      }
+      this.emit('change')
+    }
+  }
+
+  changeTransaction(transactionIndex: number, newValue: Transaction) {
+    this.portfolio = {
+      ...this.portfolio,
+      transactions: Utils.setArrayImmutable(this.portfolio.transactions, transactionIndex, newValue)
     }
   }
 
@@ -203,25 +257,31 @@ class PortfolioStore extends EventEmitter {
     const inEditTransaction: ?Transaction = this.portfolio.transactions.find(t => t.editMode)
 
     if (inEditTransaction) {
+      const inEditTransactionIndex: number = this.portfolio.transactions.findIndex(t => t.editMode)
       if (!newCoinId) {
-        inEditTransaction.coin.id = ''
-        inEditTransaction.coin.label = ''
-        inEditTransaction.coin.symbol = ''
-        inEditTransaction.currentPrice = null
-        inEditTransaction.isCoinValid = false
-        this.calculateTransactionValues(inEditTransaction)
+        this.changeTransaction(inEditTransactionIndex, {
+          ...inEditTransaction,
+          coin: {
+            ...inEditTransaction.coin,
+            id: '', label: '', symbol: '', currentPrice: null, isCoinValid: false
+          }
+        })
+        this.calculateTransactionValues(inEditTransactionIndex)
         this.emit('change')
       } else {
         const coins: CoinsData = this.getCoinsData()
         const newCoin: ?Coin = coins.data.find(c => c.id === newCoinId)
 
         if (newCoin) {
-          inEditTransaction.coin.id = newCoin.id
-          inEditTransaction.coin.label = newCoin.name
-          inEditTransaction.coin.symbol = newCoin.symbol
-          inEditTransaction.currentPrice = newCoin.price_usd
-          inEditTransaction.isCoinValid = true
-          this.calculateTransactionValues(inEditTransaction)
+          this.changeTransaction(inEditTransactionIndex, {
+            ...inEditTransaction,
+            currentPrice: newCoin.price_usd, isCoinValid: true,
+            coin: {
+              ...inEditTransaction.coin,
+              id: newCoin.id, label: newCoin.name, symbol: newCoin.symbol
+            }
+          })
+          this.calculateTransactionValues(inEditTransactionIndex)
           this.emit('change')
         }
       }
@@ -229,29 +289,44 @@ class PortfolioStore extends EventEmitter {
   }
 
   transactionUnitsChanged(units: string) {
-    const inEditTransaction: ?Transaction = this.portfolio.transactions.find(t => t.editMode)
+    const inEditTransactionIndex: number = this.portfolio.transactions.findIndex(t => t.editMode)
 
-    if (inEditTransaction) {
-      inEditTransaction.units = units
-      inEditTransaction.isUnitsValid = Utils.isValidDecimal(units) && parseFloat(units) > 0
-      this.calculateTransactionValues(inEditTransaction)
-      this.emit('change')
+    if (inEditTransactionIndex > -1) {
+      const inEditTransaction: ?Transaction = this.portfolio.transactions.find(t => t.editMode)
+      if (inEditTransaction) {
+        this.changeTransaction(inEditTransactionIndex, {
+          ...inEditTransaction,
+          units,
+          isUnitsValid: Utils.isValidDecimal(units) && parseFloat(units) > 0
+        })
+        this.calculateTransactionValues(inEditTransactionIndex)
+        this.emit('change')
+      }
     }
   }
 
   transactionInitialPriceChanged(price: string) {
-    const inEditTransaction: ?Transaction = this.portfolio.transactions.find(t => t.editMode)
+    const inEditTransactionIndex: number = this.portfolio.transactions.findIndex(t => t.editMode)
 
-    if (inEditTransaction) {
-      inEditTransaction.initialPrice = price
-      inEditTransaction.isInitialPriceValid = Utils.isValidDecimal(price) && parseFloat(price) > 0
-      this.calculateTransactionValues(inEditTransaction)
-      this.emit('change')
+    if (inEditTransactionIndex > -1) {
+      const inEditTransaction: ?Transaction = this.portfolio.transactions.find(t => t.editMode)
+      if (inEditTransaction) {
+        this.changeTransaction(inEditTransactionIndex, {
+          ...inEditTransaction,
+          initialPrice: price,
+          isInitialPriceValid: Utils.isValidDecimal(price) && parseFloat(price) > 0
+        })
+        this.calculateTransactionValues(inEditTransactionIndex)
+        this.emit('change')
+      }
     }
   }
 
   decrementCountdown() {
-    this.portfolio.secToNextUpdate--
+    this.portfolio = {
+      ...this.portfolio,
+      secToNextUpdate: this.portfolio.secToNextUpdate - 1
+    }
 
     if (this.portfolio.secToNextUpdate === 0) {
       this.fetchCoinsData()
@@ -264,23 +339,29 @@ class PortfolioStore extends EventEmitter {
     return this.portfolio
   }
 
-  calculateTransactionValues(transaction: Transaction) {
+  calculateTransactionValues(transactionIndex: number) {
+    const transaction: ?Transaction = this.portfolio.transactions[transactionIndex]
+
     if (transaction) {
       const {isCoinValid, isUnitsValid, isInitialPriceValid} = transaction
       const isValid: boolean = isCoinValid && isUnitsValid && isInitialPriceValid
-      transaction.totalInvested = 0
-      transaction.currentValue = 0
-      transaction.margin = transaction.profit = 0
+
+      const newTransaction: Transaction = {
+        ...transaction,
+        totalInvested: 0, currentValue: 0, profit: 0, margin: 0
+      }
 
       if (isValid && transaction.currentPrice) {
         const units: number = parseFloat(transaction.units)
         const initialPrice: number = parseFloat(transaction.initialPrice)
         const {currentPrice} = transaction
-        transaction.totalInvested = units * initialPrice
-        transaction.currentValue = units * (currentPrice || 0)
-        transaction.profit = transaction.currentValue - transaction.totalInvested
-        transaction.margin = transaction.profit / transaction.totalInvested * 100
+        newTransaction.totalInvested = units * initialPrice
+        newTransaction.currentValue = units * (currentPrice || 0)
+        newTransaction.profit = newTransaction.currentValue - newTransaction.totalInvested
+        newTransaction.margin = newTransaction.profit / newTransaction.totalInvested * 100
       }
+
+      this.changeTransaction(transactionIndex, newTransaction)
     }
   }
 
@@ -288,27 +369,37 @@ class PortfolioStore extends EventEmitter {
     const transactions: Array<Transaction> = this.portfolio.transactions
       .filter(t => !t.editMode)
 
-    this.portfolio.totalInvested = 0
-    this.portfolio.currentTotalValue = 0
-    this.portfolio.totalMargin = 0
-    this.portfolio.totalProfit = 0
+    this.portfolio = {
+      ...this.portfolio,
+      totalInvested: 0, currentTotalValue: 0, totalMargin: 0, totalProfit: 0
+    }
+
     if (transactions && transactions.length > 0) {
+      let newTotalInvested: number = 0, newCurrentTotalValue: number = 0
       transactions.forEach(t => {
-        this.portfolio.totalInvested += t.totalInvested
-        this.portfolio.currentTotalValue += t.currentValue
+        newTotalInvested += t.totalInvested
+        newCurrentTotalValue += t.currentValue
       })
-      this.portfolio.totalProfit = this.portfolio.currentTotalValue - this.portfolio.totalInvested
-      this.portfolio.totalMargin = this.portfolio.totalProfit / this.portfolio.totalInvested * 100
+      const newTotalProfit: number = newCurrentTotalValue - newTotalInvested
+      const newTotalMargin: number = newTotalProfit / newTotalInvested * 100
+      this.portfolio = {
+        ...this.portfolio,
+        totalInvested: newTotalInvested, currentTotalValue: newCurrentTotalValue,
+        totalProfit: newTotalProfit, totalMargin:newTotalMargin
+      }
     }
   }
 
   updateTransactionsCurrentPrices() {
     const coins: CoinsData = this.getCoinsData()
-    this.portfolio.transactions.forEach(transaction => {
-      const coin: ?Coin = coins.data.find(c => c.id === transaction.coin.id)
+
+    this.portfolio.transactions.forEach((t: Transaction, index: number) => {
+      const coin: ?Coin = coins.data.find(c => c.id === t.coin.id)
       if (coin) {
-        transaction.currentPrice = coin.price_usd
-        this.calculateTransactionValues(transaction)
+        this.changeTransaction(index, {
+          ...t, currentPrice: coin.price_usd
+        })
+        this.calculateTransactionValues(index)
       }
     })
 
@@ -317,7 +408,7 @@ class PortfolioStore extends EventEmitter {
 
   getCoinsData(): CoinsData {
     const coins: ?string = localStorage.getItem(this.COINS_DATA_STORAGE_KEY)
-    const defaultCoinsData: CoinsData = { added_at: undefined, data: [] }
+    const defaultCoinsData: CoinsData = { added_at: '', data: [] }
     return coins ? JSON.parse(coins) : defaultCoinsData
   }
 

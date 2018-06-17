@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import moment from 'moment'
 import TextToClipboard from '../../../elements/text-to-clipboard/text-to-clipboard'
 import PortfolioActions from '../../../../actions/portfolio-actions'
@@ -14,7 +14,7 @@ type State = {
   shakeCopyToClipboardButton: boolean
 }
 
-export default class Toolbar extends Component<Props, State> {
+export default class Toolbar extends PureComponent<Props, State> {
   countdownInterval: IntervalID
   enableRefreshBtnTimer: TimeoutID
 

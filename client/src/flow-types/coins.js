@@ -18,6 +18,6 @@ export type Coin = {
 }
 
 export type CoinsData = {
-  added_at: ?Date,
+  added_at: string,
   data: Array<Coin>
 }

@@ -1,18 +1,21 @@
 // @flow
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import Select from 'react-virtualized-select'
 import CoinIcon from '../coin-icon/coin-icon'
 import 'react-select/dist/react-select.css'
 import 'react-virtualized/styles.css'
 import 'react-virtualized-select/styles.css'
 import type {
-  CoinsSelectProps as Props,
-  CoinsSelectState as State
+  CoinsSelectProps as Props
 } from '../../../flow-types/coins-select'
 import type {CoinSelectOption} from '../../../flow-types/coins-select'
 import './coins-select.css'
 
-export default class CoinsSelect extends Component<Props, State> {
+type State = {
+  isTouched: boolean
+}
+
+export default class CoinsSelect extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {isTouched: false}

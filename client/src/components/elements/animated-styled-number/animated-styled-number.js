@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import AnimatedNumber from 'react-animated-number'
 import type {State} from '../../../flow-types/react-generic'
 
@@ -9,7 +9,7 @@ type Props = {
   styled?: boolean
 }
 
-export default class AnimatedStyledNumber extends Component<Props, State> {
+export default class AnimatedStyledNumber extends PureComponent<Props, State> {
   static defaultProps = {
     decimalPlaces: 2,
     styled: true

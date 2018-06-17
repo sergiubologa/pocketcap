@@ -1,5 +1,5 @@
 // @flow
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import CoinIcon from '../../../elements/coin-icon/coin-icon'
 import TabContent from '../tab-content/tab-content'
 import FontAwesomeIcon from '@fortawesome/react-fontawesome'
@@ -15,7 +15,7 @@ type State = {
   activeTab: string
 }
 
-export default class Tabs extends Component<Props, State> {
+export default class Tabs extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {

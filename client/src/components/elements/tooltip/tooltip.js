@@ -16,11 +16,22 @@ type State = {
 
 // Currently supports only top-end placement
 // TODO - extend it to support other positionings
-export default class Tooltip extends React.Component<Props, State> {
+export default class Tooltip extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = { isHovering: false }
     this.hover = this.hover.bind(this)
+  }
+
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    if (this.props.tip !== nextProps.tip ||
+        this.props.className !== nextProps.className) {
+      return true
+    }
+    if (this.state.isHovering !== nextState.isHovering) {
+      return true
+    }
+    return false
   }
 
   hover = () =>

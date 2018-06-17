@@ -1,7 +1,7 @@
 // @flow
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {Link} from 'react-router-dom'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import Icon from '../elements/icon/icon'
 import faDonate from '@fortawesome/fontawesome-free-solid/faHandHoldingHeart'
 import PortfolioStore from '../../stores/portfolio-store'
 import DonateModal from '../donate-modal/donate-modal'
@@ -18,7 +18,7 @@ type State = {
   isDonateModalOpen: boolean
 }
 
-class Header extends Component<Props, State> {
+class Header extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -96,7 +96,7 @@ class Header extends Component<Props, State> {
             <div className="navbar-item">
               <button className="button is-primary" onClick={this.toggleDonateModal}>
                 <span className="icon">
-                  <FontAwesomeIcon icon={faDonate} />
+                  <Icon icon={faDonate} />
                 </span>
                 <span>Donate!</span>
               </button>

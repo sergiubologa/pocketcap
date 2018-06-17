@@ -10,7 +10,10 @@ class DonateModalStore extends EventEmitter {
   }
 
   toggleDonateModal() {
-    this.modal.isOpen = !this.modal.isOpen
+    this.modal = {
+      ...this.modal,
+      isOpen: !this.modal.isOpen
+    }
     this.emit('change', this.modal)
   }
 

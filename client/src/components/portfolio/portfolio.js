@@ -1,7 +1,7 @@
 // @flow
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import qs from 'qs'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import Icon from '../elements/icon/icon'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
 import faQuestionCircle from '@fortawesome/fontawesome-free-solid/faQuestionCircle'
 import * as Utils from '../../utils/utils'
@@ -18,7 +18,7 @@ import type {Props} from '../../flow-types/react-generic'
 import type {PortfolioState as State} from '../../flow-types/portfolio'
 import './portfolio.css'
 
-export default class Portfolio extends Component<Props, State> {
+export default class Portfolio extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -86,7 +86,7 @@ export default class Portfolio extends Component<Props, State> {
                     Current Price<br/>
                     <span className="is-size-7 has-text-weight-light">(per unit)</span>&nbsp;
                     <Tooltip tip="Prices from CoinMarketCap">
-                      <FontAwesomeIcon icon={faQuestionCircle} className="has-text-grey" />
+                      <Icon icon={faQuestionCircle} className="has-text-grey" />
                     </Tooltip>
                   </th>
                   <th style={{width: "12%"}} className="has-text-right has-text-weight-bold">Total invested</th>
@@ -100,7 +100,7 @@ export default class Portfolio extends Component<Props, State> {
                     <button
                       className="btn-add-new-transaction button is-primary"
                       onClick={this.onAddNewTransaction}>
-                      <FontAwesomeIcon icon={faPlus} />&nbsp;Add new transaction
+                      <Icon icon={faPlus} />&nbsp;Add new transaction
                     </button>
                   </th>
                   <th className="has-text-right has-text-weight-semibold is-size-4">Total:</th>

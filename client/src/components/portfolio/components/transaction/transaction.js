@@ -1,6 +1,6 @@
 // @flow
-import React, {Component} from 'react'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import React, {PureComponent} from 'react'
+import Icon from '../../../elements/icon/icon'
 import faMinus from '@fortawesome/fontawesome-free-solid/faMinus'
 import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
 import faBan from '@fortawesome/fontawesome-free-solid/faBan'
@@ -21,7 +21,7 @@ import type {Coin, CoinsData} from '../../../../flow-types/coins'
 import type {CoinSelectOption} from '../../../../flow-types/coins-select'
 import './transaction.css'
 
-export default class Transaction extends Component<Props, State> {
+export default class Transaction extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = { fieldToFocus: 'coin', isCoinMenuOpen: false }
@@ -141,13 +141,13 @@ export default class Transaction extends Component<Props, State> {
     					coins={this.getCoinsDataForSelect()}
     					value={coinValue}
               placeholder=""
-              icon={<FontAwesomeIcon icon={isCoinValid ? faCheck : faBan} />} />
+              icon={<Icon icon={isCoinValid ? faCheck : faBan} />} />
           ) : (
             <div className="coin-cell">
               <button
                 className="btnRemoveTransaction button is-dwarf is-warning is-outlined"
                 onClick={this.onRemoveTransaction}>
-                <span className="icon is-small"><FontAwesomeIcon icon={faMinus} /></span>
+                <span className="icon is-small"><Icon icon={faMinus} /></span>
               </button>
               <EditableField
                 className="field"
@@ -202,7 +202,7 @@ export default class Transaction extends Component<Props, State> {
                 className="button is-primary"
                 onClick={this.onSaveTransaction}
                 disabled={!isSaveEnabled}>
-                <FontAwesomeIcon icon={faCheck} />&nbsp;Save transaction
+                <Icon icon={faCheck} />&nbsp;Save transaction
               </button>
             </div>
           </div>

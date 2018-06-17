@@ -1,11 +1,11 @@
 // @flow
-import React, {Component} from 'react'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import React, {PureComponent} from 'react'
+import Icon from '../../../elements/icon/icon'
 import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
 import faBan from '@fortawesome/fontawesome-free-solid/faBan'
 import type {TextboxProps as Props, TextboxState as State} from '../../../../flow-types/textbox'
 
-export default class Textbox extends Component<Props, State> {
+export default class Textbox extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {isTouched: false}
@@ -36,7 +36,7 @@ export default class Textbox extends Component<Props, State> {
     inputClasses.push(className)
     const validationIcon = !isTouched ? undefined :
       <span className="icon is-small is-right">
-        <FontAwesomeIcon icon={isValid ? faCheck : faBan} className={isValid ? 'has-text-success' : 'has-text-danger'} />
+        <Icon icon={isValid ? faCheck : faBan} className={isValid ? 'has-text-success' : 'has-text-danger'} />
       </span>
 
     return (

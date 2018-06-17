@@ -17,10 +17,6 @@ export type CoinsSelectProps = {
   className?: string
 }
 
-export type CoinsSelectState = {
-  isTouched: boolean
-}
-
 export type CoinSelectOption = {
   id: string,
   label: string,
