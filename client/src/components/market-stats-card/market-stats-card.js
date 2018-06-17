@@ -55,7 +55,7 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
   }
 
   getBest3Coins = (): Array<Coin> => {
-    var t0 = performance.now()
+    // var t0 = performance.now()
     const coinsData: CoinsData = PortfolioStore.getCoinsData()
     const best3Coins: Array<Coin> = []
     const activateCache = false
@@ -64,9 +64,9 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
       if (coinsData.added_at && activateCache) {
         const cachedData = this.best3CoinsCache[coinsData.added_at]
         if (cachedData) {
-          var t1 = performance.now()
-          console.log('from cache: ' + (t1 - t0) + " milliseconds.")
-          console.log('items in cache: ' + Object.keys(this.best3CoinsCache).length)
+          // var t1 = performance.now()
+          // console.log('from cache: ' + (t1 - t0) + " milliseconds.")
+          // console.log('items in cache: ' + Object.keys(this.best3CoinsCache).length)
           return cachedData
         }
       }
@@ -98,8 +98,8 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
       }
     }
 
-    var t2 = performance.now()
-    console.log('from iterating: ' + (t2 - t0) + " milliseconds.")
+    // var t2 = performance.now()
+    // console.log('from iterating: ' + (t2 - t0) + " milliseconds.")
     return best3Coins
   }
 
