@@ -51,10 +51,13 @@ export default class Toolbar extends PureComponent<Props, State> {
   }
 
   updateStateData = (): void => {
+    const {
+      isUpdatingCoinsData, secToNextUpdate, shakeCopyToClipboardButton
+    } = PortfolioStore.getPortfolio()
     this.setState({
-      isUpdatingCoinsData: PortfolioStore.getPortfolio().isUpdatingCoinsData,
-      secToNextUpdate: PortfolioStore.getPortfolio().secToNextUpdate,
-      shakeCopyToClipboardButton: PortfolioStore.getPortfolio().shakeCopyToClipboardButton
+      isUpdatingCoinsData,
+      secToNextUpdate,
+      shakeCopyToClipboardButton
     })
   }
 

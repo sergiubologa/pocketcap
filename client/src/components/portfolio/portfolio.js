@@ -1,5 +1,5 @@
 // @flow
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import qs from 'qs'
 import Icon from '../elements/icon/icon'
 import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
@@ -18,7 +18,7 @@ import type {Props} from '../../flow-types/react-generic'
 import type {PortfolioState as State} from '../../flow-types/portfolio'
 import './portfolio.css'
 
-export default class Portfolio extends PureComponent<Props, State> {
+export default class Portfolio extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -26,6 +26,18 @@ export default class Portfolio extends PureComponent<Props, State> {
     }
     this.updateStateData = this.updateStateData.bind(this)
     this.onAddNewTransaction = this.onAddNewTransaction.bind(this)
+  }
+
+  shouldComponentUpdate(nextProps: Props, nextState: State) {
+    if (this.state.transactions !== nextState.transactions ||
+        this.state.totalInvested !== nextState.totalInvested ||
+        this.state.currentTotalValue !== nextState.currentTotalValue ||
+        this.state.totalMargin !== nextState.totalMargin ||
+        this.state.totalProfit !== nextState.totalProfit) {
+      return true
+    }
+
+    return false
   }
 
   componentWillMount() {
