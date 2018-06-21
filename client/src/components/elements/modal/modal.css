@@ -1,0 +1,9 @@
+.modal .modal-card-foot.align-right {
+  justify-content: flex-end;
+}
+.modal .modal-card-foot.align-left-right {
+  justify-content: space-between;
+}
+.modal .modal-card-foot.align-center {
+  justify-content: center;
+}

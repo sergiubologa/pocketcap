@@ -1,3 +1,8 @@
 // @flow
-export type Props = {};
-export type State = {};
+import * as React from 'react'
+
+export type Props = {
+  children?: React.Node
+}
+
+export type State = {}

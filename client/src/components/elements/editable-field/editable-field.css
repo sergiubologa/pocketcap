@@ -1,0 +1,40 @@
+.editable-field {
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+  border-radius: 4px;
+  cursor: text;
+  width: 100%;
+}
+.editable-field.align-right {
+  flex-direction: row-reverse;
+}
+
+.editable-field .field-items {
+  flex: 1 0 auto;
+}
+
+.editable-field:hover {
+  background-color: #fff6be;
+  -webkit-transition: background-color 300ms ease;
+  -ms-transition: background-color 300ms ease;
+  transition: background-color 300ms ease;
+}
+
+.editable-field .field-icon {
+  flex: 0 0 auto;
+  order: 1;
+  align-self: center;
+  text-align: right;
+  opacity: 0;
+}
+.editable-field.align-right .field-icon {
+  text-align: left;
+}
+
+.editable-field:hover .field-icon {
+  opacity: 1;
+  -webkit-transition: opacity 300ms ease;
+  -ms-transition: opacity 300ms ease;
+  transition: opacity 300ms ease;
+}

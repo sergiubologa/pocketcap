@@ -1,0 +1,77 @@
+.portfolio .table.is-edit-mode tbody tr.is-edit-mode {
+  opacity: 1;
+}
+
+tr.trTransaction {
+  transition: box-shadow 0.4s ease-in-out, border-width 0.4s ease-in-out;
+}
+
+tr.trTransaction.is-edit-mode {
+  border: 1px solid #dcdcdc;
+  box-shadow: 0 2px 3px rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.1);
+}
+
+tr.trTransaction td .coin-cell {
+  display: flex;
+  align-items: flex-start;
+}
+
+tr.trTransaction td .coin-cell .btnRemoveTransaction {
+  align-self: center;
+  margin-right: 1rem;
+}
+
+tr.trTransaction td .coin-cell .field,
+tr.trTransaction td .coin-cell .field .field-items {
+  min-width: 0;
+}
+
+tr.trTransaction td .coin-cell .field .field-items > span {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+}
+
+tr.trTransaction .initial-price-cell-wrapper {
+  position: relative;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .textbox.field {
+  margin-bottom: 0px;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .action-buttons {
+  transition: opacity .4s ease-in-out;
+  z-index: 9999;
+  display: flex;
+  position: absolute;
+  top: 50px; right: 0px;
+  padding: 10px 0px 0px 0px;
+  width: 278px;
+  justify-content: flex-end;
+  background: #fff;
+  border: 1px solid #dcdcdc;
+  border-top: 0 none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .action-buttons button {
+  margin-right: 10px;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .action-buttons.invisible {
+  opacity: 0;
+  z-index: -9999;
+}
+
+tr.trTransaction .initial-price-cell-wrapper .action-buttons.invisible button {
+  height: 0px;
+  padding: 0;
+  border: 0 none;
+}
+
+tr.trTransaction.is-edit-mode .initial-price-cell-wrapper .action-buttons.visible {
+  opacity: 1;
+}

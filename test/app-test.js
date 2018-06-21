@@ -29,7 +29,7 @@ test('get coins data', assert => {
         .end(testHelpers.testEnd('should return 200 OK', assert));
 });
 
-test('get not existing endpoint', assert => {
+test('get non existing endpoint', assert => {
     assert.plan(1);
     request(app)
         .get('/some/url/that/will/never/exist')

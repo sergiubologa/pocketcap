@@ -1,0 +1,41 @@
+.Select .Select-control {
+  cursor: text;
+}
+
+.Select.is-valid .Select-control {
+  /* TODO - change with Bulma properties when CRA will support SASS */
+  border-color: #23d160
+}
+
+.Select.is-valid .Select-arrow-zone {
+  color: #23d160
+}
+
+.Select.not-valid .Select-control {
+  /* TODO - change with Bulma properties when CRA will support SASS */
+  border-color: #ff3860
+}
+
+.Select.not-valid .Select-arrow-zone {
+  color: #ff3860
+}
+
+.Select .coinOption {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 1rem;
+}
+
+.Select .coinOption i.cc.defaultCoinIcon,
+.Select .Select-value i.cc.defaultCoinIcon {
+  margin-right: 5px;
+}
+
+.Select .coinOptionFocused {
+  background-color: rgba(0, 126, 255, 0.1);
+}
+
+.Select .coinOptionSelected {
+  font-weight: bold;
+}

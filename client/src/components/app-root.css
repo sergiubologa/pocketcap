@@ -1,1 +1,18 @@
+#root {
+  display: flex;
+  min-height: calc(100vh - 52px);
+  flex-direction: column;
+}
 
+#page-content {
+  display: flex;
+  flex: 1 0 auto;
+}
+
+.button.is-dwarf {
+  font-size: 0.6rem;
+}
+
+.has-text-green {
+  color: #108e3c !important;
+}

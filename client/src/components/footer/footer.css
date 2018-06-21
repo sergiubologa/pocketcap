@@ -1,0 +1,32 @@
+#root .footer {
+  padding: 2.5rem 1.5rem 2.5rem;
+}
+
+.content h4.created-by, .content h5.contribute {
+  margin-bottom: 0.8rem;
+}
+
+.content h5.contribute {
+  margin-top: 1.6rem;
+}
+
+.content .github-btns {
+  overflow: hidden;
+}
+
+.content .license {
+  margin-top: 0.4rem;
+}
+
+.content .love-heart {
+  animation: pulse 0.8s linear infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.3);
+  }
+}

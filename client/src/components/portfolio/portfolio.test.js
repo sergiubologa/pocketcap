@@ -1,26 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { shallow, mount, render } from 'enzyme'
+import axios from 'axios'
 import Portfolio from './portfolio'
 
+jest.mock('axios')
+
+it('renders without crashing', () => {
+  axios.get.mockImplementation(() => Promise.resolve({data: {}}))
+  const div = document.createElement('div')
+  ReactDOM.render(<Portfolio />, div)
+})
+
 it('calls componentDidMount', () => {
-  // const spy = jest.spyOn(App.prototype, 'componentDidMount');
-  // const wrapper = mount(<Portfolio />);
-  // expect(spy).toHaveBeenCalled();
-});
+  axios.get.mockImplementation(() => Promise.resolve({data: {}}))
+  const cdmSpy = jest.spyOn(Portfolio.prototype, 'componentDidMount')
 
-it('renders without crashing', () => {
-  // global.fetch = jest.fn().mockImplementation(() => {
-  //   return Promise.resolve({
-  //     json: () => { users: [] }
-  //   });
-  // });
+  const wrapper = shallow(<Portfolio />)
 
-  // const div = document.createElement('div');
-  // ReactDOM.render(<Portfolio />, div);
-});
-
-it('renders without crashing', () => {
-  // const component = shallow(<Portfolio />);
-  // expect(component.find('div.App')).toHaveLength(1);
+  expect(cdmSpy).toHaveBeenCalled()
 });

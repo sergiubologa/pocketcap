@@ -1,68 +1,110 @@
 // @flow
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {Link} from 'react-router-dom'
+import Icon from '../elements/icon/icon'
+import { faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons'
+import PortfolioStore from '../../stores/portfolio-store'
+import DonateModal from '../donate-modal/donate-modal'
+import DonateModalStore from '../../stores/donate-modal-store'
+import {Actions as DonateModalActions} from '../../actions/donate-modal-actions'
+import type {DonateModalState} from '../../flow-types/donate-modal'
 import type { Props } from '../../flow-types/react-generic'
-import type { HeaderData as State } from '../../flow-types/header-data'
-import HeaderStore from '../../stores/header-store'
-import HeaderActions from '../../actions/header-actions'
 import logo from '../../resources/thepocketcap.png'
 import './header.css'
 
-class Header extends Component<Props, State> {
+type State = {
+  isBurgerMenuVisible: boolean,
+  homePageHash: ?string,
+  isDonateModalOpen: boolean
+}
+
+class Header extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
-    this.state = HeaderStore.getHeaderState()
+    this.state = {
+      isBurgerMenuVisible: false,
+      homePageHash: PortfolioStore.getPortfolio().urlHash,
+      isDonateModalOpen: DonateModalStore.isOpen()
+    }
+    this.toggleBurgerMenu = this.toggleBurgerMenu.bind(this);
+    this.closeBurgerMenu = this.closeBurgerMenu.bind(this)
+    this.toggleDonateModal = this.toggleDonateModal.bind(this)
+    this.updateDonateModalState = this.updateDonateModalState.bind(this)
   }
 
   componentWillMount() {
-    HeaderStore.on('change', this.getHeaderState)
+    PortfolioStore.on('change', this.updateStateData)
+    DonateModalStore.on('change', this.updateDonateModalState)
   }
 
   componentWillUnmount() {
-    HeaderStore.removeListener('change', this.getHeaderState)
+    PortfolioStore.removeListener('change', this.updateStateData)
+    DonateModalStore.removeListener('change', this.updateDonateModalState)
   }
 
-  getHeaderState = (): void => {
-    this.setState(HeaderStore.getHeaderState())
+  updateStateData = (): void => {
+    this.setState({
+      homePageHash: PortfolioStore.getPortfolio().urlHash
+    })
+  }
+
+  updateDonateModalState = (changes: DonateModalState): void => {
+    this.setState({isDonateModalOpen: changes.isOpen})
   }
 
   toggleBurgerMenu = (): void => {
-    HeaderActions.toggleBurgerMenu()
+    this.setState({isBurgerMenuVisible: !this.state.isBurgerMenuVisible})
+  }
+
+  closeBurgerMenu = (): void => {
+    if (this.state.isBurgerMenuVisible) {
+      this.setState({isBurgerMenuVisible: false})
+    }
+  }
+
+  toggleDonateModal = (): void => {
+    DonateModalActions.togleModalVisibility()
   }
 
   render(){
-    const burgerMenuActiveClass = this.state.isBurgerMenuVisible ? 'is-active' : ''
+    const {isBurgerMenuVisible, homePageHash, isDonateModalOpen} = this.state
+    const burgerMenuActiveClass = isBurgerMenuVisible ? 'is-active' : ''
+    const homePageUrl = `/${homePageHash || ''}`
+
+    // <div className="navbar-start">
+    //   <Link to={homePageUrl} className="navbar-item" onClick={this.closeBurgerMenu}>Home</Link>
+    //   <Link to="/about" className="navbar-item" onClick={this.closeBurgerMenu}>About</Link>
+    //   <Link to="/contact" className="navbar-item" onClick={this.closeBurgerMenu}>Contact</Link>
+    // </div>
 
     return (
       <nav className="navbar is-fixed-top is-light">
+
         <div className="navbar-brand">
-          <Link to="/" className="navbar-item">
+          <Link to={homePageUrl} className="navbar-item">
             <img src={logo} alt="The Pocket Cap logo" height="28" />
           </Link>
           <div
             className={'navbar-burger ' + burgerMenuActiveClass}
-            onClick={this.toggleBurgerMenu.bind(this)}>
+            onClick={this.toggleBurgerMenu}>
             <span></span><span></span><span></span>
           </div>
         </div>
 
         <div className={'navbar-menu ' + burgerMenuActiveClass}>
-          <div className="navbar-start">
-            <Link to="/" className="navbar-item">Home</Link>
-            <Link to="/contact" className="navbar-item">Contact</Link>
-          </div>
-
           <div className="navbar-end">
             <div className="navbar-item">
-              <button className="button is-primary">
+              <button className="button is-primary" onClick={this.toggleDonateModal}>
                 <span className="icon">
-                  <i className="fa fa-heart-o"></i>
+                  <Icon icon={faHandHoldingHeart} />
                 </span>
                 <span>Donate!</span>
               </button>
             </div>
           </div>
         </div>
+
+        <DonateModal isOpen={isDonateModalOpen} onCloseRequest={this.toggleDonateModal} />
       </nav>
     )
   }

@@ -2,15 +2,13 @@
 import AppDispatcher from '../app-dispatcher'
 
 const Names = {
-  TOGGLE_BURGER_MENU: 'TOGGLE_BURGER_MENU'
+  FETCH_STATS_DATA: 'FETCH_STATS_DATA'
 }
 
 const Actions = {
-  toggleBurgerMenu: () => {
-    AppDispatcher.dispatch({
-      type: Names.TOGGLE_BURGER_MENU
-    })
-  }
+  fetchStatsData: () => AppDispatcher.dispatch({
+    type: Names.FETCH_STATS_DATA
+  })
 }
 
 export {
