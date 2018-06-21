@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
-const dbOptions = { useMongoClient: true };
-mongoose.connect(process.env.MONGODB_URI, dbOptions)
+mongoose.connect(process.env.MONGODB_URI)
         .then(
             () => {
                 // TODO - use logger

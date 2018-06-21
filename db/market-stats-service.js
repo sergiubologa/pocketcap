@@ -38,7 +38,7 @@ function cleanupDatabase(){
     return MarketStatsModel.remove({ added_at: { $lt: cutoff }})
                      .then(res => {
                          // TODO - use logger
-                         console.log('Market stats deleted:', res.result.n);
+                         console.log('Market stats deleted:', res.n);
                      });
 }
 

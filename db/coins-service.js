@@ -38,7 +38,7 @@ function cleanupDatabase(){
     return CoinsModel.remove({ added_at: { $lt: cutoff }})
                      .then((res) => {
                          // TODO - use logger
-                         console.log('Coins deleted:', res.result.n);
+                         console.log('Coins deleted:', res.n);
                      });
 }
 
