@@ -1,10 +1,8 @@
 // @flow
 import React from 'react'
 import Icon from '../../../elements/icon/icon'
-import faPlus from '@fortawesome/fontawesome-free-solid/faPlus'
-import faUserSlash from '@fortawesome/fontawesome-free-solid/faUserSlash'
-import faUserSecret from '@fortawesome/fontawesome-free-solid/faUserSecret'
-import faGithub from '@fortawesome/fontawesome-free-brands/faGithub'
+import { faPlus, faUserSlash, faUserSecret } from '@fortawesome/free-solid-svg-icons'
+import { faGithub } from '@fortawesome/free-brands-svg-icons'
 import './no-transactions.css'
 
 type Props = {

@@ -62,7 +62,7 @@ export default class CoinsSelect extends PureComponent<Props, State> {
         onMouseEnter={() => focusOption(option)}
         style={style}
       >
-        <CoinIcon symbol={option.symbol.toUpperCase()} />
+        <CoinIcon symbol={option.symbol.toUpperCase()} />&nbsp;
         <label>{option.label}</label>
       </div>
     )
@@ -72,7 +72,7 @@ export default class CoinsSelect extends PureComponent<Props, State> {
     return (
       <div className="Select-value">
 				<span className="Select-value-label">
-          <CoinIcon symbol={coin.symbol.toUpperCase()} />
+          <CoinIcon symbol={coin.symbol.toUpperCase()} />&nbsp;
 					{children}
 				</span>
 			</div>

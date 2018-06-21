@@ -1,8 +1,7 @@
 // @flow
 import React, {PureComponent} from 'react'
 import Icon from '../../../elements/icon/icon'
-import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
-import faBan from '@fortawesome/fontawesome-free-solid/faBan'
+import { faCheck, faBan } from '@fortawesome/free-solid-svg-icons'
 import type {TextboxProps as Props, TextboxState as State} from '../../../../flow-types/textbox'
 
 export default class Textbox extends PureComponent<Props, State> {

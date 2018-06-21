@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react'
 import {Link} from 'react-router-dom'
 import Icon from '../elements/icon/icon'
-import faDonate from '@fortawesome/fontawesome-free-solid/faHandHoldingHeart'
+import { faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons'
 import PortfolioStore from '../../stores/portfolio-store'
 import DonateModal from '../donate-modal/donate-modal'
 import DonateModalStore from '../../stores/donate-modal-store'
@@ -96,7 +96,7 @@ class Header extends PureComponent<Props, State> {
             <div className="navbar-item">
               <button className="button is-primary" onClick={this.toggleDonateModal}>
                 <span className="icon">
-                  <Icon icon={faDonate} />
+                  <Icon icon={faHandHoldingHeart} />
                 </span>
                 <span>Donate!</span>
               </button>

@@ -3,8 +3,7 @@ import React from 'react'
 import { Follow } from 'react-twitter-widgets'
 import {Actions as DonateModalActions} from '../../actions/donate-modal-actions'
 import Icon from '../elements/icon/icon'
-import faHeart from '@fortawesome/fontawesome-free-solid/faHeart'
-import faDonate from '@fortawesome/fontawesome-free-solid/faHandHoldingHeart'
+import { faHeart, faHandHoldingHeart } from '@fortawesome/free-solid-svg-icons'
 import type {Props} from '../../flow-types/react-generic'
 import './footer.css'
 
@@ -41,7 +40,7 @@ export default (props: Props) => {
               <p>If you like the app and want to support its maintenance and development, make a donation!</p>
               <button className="button" onClick={DonateModalActions.togleModalVisibility}>
                 <span className="icon">
-                  <Icon icon={faDonate} />
+                  <Icon icon={faHandHoldingHeart} />
                 </span>
                 <span>Make a donation!</span>
               </button>

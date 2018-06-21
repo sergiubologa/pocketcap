@@ -1,9 +1,7 @@
 // @flow
 import React from 'react'
 import Icon from '../icon/icon'
-import faCaretUp from '@fortawesome/fontawesome-free-solid/faCaretUp'
-import faCaretDown from '@fortawesome/fontawesome-free-solid/faCaretDown'
-import faCaretRight from '@fortawesome/fontawesome-free-solid/faCaretRight'
+import { faCaretUp, faCaretDown, faCaretRight } from '@fortawesome/free-solid-svg-icons'
 import type {State} from '../../../flow-types/react-generic'
 
 type Props = {

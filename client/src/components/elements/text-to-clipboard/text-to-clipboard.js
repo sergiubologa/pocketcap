@@ -1,7 +1,7 @@
 // @flow
 import React, {PureComponent} from 'react'
 import Icon from '../icon/icon'
-import faCopy from '@fortawesome/fontawesome-free-solid/faCopy'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import {CopyToClipboard} from 'react-copy-to-clipboard'
 import AnimatedCheckIcon from '../../elements/animated-check-icon/animated-check-icon'
 import './text-to-clipboard.css'

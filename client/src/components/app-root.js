@@ -9,8 +9,8 @@ import AboutPage from './pages/about-page/about-page'
 import ContactPage from './pages/contact-page/contact-page'
 import NotFoundPage from './pages/not-found-page/not-found-page'
 import 'bulma/css/bulma.css'
-import 'cryptocoins-icons/webfont/cryptocoins.css'
-import 'cryptocoins-icons/webfont/cryptocoins-colors.css'
+import 'crypto-vect-icons/webfont/cryptocoins.css'
+import 'crypto-vect-icons/webfont/cryptocoins-colors.css'
 import './app-root.css'
 
 class AppRoot extends Component<Props, State> {

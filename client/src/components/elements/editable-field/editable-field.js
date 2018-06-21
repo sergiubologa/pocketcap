@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react'
 import Icon from '../icon/icon'
-import faPencil from '@fortawesome/fontawesome-free-solid/faPencilAlt'
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 import type {State} from '../../../flow-types/react-generic'
 import './editable-field.css'
 
@@ -30,7 +30,7 @@ export default class EditableField extends React.PureComponent<Props, State> {
         <div className="field-items">
           <span>{this.props.children}</span>
         </div>
-        <Icon icon={faPencil} className="field-icon has-text-primary" />
+        <Icon icon={faPencilAlt} className="field-icon has-text-primary" />
       </div>
     )
   }

@@ -13,7 +13,7 @@ export default class CoinIcon extends PureComponent<Props, State> {
     const classes = ['cc']
 
     if (showDefault) {
-      classes.push('defaultCoinIcon')
+      classes.push('default')
     }
     classes.push(symbol)
 

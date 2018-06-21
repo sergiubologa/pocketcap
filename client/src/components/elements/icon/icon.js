@@ -1,6 +1,6 @@
 // @flow
 import React, {PureComponent} from 'react'
-import FontAwesomeIcon from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import type {State} from '../../../flow-types/react-generic'
 
 type Props = {

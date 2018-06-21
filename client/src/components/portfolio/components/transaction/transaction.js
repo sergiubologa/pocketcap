@@ -1,9 +1,7 @@
 // @flow
 import React, {PureComponent} from 'react'
 import Icon from '../../../elements/icon/icon'
-import faMinus from '@fortawesome/fontawesome-free-solid/faMinus'
-import faCheck from '@fortawesome/fontawesome-free-solid/faCheck'
-import faBan from '@fortawesome/fontawesome-free-solid/faBan'
+import { faMinus, faCheck, faBan } from '@fortawesome/free-solid-svg-icons'
 import AnimatedStyledNumber from '../../../elements/animated-styled-number/animated-styled-number'
 import PortfolioActions from '../../../../actions/portfolio-actions'
 import PortfolioStore from '../../../../stores/portfolio-store'
