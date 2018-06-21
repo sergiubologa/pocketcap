@@ -6,6 +6,9 @@ node_js:
 services:
   - mongodb
 
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.7.0
+
 install:
   - yarn install
   - cd client
@@ -35,6 +38,5 @@ git:
 
 # Whitelist master branch
 branches:
-  only: 
+  only:
     - master
-
