@@ -6,7 +6,7 @@
     "start": "cross-env NODE_PATH=. node ./bin/www",
     "debug": "cross-env NODE_PATH=. node --debug-brk --inspect ./bin/www",
     "test": "cross-env NODE_PATH=. NODE_ENV=testing tape ./test/**/*-test.js",
-    "heroku-postbuild": "cd client && yarn --production=false && yarn run build"
+    "heroku-postbuild": "cd client && yarn --production=true && yarn run build"
   },
   "engines": {
     "node": ">=8.11.1"
