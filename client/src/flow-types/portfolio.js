@@ -13,7 +13,8 @@ export type PortfolioState = {
   urlHash: ?string,
   isRefreshButtonDisabled?: boolean,
   urlCopiedToClipboard?: boolean,
-  shakeCopyToClipboardButton: boolean
+  shakeCopyToClipboardButton: boolean,
+  previousTransactions: Array<Transaction>
 }
 
 export type Transaction = {
@@ -34,7 +35,8 @@ export type Transaction = {
 
 export type TransactionState = {
   fieldToFocus: string,
-  isCoinMenuOpen: boolean
+  isCoinMenuOpen: boolean,
+  isInDeleteConfirmation: boolean
 }
 
 export type TransactionRowProps = {
@@ -42,4 +44,6 @@ export type TransactionRowProps = {
   index: number
 }
 
+// Array of arrays with 3 elements: coindId, units and initialPrice in USD
+// e.g.: [['ADA', 140, 0.07], ['BTC', 0.433121, 14382]]
 export type URLPortfolio = Array<[string, string, string]>

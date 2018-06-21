@@ -42,13 +42,14 @@ tr.trTransaction .initial-price-cell-wrapper .textbox.field {
 }
 
 tr.trTransaction .initial-price-cell-wrapper .action-buttons {
-  transition: opacity .4s ease-in-out;
-  z-index: 9999;
+  transition: opacity 0.4s ease-in-out;
+  z-index: 29; /* should be lower than donate modal, which is 40 */
   display: flex;
   position: absolute;
-  top: 50px; right: 0px;
+  top: 52px;
+  right: calc(100% - 173px);
   padding: 10px 0px 0px 0px;
-  width: 278px;
+  width: 290px;
   justify-content: flex-end;
   background: #fff;
   border: 1px solid #dcdcdc;
@@ -72,6 +73,13 @@ tr.trTransaction .initial-price-cell-wrapper .action-buttons.invisible button {
   border: 0 none;
 }
 
-tr.trTransaction.is-edit-mode .initial-price-cell-wrapper .action-buttons.visible {
+tr.trTransaction.is-edit-mode
+  .initial-price-cell-wrapper
+  .action-buttons.visible {
   opacity: 1;
+}
+
+.Select-menu-outer {
+  min-width: 200px;
+  z-index: 30;
 }

@@ -3,6 +3,7 @@ import AppDispatcher from '../app-dispatcher'
 
 const Names = {
   FETCH_COINS_DATA: 'FETCH_COINS_DATA',
+  SIMULATE_FETCH_COINS_DATA: 'SIMULATE_FETCH_COINS_DATA',
   DECREMENT_COUNTDOWN: 'DECREMENT_COUNTDOWN',
   ADD_NEW_TRANSACTION: 'ADD_NEW_TRANSACTION',
   CANCEL_TRANSACTION: 'CANCEL_TRANSACTION',
@@ -13,12 +14,17 @@ const Names = {
   TRANSACTION_UNITS_CHANGED: 'TRANSACTION_UNITS_CHANGED',
   TRANSACTION_INITIAL_PRICE_CHANGED: 'TRANSACTION_INITIAL_PRICE_CHANGED',
   SET_PORTFOLIO_FROM_ENCODED_URL_PARAM: 'SET_PORTFOLIO_FROM_ENCODED_URL_PARAM',
-  CLEAR_PORTFOLIO: 'CLEAR_PORTFOLIO'
+  CLEAR_PORTFOLIO: 'CLEAR_PORTFOLIO',
+  CHECK_FOR_PREVIOUS_PORTFOLIO: 'CHECK_FOR_PREVIOUS_PORTFOLIO',
+  LOAD_PREVIOUS_PORTFOLIO: 'LOAD_PREVIOUS_PORTFOLIO'
 }
 
 const Actions = {
   fetchCoinsData: () => AppDispatcher.dispatch({
     type: Names.FETCH_COINS_DATA
+  }),
+  simulateFetchCoinsData: () => AppDispatcher.dispatch({
+    type: Names.SIMULATE_FETCH_COINS_DATA
   }),
   addNewTransaction: () => AppDispatcher.dispatch({
     type: Names.ADD_NEW_TRANSACTION
@@ -58,7 +64,13 @@ const Actions = {
   }),
   clearPortfolio: () => AppDispatcher.dispatch({
     type: Names.CLEAR_PORTFOLIO
-  })
+  }),
+  checkForPreviousPortfolio: () => AppDispatcher.dispatch({
+    type: Names.CHECK_FOR_PREVIOUS_PORTFOLIO
+  }),
+  loadPreviousPortfolio: () => AppDispatcher.dispatch({
+    type: Names.LOAD_PREVIOUS_PORTFOLIO
+  }),
 }
 
 export {

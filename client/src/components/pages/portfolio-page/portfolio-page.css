@@ -1,4 +1,24 @@
 #portfolio-container {
   flex-grow: 1;
-  padding: 1rem 1rem 6rem;
+  padding: 1rem 0 1rem;
+  margin-left: 0;
+  margin-right: 0;
+}
+#portfolio-container > .column:first-child {
+  margin-bottom: 2rem;
+}
+
+#portfolio-container > .column:nth-child(2) {
+  max-width: 420px;
+}
+
+@media (min-width: 768px) and (max-width: 1280px) {
+  #portfolio-container {
+    display: block;
+  }
+
+  #portfolio-container > .column:first-child {
+    width: 100%;
+    box-sizing: border-box;
+  }
 }

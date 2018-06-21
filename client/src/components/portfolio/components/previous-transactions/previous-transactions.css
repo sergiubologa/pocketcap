@@ -1,0 +1,69 @@
+.prevTransactionsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.prevTransactionsContainer > div.or {
+  margin: 1.5rem 0;
+}
+
+.prevTransactionsContainer > div.transactions {
+  cursor: pointer;
+  max-width: 350px;
+  min-height: 100px;
+
+  transition-duration: 86ms;
+  transition-property: box-shadow, -webkit-transform;
+  transition-property: box-shadow, transform;
+  transition-property: box-shadow, transform, -webkit-transform;
+  will-change: box-shadow, transform;
+}
+
+.prevTransactionsContainer > div.transactions:hover {
+  -webkit-transform: translateY(-0.5rem);
+  transform: translateY(-0.5rem);
+  color: #3273dc !important;
+}
+
+.prevTransactionsContainer > .transactions > .coins {
+  margin: 1rem 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.prevTransactionsContainer > .transactions > .coins > .cc {
+  margin: 0 5px;
+}
+
+.prevTransactionsContainer > .transactions > .coins > .fader {
+  position: absolute;
+  width: 70px;
+  height: 25px;
+  right: 0;
+  top: 0;
+  background: -webkit-linear-gradient(
+    -90deg,
+    rgba(250, 250, 250, 1),
+    rgba(250, 250, 250, 0.1)
+  );
+  background: -moz-linear-gradient(
+    -90deg,
+    rgba(250, 250, 250, 1),
+    rgba(250, 250, 250, 0.1)
+  );
+  background: -o-linear-gradient(
+    -90deg,
+    rgba(250, 250, 250, 1),
+    rgba(250, 250, 250, 0.1)
+  );
+  background: linear-gradient(
+    -90deg,
+    rgba(250, 250, 250, 1),
+    rgba(250, 250, 250, 0.1)
+  );
+}
+
+.prevTransactionsContainer > .transactions > .tags {
+  justify-content: center;
+}

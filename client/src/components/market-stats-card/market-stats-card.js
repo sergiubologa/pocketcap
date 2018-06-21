@@ -7,7 +7,6 @@ import {
   faQuestionCircle
 } from "@fortawesome/free-solid-svg-icons";
 import Tooltip from "../elements/tooltip/tooltip";
-import CoinIcon from "../elements/coin-icon/coin-icon";
 import MarketStatsStore from "../../stores/market-stats-store";
 import PortfolioStore from "../../stores/portfolio-store";
 import * as Utils from "../../utils/utils";
@@ -15,6 +14,7 @@ import type { Props } from "../../flow-types/react-generic";
 import type { MarketStatsState as State } from "../../flow-types/market-stats";
 import type { Coin, CoinsData } from "../../flow-types/coins";
 import "./market-stats-card.css";
+import TopCoin from "./top-coin/top-coin";
 
 type Best3CoinsCache = {
   [key: string]: Array<Coin>
@@ -22,30 +22,43 @@ type Best3CoinsCache = {
 
 export default class MarketStatsCard extends PureComponent<Props, State> {
   best3CoinsCache: Best3CoinsCache = {};
+  refreshStatsIntervalId: IntervalID;
+  REFRESH_STATS_INTERVAL_MS: number = 10 * 60 * 1000; // 10 minutes
 
   constructor(props: Props) {
     super(props);
 
     this.state = {
       ...MarketStatsStore.getMarketStats(),
-      best3Coins: this.getBest3Coins()
+      best3Coins: this.getBest3Coins(),
+      lastStatsUpdate: new Date()
     };
 
     this.updateStateData = this.updateStateData.bind(this);
   }
 
-  componentWillMount() {
+  componentWillUnmount() {
+    MarketStatsStore.removeListener("change", this.updateStateData);
+    PortfolioStore.removeListener("change", this.updateBestCoinsData);
+    clearInterval(this.refreshStatsIntervalId);
+  }
+
+  componentDidMount() {
+    this.fetchNewStatsData();
+    this.refreshStatsIntervalId = setInterval(
+      this.fetchNewStatsData.bind(this),
+      this.REFRESH_STATS_INTERVAL_MS
+    );
+
     MarketStatsStore.on("change", this.updateStateData);
     PortfolioStore.on("change", this.updateBestCoinsData);
   }
 
-  componentWillUnmount() {
-    MarketStatsStore.removeListener("change", this.updateStateData);
-    PortfolioStore.removeListener("change", this.updateBestCoinsData);
-  }
-
-  componentDidMount() {
+  fetchNewStatsData() {
     MarketStatsStore.fetchMarketStatsData();
+    this.setState({
+      lastStatsUpdate: new Date()
+    });
   }
 
   updateStateData = (): void => {
@@ -76,29 +89,32 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
       for (let i = 0, len = coinsData.data.length; i < len; i++) {
         const currentCoin: Coin = coinsData.data[i];
 
-        if (currentCoin.percent_change_24h) {
+        if (currentCoin.quote.USD.percent_change_24h) {
           const firstCoin: Coin = best3Coins[0];
           const secondCoin: Coin = best3Coins[1];
           const thirdCoin: Coin = best3Coins[2];
 
           if (
             firstCoin &&
-            firstCoin.percent_change_24h &&
-            currentCoin.percent_change_24h > firstCoin.percent_change_24h
+            firstCoin.quote.USD.percent_change_24h &&
+            currentCoin.quote.USD.percent_change_24h >
+              firstCoin.quote.USD.percent_change_24h
           ) {
             best3Coins.unshift(currentCoin);
             if (thirdCoin) best3Coins.splice(-1, 1);
           } else if (
             secondCoin &&
-            secondCoin.percent_change_24h &&
-            currentCoin.percent_change_24h > secondCoin.percent_change_24h
+            secondCoin.quote.USD.percent_change_24h &&
+            currentCoin.quote.USD.percent_change_24h >
+              secondCoin.quote.USD.percent_change_24h
           ) {
             best3Coins.splice(1, 0, currentCoin);
             if (thirdCoin) best3Coins.splice(-1, 1);
           } else if (
             thirdCoin &&
-            thirdCoin.percent_change_24h &&
-            currentCoin.percent_change_24h > thirdCoin.percent_change_24h
+            thirdCoin.quote.USD.percent_change_24h &&
+            currentCoin.quote.USD.percent_change_24h >
+              thirdCoin.quote.USD.percent_change_24h
           ) {
             best3Coins.splice(2, 1, currentCoin);
           } else if (best3Coins.length < 3) {
@@ -118,27 +134,37 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
   };
 
   render() {
-    const { stats = {}, isUpdatingStatsData, best3Coins = [] } = this.state;
+    const {
+      stats = {},
+      isUpdatingStatsData,
+      best3Coins = [],
+      lastStatsUpdate
+    } = this.state;
+
     const marketCap: ?number = Utils.safePick(
       stats,
       "data",
-      "total_market_cap_usd"
+      "quote",
+      "USD",
+      "total_market_cap"
     );
     const volume24hrs: ?number = Utils.safePick(
       stats,
       "data",
-      "total_24h_volume_usd"
+      "quote",
+      "USD",
+      "total_volume_24h"
     );
     const btcDominance: ?number = Utils.safePick(
       stats,
       "data",
-      "bitcoin_percentage_of_market_cap"
+      "btc_dominance"
     );
     const firstCoin: Coin = best3Coins[0];
     const secondCoin: Coin = best3Coins[1];
     const thirdCoin: Coin = best3Coins[2];
 
-    return (
+    return stats ? (
       <div className="card market-stats-card">
         <div className="card-content">
           <p className="title">
@@ -151,30 +177,48 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
               <Icon icon={faQuestionCircle} className="has-text-grey" />
             </Tooltip>
           </p>
-          <p className="subtitle is-6">
-            last update:
+          <p className="subtitle is-7">
+            next update
             {isUpdatingStatsData ? (
               <span> loading...</span>
             ) : (
-              <span> {moment(stats.added_at).fromNow()}</span>
+              <span>
+                {" "}
+                {moment(lastStatsUpdate)
+                  .add(this.REFRESH_STATS_INTERVAL_MS, "ms")
+                  .fromNow()}
+              </span>
             )}
           </p>
 
-          <div className="content">
-            <div className="columns is-multiline is-gapless">
-              <div className="column is-half">Market cap:</div>
-              <div className="column is-half">
+          <div className="stats-container">
+            <div className="stat">
+              <span className="category is-size-6 has-text-weight-light">
+                Total market cap
+              </span>
+              <span className="value is-size-7 has-text-weight-semibold">
                 {Utils.toMoneyString(marketCap)}
-              </div>
-              <div className="column is-half">Volume 24h:</div>
-              <div className="column is-half">
+              </span>
+            </div>
+            <div className="stat">
+              <span className="category is-size-6 has-text-weight-light">
+                Volume 24h
+              </span>
+              <span className="value is-size-7 has-text-weight-semibold">
                 {Utils.toMoneyString(volume24hrs)}
-              </div>
-              <div className="column is-half">BTC dominance:</div>
-              <div className="column is-half">{btcDominance || "N/A"}%</div>
+              </span>
+            </div>
+            <div className="stat">
+              <span className="category is-size-6 has-text-weight-light">
+                BTC share
+              </span>
+              <span className="value is-size-7 has-text-weight-semibold">
+                {btcDominance || "N/A"}%
+              </span>
             </div>
           </div>
         </div>
+
         <div>
           <p className="is-size-7 has-text-weight-semibold is-marginless has-text-centered has-text-grey">
             <Icon icon={faAngleDown} />
@@ -184,35 +228,20 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
           </p>
         </div>
         <footer className="card-footer">
-          <div className="card-footer-item has-text-centered">
-            <div>
-              <CoinIcon symbol={firstCoin && firstCoin.symbol} />{" "}
-              {firstCoin && firstCoin.symbol}
-            </div>
-            <div className="has-text-green">
-              {firstCoin && firstCoin.percent_change_24h}%
-            </div>
-          </div>
-          <div className="card-footer-item has-text-centered">
-            <div>
-              <CoinIcon symbol={secondCoin && secondCoin.symbol} />{" "}
-              {secondCoin && secondCoin.symbol}
-            </div>
-            <div className="has-text-green">
-              {secondCoin && secondCoin.percent_change_24h}%
-            </div>
-          </div>
-          <div className="card-footer-item has-text-centered">
-            <div>
-              <CoinIcon symbol={thirdCoin && thirdCoin.symbol} />{" "}
-              {thirdCoin && thirdCoin.symbol}
-            </div>
-            <div className="has-text-green">
-              {thirdCoin && thirdCoin.percent_change_24h}%
-            </div>
-          </div>
+          <TopCoin
+            coin={firstCoin}
+            className="card-footer-item has-text-centered"
+          />
+          <TopCoin
+            coin={secondCoin}
+            className="card-footer-item has-text-centered"
+          />
+          <TopCoin
+            coin={thirdCoin}
+            className="card-footer-item has-text-centered"
+          />
         </footer>
       </div>
-    );
+    ) : null;
   }
 }

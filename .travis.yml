@@ -2,6 +2,7 @@ language: node_js
 node_js:
   - "8"
   - "9"
+  - "10"
 
 services:
   - mongodb
@@ -12,9 +13,9 @@ before_install:
   - yarn --version
 
 install:
-  - yarn install
+  - yarn install --ignore-engines
   - cd client
-  - yarn install
+  - yarn install --ignore-engines
   - cd ..
 
 before_script:

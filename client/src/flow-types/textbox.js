@@ -6,7 +6,8 @@ export type TextboxProps = {
   placeholder?: string,
   autoFocus?: boolean,
   onChange?: (value: string) => void,
-  className?: string
+  className?: string,
+  leftIcon?: any
 }
 
 export type TextboxState = {

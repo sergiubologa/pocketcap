@@ -21,4 +21,5 @@ export type MarketStatsState = {
   isUpdatingStatsData: boolean,
   stats?: MarketStats,
   best3Coins?: Array<Coin>,
+  lastStatsUpdate: Date
 }
