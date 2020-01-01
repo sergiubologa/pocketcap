@@ -7,7 +7,7 @@ import JsonUrl from "json-url";
 // import 'json-url/dist/browser/json-url-lzma'
 // import 'json-url/dist/browser/json-url-lzstring'
 // import 'json-url/dist/browser/json-url-safe64'
-import "json-url/dist/browser/json-url-single";
+// import "json-url/dist/browser/json-url-single"
 import EventEmitter from "events";
 import AppDispatcher from "../app-dispatcher";
 import { Names as PortfolioActionsNames } from "../actions/portfolio-actions";
