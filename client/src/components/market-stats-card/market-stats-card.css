@@ -1,3 +1,27 @@
 .market-stats-card .card-footer-item {
   flex-direction: column;
 }
+
+.market-stats-card .stats-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.market-stats-card .stats-container .stat:not(:first-child) {
+  margin-left: 1rem;
+}
+
+.market-stats-card .stats-container .stat .category {
+  display: block;
+}
+
+.market-stats-card .stats-container .stat:nth-child(2) {
+  display: none;
+}
+
+/* the max-width of the card */
+@media (min-width: 450px) {
+  .market-stats-card .stats-container .stat:nth-child(2) {
+    display: block;
+  }
+}

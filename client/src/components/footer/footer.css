@@ -2,7 +2,8 @@
   padding: 2.5rem 1.5rem 2.5rem;
 }
 
-.content h4.created-by, .content h5.contribute {
+.content h4.created-by,
+.content h5.contribute {
   margin-bottom: 0.8rem;
 }
 
@@ -12,6 +13,7 @@
 
 .content .github-btns {
   overflow: hidden;
+  height: 20px;
 }
 
 .content .license {

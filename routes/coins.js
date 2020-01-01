@@ -7,8 +7,8 @@ router
   .route('/')
   .get((req, res, next) => {
     coinsService.getMostRecentCoinsData()
-      .then((coinsModel) => res.json(coinsModel))
-      .catch((error) => {
+      .then(coinsModel => res.json(coinsModel))
+      .catch(error => {
         // TODO - log the error
         console.log(error);
         res.status(500).send();
