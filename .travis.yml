@@ -4,6 +4,8 @@ node_js:
   - "9"
   - "10"
 
+warnings_are_errors: false
+
 services:
   - mongodb
 
