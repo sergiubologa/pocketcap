@@ -32,10 +32,10 @@ before_script:
 script:
   # run first the client, as the api depends on the built client
   - cd client
-  - yarn build
-  - yarn test
+  - CI=false yarn build
+  - CI=false yarn test
   - cd ..
-  - yarn test
+  - CI=false yarn test
 
 git:
   depth: 10
