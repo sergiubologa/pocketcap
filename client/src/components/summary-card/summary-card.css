@@ -1,0 +1,20 @@
+.summary-card.green {
+  background-color: rgb(224, 242, 241);
+}
+.summary-card.red {
+  background-color: rgb(255, 235, 238);
+}
+
+.summary-card .data {
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
+
+.summary-card .data > div {
+  width: 33%;
+}
+
+.summary-card .data > div:not(:last-child) {
+  margin-right: 1rem;
+}

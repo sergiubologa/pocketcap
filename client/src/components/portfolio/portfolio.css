@@ -1,0 +1,138 @@
+.portfolio .table {
+  table-layout: fixed;
+  white-space: nowrap;
+}
+
+.portfolio .table td,
+.portfolio .table tfoot th {
+  vertical-align: middle;
+}
+
+.portfolio .table thead th.h-coin {
+  padding-left: 55px;
+  width: 29%;
+}
+.portfolio .table thead th.h-units {
+  width: 20%;
+}
+.portfolio .table thead th.h-initial-price {
+  width: 20%;
+}
+.portfolio .table thead th.h-current-price {
+  width: 0%;
+}
+.portfolio .table thead th.h-total-invested {
+  width: 0%;
+}
+.portfolio .table thead th.h-current-value {
+  width: 0%;
+}
+.portfolio .table thead th.h-profit {
+  width: 31%;
+}
+
+.portfolio .table .btn-add-new-transaction {
+  opacity: 1;
+}
+
+.portfolio .table.is-edit-mode .btn-add-new-transaction {
+  opacity: 0;
+}
+
+.portfolio .table.is-edit-mode tbody tr:not(.is-edit-mode),
+.portfolio .table.is-edit-mode tfoot {
+  opacity: 0.2;
+  transform: translateZ(0);
+}
+
+.portfolio .col-current-price,
+.portfolio .col-total-text,
+.portfolio .col-total-invested,
+.portfolio .col-current-value {
+  display: none;
+}
+
+@media (min-width: 360px) {
+  .portfolio .table thead th.h-coin {
+    width: 25%;
+  }
+  .portfolio .table thead th.h-units {
+    width: 20%;
+  }
+  .portfolio .table thead th.h-initial-price {
+    width: 20%;
+  }
+  .portfolio .table thead th.h-current-price {
+    width: 0%;
+  }
+  .portfolio .table thead th.h-total-invested {
+    width: 0%;
+  }
+  .portfolio .table thead th.h-current-value {
+    width: 0%;
+  }
+  .portfolio .table thead th.h-profit {
+    width: 35%;
+  }
+}
+
+@media (min-width: 768px) {
+  .portfolio .col-current-price,
+  .portfolio .col-total-text {
+    display: table-cell;
+  }
+
+  .portfolio .table thead th.h-coin {
+    width: 20%;
+  }
+  .portfolio .table thead th.h-units {
+    width: 20%;
+  }
+  .portfolio .table thead th.h-initial-price {
+    width: 20%;
+  }
+  .portfolio .table thead th.h-current-price {
+    width: 20%;
+  }
+  .portfolio .table thead th.h-total-invested {
+    width: 0%;
+  }
+  .portfolio .table thead th.h-current-value {
+    width: 0%;
+  }
+  .portfolio .table thead th.h-profit {
+    width: 20%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .portfolio .table {
+    white-space: initial;
+  }
+  .portfolio .col-total-invested,
+  .portfolio .col-current-value {
+    display: table-cell;
+  }
+
+  .portfolio .table thead th.h-coin {
+    width: 20%;
+  }
+  .portfolio .table thead th.h-units {
+    width: 15%;
+  }
+  .portfolio .table thead th.h-initial-price {
+    width: 13%;
+  }
+  .portfolio .table thead th.h-current-price {
+    width: 13%;
+  }
+  .portfolio .table thead th.h-total-invested {
+    width: 13%;
+  }
+  .portfolio .table thead th.h-current-value {
+    width: 13%;
+  }
+  .portfolio .table thead th.h-profit {
+    width: 13%;
+  }
+}

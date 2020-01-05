@@ -1,0 +1,45 @@
+language: node_js
+node_js:
+  - "11.10"
+
+warnings_are_errors: false
+
+services:
+  - mongodb
+
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.7.0
+  - export PATH=$HOME/.yarn/bin:$PATH
+  - yarn --version
+
+install:
+  - yarn install --ignore-engines
+  - cd client
+  - yarn install --ignore-engines
+  - cd ..
+
+before_script:
+  # artificial wait before making the first connection
+  - sleep 15
+  # insert bitcoin document
+  - mongo ThePocketCap --eval 'db.coins.drop();'
+  - mongo ThePocketCap --eval 'db.coins.insert({"added_at":new Date(),"data":[{"id":"bitcoin","name":"Bitcoin","symbol":"BTC","rank":"1","price_usd":"14798.3","price_btc":"1.0","24h_volume_usd":"12411400000.0","market_cap_usd":"248171368155","available_supply":"16770262.0","total_supply":"16770262.0","max_supply":"21000000.0","percent_change_1h":"0.16","percent_change_24h":"4.08","percent_change_7d":"8.87","last_updated":"1514576960"}]});'
+  # create index
+  - mongo ThePocketCap --eval 'db.coins.ensureIndex({"added_at":-1});'
+
+script:
+  # run first the client, as the api depends on the built client
+  - cd client
+  - CI=false yarn build
+  - CI=false yarn test
+  - cd ..
+  - CI=false yarn test
+
+git:
+  depth: 10
+  submodules: false
+
+# Whitelist master branch
+branches:
+  only:
+    - master

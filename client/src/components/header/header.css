@@ -1,0 +1,12 @@
+.navbar .navbar-brand {
+  width: 99%;
+}
+
+.navbar .navbar-brand .navbar-item:first-child {
+  flex-grow: 1;
+}
+
+.navbar .navbar-brand .navbar-item .icon .svg-inline--fa {
+  height: 1.4em;
+  width: auto;
+}

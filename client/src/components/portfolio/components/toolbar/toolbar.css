@@ -1,0 +1,59 @@
+.portfolio .toolbar {
+  margin-bottom: 1rem;
+}
+
+.portfolio .toolbar .card-content {
+  padding: 1rem;
+}
+
+.portfolio .toolbar .columns {
+  display: flex;
+}
+
+.portfolio .toolbar #nextRefreshContainer {
+  display: none;
+  justify-content: center;
+}
+@media (min-width: 640px) {
+  .portfolio .toolbar #nextRefreshContainer {
+    display: flex;
+  }
+}
+
+.portfolio .toolbar #nextRefreshContainer > div.refreshMessage {
+  align-self: center;
+  margin-right: 5px;
+}
+
+.portfolio .toolbar #nextRefreshContainer > div.refreshButtonContainer {
+  flex-grow: 1;
+}
+
+.portfolio .toolbar .btnCopyToClipboard.shake-it {
+  animation-name: shake;
+  animation-duration: 1s;
+  animation-timing-function: cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  animation-iteration-count: infinite;
+  animation-direction: both;
+  animation-delay: 0.5s;
+}
+
+@keyframes shake {
+  15%,
+  85% {
+    transform: translateX(-2px);
+  }
+  20%,
+  80% {
+    transform: translateX(3px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-5px);
+  }
+  40%,
+  60% {
+    transform: translateX(5px);
+  }
+}
