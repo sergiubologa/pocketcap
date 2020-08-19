@@ -12,8 +12,8 @@ function retrieveAndSaveCoinsDataFrom3rdParty() {
     .then(coins => {
       if (coins && coins.data) {
         const newCoinsData = new CoinsModel();
-        newCoinsData.status = coins.data.status;
-        newCoinsData.data = coins.data.data;
+        newCoinsData.status = coins.status;
+        newCoinsData.data = coins.data;
         return newCoinsData.save();
       }
     })
