@@ -49,26 +49,26 @@ export default class Textbox extends PureComponent<Props, State> {
       !isTouched || !showIcons ? (
         undefined
       ) : (
-        <span className="icon is-small is-right">
-          <Icon
-            icon={isValid ? faCheck : faBan}
-            className={isValid ? "has-text-success" : "has-text-danger"}
-          />
-        </span>
-      );
+          <span className="icon is-small is-right">
+            <Icon
+              icon={isValid ? faCheck : faBan}
+              className={isValid ? "has-text-success" : "has-text-danger"}
+            />
+          </span>
+        );
 
     const showLeftIcon = !!leftIcon && showIcons;
 
     const leftIconElement = !showLeftIcon ? (
       undefined
     ) : (
-      <span className="icon is-small is-left">
-        <Icon icon={leftIcon} />
-      </span>
-    );
+        <span className="icon is-small is-left">
+          <Icon icon={leftIcon} />
+        </span>
+      );
 
     return (
-      <div className="textbox field">
+      <div className="textbox field is-text-7">
         <div
           className={`control 
           ${showLeftIcon ? "has-icons-left" : ""}

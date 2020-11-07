@@ -108,9 +108,8 @@ export default class Toolbar extends PureComponent<Props, State> {
 
   render() {
     const { isUpdatingCoinsData, shakeCopyToClipboardButton } = this.state;
-    const updateButtonClass = `button is-info is-outlined ${
-      isUpdatingCoinsData ? "is-loading" : ""
-    }`;
+    const updateButtonClass = `button is-info is-outlined is-small ${isUpdatingCoinsData ? "is-loading" : ""
+      }`;
     const nextUpdate = this.getNextUpdateRemainingTime();
 
     return (
@@ -135,9 +134,8 @@ export default class Toolbar extends PureComponent<Props, State> {
                 text={window.location.href}
                 buttonText="Copy"
                 copiedStateText="Copied!"
-                buttonClass={`btnCopyToClipboard ${
-                  shakeCopyToClipboardButton ? "shake-it" : ""
-                }`}
+                buttonClass={`btnCopyToClipboard ${shakeCopyToClipboardButton ? "shake-it" : ""
+                  }`}
               />
             </div>
           </div>

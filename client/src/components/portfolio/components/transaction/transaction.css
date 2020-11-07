@@ -47,9 +47,9 @@ tr.trTransaction .initial-price-cell-wrapper .action-buttons {
   display: flex;
   position: absolute;
   top: 52px;
-  right: calc(100% - 173px);
+  right: calc(100% - 110px);
   padding: 10px 0px 0px 0px;
-  width: 290px;
+  width: 235px;
   justify-content: flex-end;
   background: #fff;
   border: 1px solid #dcdcdc;
@@ -73,9 +73,7 @@ tr.trTransaction .initial-price-cell-wrapper .action-buttons.invisible button {
   border: 0 none;
 }
 
-tr.trTransaction.is-edit-mode
-  .initial-price-cell-wrapper
-  .action-buttons.visible {
+tr.trTransaction.is-edit-mode .initial-price-cell-wrapper .action-buttons.visible {
   opacity: 1;
 }
 

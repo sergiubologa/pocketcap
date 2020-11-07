@@ -92,24 +92,23 @@ export default class Portfolio extends Component<Props, State> {
 
         {hasTransactions && (
           <table
-            className={`table is-fullwidth ${
-              isEditMode ? "is-edit-mode" : "is-hoverable"
-            }`}
+            className={`table is-fullwidth ${isEditMode ? "is-edit-mode" : "is-hoverable"
+              }`}
           >
             <thead className="has-background-light">
               <tr>
-                <th className="h-coin has-text-weight-bold">Coin</th>
-                <th className="h-units has-text-right has-text-weight-bold">
+                <th className="h-coin has-text-weight-bold is-size-7">Coin</th>
+                <th className="h-units has-text-right has-text-weight-bold is-size-7">
                   Units
                 </th>
-                <th className="h-initial-price col-initial-price has-text-right has-text-weight-bold">
+                <th className="h-initial-price col-initial-price has-text-right has-text-weight-bold is-size-7">
                   Initial Price
                   <br />
-                  <span className="is-size-7 has-text-weight-light">
+                  <span className="is-size-7 has-text-weight-light is-size-7">
                     ($ per unit)
                   </span>
                 </th>
-                <th className="h-current-price col-current-price has-text-right has-text-weight-bold">
+                <th className="h-current-price col-current-price has-text-right has-text-weight-bold is-size-7">
                   Current Price
                   <br />
                   <span className="is-size-7 has-text-weight-light">
@@ -120,13 +119,13 @@ export default class Portfolio extends Component<Props, State> {
                     <Icon icon={faQuestionCircle} className="has-text-grey" />
                   </Tooltip>
                 </th>
-                <th className="h-total-invested col-total-invested has-text-right has-text-weight-bold">
+                <th className="h-total-invested col-total-invested has-text-right has-text-weight-bold is-size-7">
                   Total invested
                 </th>
-                <th className="h-current-value col-current-value has-text-right has-text-weight-bold">
+                <th className="h-current-value col-current-value has-text-right has-text-weight-bold is-size-7">
                   Current value
                 </th>
-                <th className="h-profit has-text-right has-text-weight-bold">
+                <th className="h-profit has-text-right has-text-weight-bold is-size-7">
                   Profit
                 </th>
               </tr>
@@ -135,7 +134,7 @@ export default class Portfolio extends Component<Props, State> {
               <tr>
                 <th colSpan={addNewBtnColSpan} className="has-text-centered">
                   <button
-                    className="btn-add-new-transaction button is-primary"
+                    className="btn-add-new-transaction button is-primary is-small"
                     onClick={this.onAddNewTransaction}
                   >
                     <Icon icon={faPlus} />

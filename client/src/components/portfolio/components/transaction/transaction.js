@@ -162,7 +162,7 @@ export default class Transaction extends PureComponent<Props, State> {
     const { fieldToFocus, isInDeleteConfirmation } = this.state;
 
     return (
-      <tr className={`trTransaction ${editMode ? "is-edit-mode" : ""}`}>
+      <tr className={`trTransaction is-size-7 ${editMode ? "is-edit-mode" : ""}`}>
         <td>
           {editMode ? (
             <CoinsSelect
@@ -178,56 +178,56 @@ export default class Transaction extends PureComponent<Props, State> {
               icon={<Icon icon={isCoinValid ? faCheck : faBan} />}
             />
           ) : (
-            <div className="coin-cell wrap-text">
-              {!isInDeleteConfirmation && (
-                <button
-                  className="btnRemoveTransaction button is-dwarf is-warning is-outlined"
-                  onClick={this.onRemoveTransaction}
-                >
-                  <span className="icon is-small">
-                    <Icon icon={faMinus} />
-                  </span>
-                </button>
-              )}
-              {isInDeleteConfirmation && (
-                <Fragment>
+              <div className="coin-cell wrap-text">
+                {!isInDeleteConfirmation && (
                   <button
-                    className="btnRemoveTransaction button is-dwarf is-info is-outlined"
-                    onClick={this.onCancelRemoveTransaction}
-                  >
-                    {Utils.isSmall() ? (
-                      <span className="icon is-small">
-                        <Icon icon={faArrowLeft} />
-                      </span>
-                    ) : (
-                      "Cancel"
-                    )}
-                  </button>
-                  <button
-                    className="btnRemoveTransaction button is-dwarf is-danger is-outlined"
+                    className="btnRemoveTransaction button is-dwarf is-warning is-outlined"
                     onClick={this.onRemoveTransaction}
                   >
-                    {Utils.isSmall() ? (
-                      <span className="icon is-small">
-                        <Icon icon={faCheck} />
-                      </span>
-                    ) : (
-                      "Remove"
-                    )}
+                    <span className="icon is-small">
+                      <Icon icon={faMinus} />
+                    </span>
                   </button>
-                </Fragment>
-              )}
-              <EditableField
-                className="field"
-                onClick={this.onCellClick}
-                name="coin"
-              >
-                <CoinIcon symbol={coin.symbol} /> {coin.label}
-              </EditableField>
-            </div>
-          )}
+                )}
+                {isInDeleteConfirmation && (
+                  <Fragment>
+                    <button
+                      className="btnRemoveTransaction button is-dwarf is-info is-outlined"
+                      onClick={this.onCancelRemoveTransaction}
+                    >
+                      {Utils.isSmall() ? (
+                        <span className="icon is-small">
+                          <Icon icon={faArrowLeft} />
+                        </span>
+                      ) : (
+                          "Cancel"
+                        )}
+                    </button>
+                    <button
+                      className="btnRemoveTransaction button is-dwarf is-danger is-outlined"
+                      onClick={this.onRemoveTransaction}
+                    >
+                      {Utils.isSmall() ? (
+                        <span className="icon is-small">
+                          <Icon icon={faCheck} />
+                        </span>
+                      ) : (
+                          "Remove"
+                        )}
+                    </button>
+                  </Fragment>
+                )}
+                <EditableField
+                  className="field"
+                  onClick={this.onCellClick}
+                  name="coin"
+                >
+                  <CoinIcon symbol={coin.symbol} /> {coin.label}
+                </EditableField>
+              </div>
+            )}
         </td>
-        <td className="has-text-right">
+        <td className="has-text-right is-size-7">
           {editMode ? (
             <Textbox
               value={units}
@@ -237,16 +237,16 @@ export default class Transaction extends PureComponent<Props, State> {
               onChange={this.onUnitsChange}
             />
           ) : (
-            <EditableField
-              onClick={this.onCellClick}
-              name="units"
-              align="right"
-            >
-              {Number(units).toString()}
-            </EditableField>
-          )}
+              <EditableField
+                onClick={this.onCellClick}
+                name="units"
+                align="right"
+              >
+                {Number(units).toString()}
+              </EditableField>
+            )}
         </td>
-        <td className="col-initial-price has-text-right">
+        <td className="col-initial-price has-text-right is-size-7">
           <div className="initial-price-cell-wrapper">
             {editMode ? (
               <Textbox
@@ -258,18 +258,17 @@ export default class Transaction extends PureComponent<Props, State> {
                 onChange={this.onInitialPriceChange}
               />
             ) : (
-              <EditableField
-                onClick={this.onCellClick}
-                name="initial-price"
-                align="right"
-              >
-                {Utils.toMoneyString(Number(initialPrice))}
-              </EditableField>
-            )}
+                <EditableField
+                  onClick={this.onCellClick}
+                  name="initial-price"
+                  align="right"
+                >
+                  {Utils.toMoneyString(Number(initialPrice))}
+                </EditableField>
+              )}
             <div
-              className={`action-buttons buttons ${
-                editMode ? "visible" : "invisible"
-              }`}
+              className={`action-buttons buttons are-small ${editMode ? "visible" : "invisible"
+                }`}
             >
               <button
                 className="button is-dark"
@@ -288,18 +287,18 @@ export default class Transaction extends PureComponent<Props, State> {
             </div>
           </div>
         </td>
-        <td className="col-current-price has-text-right">
+        <td className="col-current-price has-text-right is-size-7">
           $
           <AnimatedStyledNumber value={displayCurrentPrice} decimalPlaces={6} />
         </td>
-        <td className="col-total-invested has-text-right">
+        <td className="col-total-invested has-text-right is-size-7">
           $<AnimatedStyledNumber value={displayTotalInvested} />
         </td>
-        <td className="col-current-value has-text-right">
+        <td className="col-current-value has-text-right is-size-7">
           $<AnimatedStyledNumber value={displayCurrentValue} />
         </td>
         <td
-          className={`has-text-right wrap-text ${Utils.colorClassForNumbers(
+          className={`has-text-right wrap-text is-size-7 ${Utils.colorClassForNumbers(
             displayProfit
           )}`}
         >
