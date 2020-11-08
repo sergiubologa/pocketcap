@@ -1,6 +1,7 @@
 import React from "react";
 import CoinIcon from "../../elements/coin-icon/coin-icon";
 import Tooltip from "../../elements/tooltip/tooltip";
+import * as Utils from "../../../utils/utils";
 
 export default props => {
   const { coin, ...rest } = props;
@@ -20,7 +21,7 @@ export default props => {
           <CoinIcon symbol={coin && coin.symbol} /> {coin && coin.symbol}
         </div>
         <div className="has-text-green">
-          {coin && coin.quote.USD.percent_change_24h}%
+          {coin && Utils.toDecimals(coin.quote.USD.percent_change_24h)}%
         </div>
       </a>
     </Tooltip>

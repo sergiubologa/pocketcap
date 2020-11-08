@@ -3,8 +3,8 @@ export const isValidDecimal = (value: ?string | ?number): boolean => {
   const decimalString: string = value
     ? value.toString()
     : value === 0
-    ? "0"
-    : "";
+      ? "0"
+      : "";
   const regex: RegExp = /^\d+(\.\d{1,8})?$/;
   return regex.test(decimalString);
 };
@@ -20,7 +20,7 @@ export const toMoneyString = (value: ?number) => {
   if (!value && value !== 0) {
     return "";
   }
-  return `$${value.toLocaleString()}`;
+  return `$${toDecimals(value, 0).toLocaleString()}`;
 };
 
 export const getHashFromUrl = (ignoreQueryPrefix: boolean = true) => {
@@ -100,10 +100,10 @@ export const getPageWidth = () => {
 
   const docElementMax = document.documentElement
     ? Math.max(
-        document.documentElement.scrollWidth,
-        document.documentElement.offsetWidth,
-        document.documentElement.clientWidth
-      )
+      document.documentElement.scrollWidth,
+      document.documentElement.offsetWidth,
+      document.documentElement.clientWidth
+    )
     : 0;
 
   return Math.max(bodyMax, docElementMax);
