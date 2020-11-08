@@ -94,7 +94,7 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
             firstCoin &&
             firstCoin.quote.USD.percent_change_24h &&
             currentCoin.quote.USD.percent_change_24h >
-              firstCoin.quote.USD.percent_change_24h
+            firstCoin.quote.USD.percent_change_24h
           ) {
             best3Coins.unshift(currentCoin);
             if (thirdCoin) best3Coins.splice(-1, 1);
@@ -102,7 +102,7 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
             secondCoin &&
             secondCoin.quote.USD.percent_change_24h &&
             currentCoin.quote.USD.percent_change_24h >
-              secondCoin.quote.USD.percent_change_24h
+            secondCoin.quote.USD.percent_change_24h
           ) {
             best3Coins.splice(1, 0, currentCoin);
             if (thirdCoin) best3Coins.splice(-1, 1);
@@ -110,7 +110,7 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
             thirdCoin &&
             thirdCoin.quote.USD.percent_change_24h &&
             currentCoin.quote.USD.percent_change_24h >
-              thirdCoin.quote.USD.percent_change_24h
+            thirdCoin.quote.USD.percent_change_24h
           ) {
             best3Coins.splice(2, 1, currentCoin);
           } else if (best3Coins.length < 3) {
@@ -178,14 +178,14 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
             {isUpdatingStatsData ? (
               <span> loading...</span>
             ) : (
-              <span>
-                {" "}
-                {moment(lastStatsUpdate)
-                  .clone()
-                  .add(this.REFRESH_STATS_INTERVAL_MS, "ms")
-                  .fromNow()}
-              </span>
-            )}
+                <span>
+                  {" "}
+                  {moment(lastStatsUpdate)
+                    .clone()
+                    .add(this.REFRESH_STATS_INTERVAL_MS, "ms")
+                    .fromNow()}
+                </span>
+              )}
           </p>
 
           <div className="stats-container">
@@ -210,7 +210,7 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
                 BTC share
               </span>
               <span className="value is-size-7 has-text-weight-semibold">
-                {btcDominance || "N/A"}%
+                {Utils.toDecimals(btcDominance, 2) || "N/A"}%
               </span>
             </div>
           </div>
