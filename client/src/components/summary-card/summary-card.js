@@ -41,7 +41,7 @@ export default class SummaryCard extends PureComponent<Props, State> {
     const displayCurrentTotalValue = Utils.toDecimals(
       currentTotalValue
     ).toLocaleString();
-    const displayTotalMargin = Utils.toDecimals(totalMargin);
+    const displayTotalMargin = Utils.toDecimals(totalMargin).toLocaleString();
     const displayTotalProfit = Utils.toDecimals(totalProfit).toLocaleString();
     const hasTransactions = transactions && transactions.length > 0;
     const colorClass = Utils.colorClassForNumbers(totalProfit);

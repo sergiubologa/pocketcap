@@ -153,7 +153,7 @@ export default class Transaction extends PureComponent<Props, State> {
     const coinValue = coin.id || coin.symbol || coin.label ? coin : null;
     const isSaveEnabled = isCoinValid && isUnitsValid && isInitialPriceValid;
 
-    const displayCurrentPrice = Utils.toDecimals(currentPrice, 6);
+    const displayCurrentPrice = Utils.toDecimals(currentPrice);
     const displayTotalInvested = Utils.toDecimals(totalInvested);
     const displayCurrentValue = Utils.toDecimals(currentValue);
     const displayProfit = Utils.toDecimals(profit);

@@ -20,7 +20,7 @@ export const toMoneyString = (value: ?number) => {
   if (!value && value !== 0) {
     return "";
   }
-  return `$${toDecimals(value, 0).toLocaleString()}`;
+  return `$${toDecimals(value).toLocaleString()}`;
 };
 
 export const getHashFromUrl = (ignoreQueryPrefix: boolean = true) => {

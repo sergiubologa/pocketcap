@@ -194,7 +194,7 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
                 Total market cap
               </span>
               <span className="value is-size-7 has-text-weight-semibold">
-                {Utils.toMoneyString(marketCap)}
+                {Utils.toMoneyString(Utils.toDecimals(marketCap, 0))}
               </span>
             </div>
             <div className="stat">
@@ -202,7 +202,7 @@ export default class MarketStatsCard extends PureComponent<Props, State> {
                 Volume 24h
               </span>
               <span className="value is-size-7 has-text-weight-semibold">
-                {Utils.toMoneyString(volume24hrs)}
+                {Utils.toMoneyString(Utils.toDecimals(volume24hrs, 0))}
               </span>
             </div>
             <div className="stat">
