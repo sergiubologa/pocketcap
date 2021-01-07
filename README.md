@@ -49,9 +49,10 @@ PocketCap is an OpenSource web app that allows you to keep track of your investm
 -   [x] Calculates the profit and loss for each coin
 -   [x] Remember last created portfolio
 -   [x] Unique URL for each portfolio
--   [ ] Limit number of coins in 1 portfolio
+-   [ ] Limit number of transactions in 1 portfolio to about 100
 -   [ ] Bookmark button
 -   [ ] Table column sorting
+-   [ ] Import transactions from CoinBase and others
 
 ## Contributing
 Please give it a try and let me know what's your feedback. I'm very open to discussions and suggestions, so feel free to write me an email or open an issue. PRs are very welcomed.
